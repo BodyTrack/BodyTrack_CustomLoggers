@@ -1,0 +1,312 @@
+   1               		.file	"debug.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+  15               	.Ltext0:
+  16               	.global	Debug_Init
+  18               	Debug_Init:
+  19               	.LFB6:
+  20               	.LM1:
+  21               	/* prologue: function */
+  22               	/* frame size = 0 */
+  23               	.LM2:
+  24 0000 E0E4      		ldi r30,lo8(1600)
+  25 0002 F6E0      		ldi r31,hi8(1600)
+  26 0004 88E0      		ldi r24,lo8(8)
+  27 0006 8183      		std Z+1,r24
+  28               	.LM3:
+  29 0008 84E0      		ldi r24,lo8(4)
+  30 000a 8283      		std Z+2,r24
+  31               	.LM4:
+  32 000c E0EA      		ldi r30,lo8(2208)
+  33 000e F8E0      		ldi r31,hi8(2208)
+  34 0010 83E0      		ldi r24,lo8(3)
+  35 0012 8583      		std Z+5,r24
+  36               	.LM5:
+  37 0014 87E6      		ldi r24,lo8(103)
+  38 0016 8683      		std Z+6,r24
+  39               	.LM6:
+  40 0018 1782      		std Z+7,__zero_reg__
+  41               	.LM7:
+  42 001a 8481      		ldd r24,Z+4
+  43 001c 8061      		ori r24,lo8(16)
+  44 001e 8483      		std Z+4,r24
+  45               	.LM8:
+  46 0020 8481      		ldd r24,Z+4
+  47 0022 8860      		ori r24,lo8(8)
+  48 0024 8483      		std Z+4,r24
+  49               	.LM9:
+  50 0026 8381      		ldd r24,Z+3
+  51 0028 8062      		ori r24,lo8(32)
+  52 002a 8383      		std Z+3,r24
+  53               	/* epilogue start */
+  54               	.LM10:
+  55 002c 0895      		ret
+  56               	.LFE6:
+  58               	.global	Debug_CharReadyToRead
+  60               	Debug_CharReadyToRead:
+  61               	.LFB7:
+  62               	.LM11:
+  63               	/* prologue: function */
+  64               	/* frame size = 0 */
+  65               	.LM12:
+  66 002e 2091 0000 		lds r18,Debug_writeLocation
+  67 0032 3091 0000 		lds r19,(Debug_writeLocation)+1
+  68 0036 8091 0000 		lds r24,Debug_readLocation
+  69 003a 9091 0000 		lds r25,(Debug_readLocation)+1
+  70 003e 40E0      		ldi r20,lo8(0)
+  71 0040 2817      		cp r18,r24
+  72 0042 3907      		cpc r19,r25
+  73 0044 01F0      		breq .L4
+  74 0046 41E0      		ldi r20,lo8(1)
+  75               	.L4:
+  76               	.LM13:
+  77 0048 842F      		mov r24,r20
+  78               	/* epilogue start */
+  79 004a 0895      		ret
+  80               	.LFE7:
+  82               	.global	Debug_GetByte
+  84               	Debug_GetByte:
+  85               	.LFB8:
+  86               	.LM14:
+  87               	.LVL0:
+  88               	/* prologue: function */
+  89               	/* frame size = 0 */
+  90               	.LM15:
+  91 004c 8823      		tst r24
+  92 004e 01F0      		breq .L7
+  93               	.L11:
+  94               	.LBB11:
+  95               	.LBB12:
+  96               	.LM16:
+  97 0050 2091 0000 		lds r18,Debug_writeLocation
+  98 0054 3091 0000 		lds r19,(Debug_writeLocation)+1
+  99 0058 8091 0000 		lds r24,Debug_readLocation
+ 100 005c 9091 0000 		lds r25,(Debug_readLocation)+1
+ 101               	.LVL1:
+ 102 0060 2817      		cp r18,r24
+ 103 0062 3907      		cpc r19,r25
+ 104 0064 01F0      		breq .L11
+ 105               	.LVL2:
+ 106               	.L7:
+ 107               	.LBE12:
+ 108               	.LBE11:
+ 109               	.LM17:
+ 110 0066 E091 0000 		lds r30,Debug_readLocation
+ 111 006a F091 0000 		lds r31,(Debug_readLocation)+1
+ 112 006e E050      		subi r30,lo8(-(DebugBuffer))
+ 113 0070 F040      		sbci r31,hi8(-(DebugBuffer))
+ 114 0072 E081      		ld r30,Z
+ 115               	.LVL3:
+ 116               	.LM18:
+ 117 0074 8091 0000 		lds r24,Debug_readLocation
+ 118 0078 9091 0000 		lds r25,(Debug_readLocation)+1
+ 119               	.LVL4:
+ 120 007c 0196      		adiw r24,1
+ 121 007e 8093 0000 		sts Debug_readLocation,r24
+ 122 0082 9093 0000 		sts (Debug_readLocation)+1,r25
+ 123               	.LM19:
+ 124 0086 8091 0000 		lds r24,Debug_readLocation
+ 125 008a 9091 0000 		lds r25,(Debug_readLocation)+1
+ 126 008e 8050      		subi r24,lo8(1024)
+ 127 0090 9440      		sbci r25,hi8(1024)
+ 128 0092 00F0      		brlo .L9
+ 129               	.LM20:
+ 130 0094 1092 0000 		sts Debug_readLocation,__zero_reg__
+ 131 0098 1092 0000 		sts (Debug_readLocation)+1,__zero_reg__
+ 132               	.L9:
+ 133               	.LM21:
+ 134 009c 8E2F      		mov r24,r30
+ 135               	/* epilogue start */
+ 136 009e 0895      		ret
+ 137               	.LFE8:
+ 139               	.global	Debug_SendByte
+ 141               	Debug_SendByte:
+ 142               	.LFB9:
+ 143               	.LM22:
+ 144               	.LVL5:
+ 145               	/* prologue: function */
+ 146               	/* frame size = 0 */
+ 147 00a0 982F      		mov r25,r24
+ 148               	.LVL6:
+ 149               	.L14:
+ 150               	.LM23:
+ 151 00a2 8091 A108 		lds r24,2209
+ 152 00a6 85FF      		sbrs r24,5
+ 153 00a8 00C0      		rjmp .L14
+ 154               	.LM24:
+ 155 00aa 9093 A008 		sts 2208,r25
+ 156               	/* epilogue start */
+ 157               	.LM25:
+ 158 00ae 0895      		ret
+ 159               	.LFE9:
+ 161               	.global	__vector_25
+ 163               	__vector_25:
+ 164               	.LFB11:
+ 165               	.LM26:
+ 166 00b0 1F92      		push __zero_reg__
+ 167 00b2 0F92      		push r0
+ 168 00b4 0FB6      		in r0,__SREG__
+ 169 00b6 0F92      		push r0
+ 170 00b8 0BB6      		in r0,59-0
+ 171 00ba 0F92      		push r0
+ 172 00bc 1124      		clr __zero_reg__
+ 173 00be 2F93      		push r18
+ 174 00c0 8F93      		push r24
+ 175 00c2 9F93      		push r25
+ 176 00c4 EF93      		push r30
+ 177 00c6 FF93      		push r31
+ 178               	/* prologue: Signal */
+ 179               	/* frame size = 0 */
+ 180               	.LM27:
+ 181 00c8 E091 0000 		lds r30,Debug_writeLocation
+ 182 00cc F091 0000 		lds r31,(Debug_writeLocation)+1
+ 183 00d0 8091 A008 		lds r24,2208
+ 184 00d4 E050      		subi r30,lo8(-(DebugBuffer))
+ 185 00d6 F040      		sbci r31,hi8(-(DebugBuffer))
+ 186 00d8 8083      		st Z,r24
+ 187               	.LM28:
+ 188 00da 8091 0000 		lds r24,Debug_writeLocation
+ 189 00de 9091 0000 		lds r25,(Debug_writeLocation)+1
+ 190 00e2 0196      		adiw r24,1
+ 191 00e4 8093 0000 		sts Debug_writeLocation,r24
+ 192 00e8 9093 0000 		sts (Debug_writeLocation)+1,r25
+ 193               	.LM29:
+ 194 00ec 8091 0000 		lds r24,Debug_writeLocation
+ 195 00f0 9091 0000 		lds r25,(Debug_writeLocation)+1
+ 196 00f4 8050      		subi r24,lo8(1024)
+ 197 00f6 9440      		sbci r25,hi8(1024)
+ 198 00f8 00F0      		brlo .L19
+ 199               	.LM30:
+ 200 00fa 1092 0000 		sts Debug_writeLocation,__zero_reg__
+ 201 00fe 1092 0000 		sts (Debug_writeLocation)+1,__zero_reg__
+ 202               	.L19:
+ 203               	/* epilogue start */
+ 204               	.LM31:
+ 205 0102 FF91      		pop r31
+ 206 0104 EF91      		pop r30
+ 207 0106 9F91      		pop r25
+ 208 0108 8F91      		pop r24
+ 209 010a 2F91      		pop r18
+ 210 010c 0F90      		pop r0
+ 211 010e 0BBE      		out 59-0,r0
+ 212 0110 0F90      		pop r0
+ 213 0112 0FBE      		out __SREG__,r0
+ 214 0114 0F90      		pop r0
+ 215 0116 1F90      		pop __zero_reg__
+ 216 0118 1895      		reti
+ 217               	.LFE11:
+ 219               	.global	Debug_SendString
+ 221               	Debug_SendString:
+ 222               	.LFB10:
+ 223               	.LM32:
+ 224               	.LVL7:
+ 225               	/* prologue: function */
+ 226               	/* frame size = 0 */
+ 227 011a 9C01      		movw r18,r24
+ 228               	.LBB13:
+ 229               	.LM33:
+ 230 011c DC01      		movw r26,r24
+ 231 011e 0D90      		ld __tmp_reg__,X+
+ 232 0120 0020      		tst __tmp_reg__
+ 233 0122 01F4      		brne .-6
+ 234 0124 1197      		sbiw r26,1
+ 235 0126 A81B      		sub r26,r24
+ 236 0128 B90B      		sbc r27,r25
+ 237 012a 90E0      		ldi r25,lo8(0)
+ 238               	.LVL8:
+ 239 012c 00C0      		rjmp .L21
+ 240               	.L23:
+ 241               	.LM34:
+ 242 012e E20F      		add r30,r18
+ 243 0130 F31F      		adc r31,r19
+ 244 0132 4081      		ld r20,Z
+ 245               	.LVL9:
+ 246               	.L22:
+ 247               	.LBB14:
+ 248               	.LBB15:
+ 249               	.LM35:
+ 250 0134 8091 A108 		lds r24,2209
+ 251 0138 85FF      		sbrs r24,5
+ 252 013a 00C0      		rjmp .L22
+ 253               	.LM36:
+ 254 013c 4093 A008 		sts 2208,r20
+ 255               	.LBE15:
+ 256               	.LBE14:
+ 257               	.LM37:
+ 258 0140 9F5F      		subi r25,lo8(-(1))
+ 259               	.LVL10:
+ 260               	.L21:
+ 261 0142 E92F      		mov r30,r25
+ 262 0144 F0E0      		ldi r31,lo8(0)
+ 263 0146 EA17      		cp r30,r26
+ 264 0148 FB07      		cpc r31,r27
+ 265 014a 00F0      		brlo .L23
+ 266               	.LVL11:
+ 267               	.LBE13:
+ 268               	.LM38:
+ 269 014c 6623      		tst r22
+ 270 014e 01F0      		breq .L27
+ 271               	.L28:
+ 272               	.LBB16:
+ 273               	.LBB17:
+ 274               	.LM39:
+ 275 0150 8091 A108 		lds r24,2209
+ 276               	.LVL12:
+ 277 0154 85FF      		sbrs r24,5
+ 278 0156 00C0      		rjmp .L28
+ 279               	.LM40:
+ 280 0158 8DE0      		ldi r24,lo8(13)
+ 281 015a 8093 A008 		sts 2208,r24
+ 282               	.L26:
+ 283               	.LBE17:
+ 284               	.LBE16:
+ 285               	.LBB18:
+ 286               	.LBB19:
+ 287               	.LM41:
+ 288 015e 8091 A108 		lds r24,2209
+ 289 0162 85FF      		sbrs r24,5
+ 290 0164 00C0      		rjmp .L26
+ 291               	.LM42:
+ 292 0166 8AE0      		ldi r24,lo8(10)
+ 293 0168 8093 A008 		sts 2208,r24
+ 294               	.LVL13:
+ 295               	.L27:
+ 296 016c 0895      		ret
+ 297               	.LBE19:
+ 298               	.LBE18:
+ 299               	.LFE10:
+ 301               	.global	Debug_readLocation
+ 302               	.global	Debug_readLocation
+ 303               		.section .bss
+ 306               	Debug_readLocation:
+ 307 0000 0000      		.skip 2,0
+ 308               	.global	Debug_writeLocation
+ 309               	.global	Debug_writeLocation
+ 312               	Debug_writeLocation:
+ 313 0002 0000      		.skip 2,0
+ 314               		.comm DebugBuffer,1024,1
+ 379               	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 debug.c
+/var/folders/wz/wzM13vx1HuGiQAygYPOM9k+++TI/-Tmp-//ccZjJj9v.s:2      *ABS*:0000003f __SREG__
+/var/folders/wz/wzM13vx1HuGiQAygYPOM9k+++TI/-Tmp-//ccZjJj9v.s:3      *ABS*:0000003e __SP_H__
+/var/folders/wz/wzM13vx1HuGiQAygYPOM9k+++TI/-Tmp-//ccZjJj9v.s:4      *ABS*:0000003d __SP_L__
+/var/folders/wz/wzM13vx1HuGiQAygYPOM9k+++TI/-Tmp-//ccZjJj9v.s:5      *ABS*:00000034 __CCP__
+/var/folders/wz/wzM13vx1HuGiQAygYPOM9k+++TI/-Tmp-//ccZjJj9v.s:6      *ABS*:00000000 __tmp_reg__
+/var/folders/wz/wzM13vx1HuGiQAygYPOM9k+++TI/-Tmp-//ccZjJj9v.s:7      *ABS*:00000001 __zero_reg__
+/var/folders/wz/wzM13vx1HuGiQAygYPOM9k+++TI/-Tmp-//ccZjJj9v.s:18     .text:00000000 Debug_Init
+/var/folders/wz/wzM13vx1HuGiQAygYPOM9k+++TI/-Tmp-//ccZjJj9v.s:60     .text:0000002e Debug_CharReadyToRead
+/var/folders/wz/wzM13vx1HuGiQAygYPOM9k+++TI/-Tmp-//ccZjJj9v.s:312    .bss:00000002 Debug_writeLocation
+/var/folders/wz/wzM13vx1HuGiQAygYPOM9k+++TI/-Tmp-//ccZjJj9v.s:306    .bss:00000000 Debug_readLocation
+/var/folders/wz/wzM13vx1HuGiQAygYPOM9k+++TI/-Tmp-//ccZjJj9v.s:84     .text:0000004c Debug_GetByte
+                            *COM*:00000400 DebugBuffer
+/var/folders/wz/wzM13vx1HuGiQAygYPOM9k+++TI/-Tmp-//ccZjJj9v.s:141    .text:000000a0 Debug_SendByte
+/var/folders/wz/wzM13vx1HuGiQAygYPOM9k+++TI/-Tmp-//ccZjJj9v.s:163    .text:000000b0 __vector_25
+/var/folders/wz/wzM13vx1HuGiQAygYPOM9k+++TI/-Tmp-//ccZjJj9v.s:221    .text:0000011a Debug_SendString
+
+UNDEFINED SYMBOLS
+__do_clear_bss

@@ -1,0 +1,147 @@
+   1               		.file	"twi.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+  15               	.Ltext0:
+  16               	.global	TWI_init
+  18               	TWI_init:
+  19               	.LFB6:
+  20               	.LM1:
+  21               	/* prologue: function */
+  22               	/* frame size = 0 */
+  23               	.LM2:
+  24 0000 E0EA      		ldi r30,lo8(1184)
+  25 0002 F4E0      		ldi r31,hi8(1184)
+  26 0004 88E0      		ldi r24,lo8(8)
+  27 0006 8183      		std Z+1,r24
+  28               	.LM3:
+  29 0008 84E0      		ldi r24,lo8(4)
+  30 000a 8383      		std Z+3,r24
+  31               	.LM4:
+  32 000c 83E2      		ldi r24,lo8(35)
+  33 000e 8583      		std Z+5,r24
+  34               	.LM5:
+  35 0010 81E0      		ldi r24,lo8(1)
+  36 0012 8483      		std Z+4,r24
+  37               	/* epilogue start */
+  38               	.LM6:
+  39 0014 0895      		ret
+  40               	.LFE6:
+  42               	.global	TWI_sendBytes
+  44               	TWI_sendBytes:
+  45               	.LFB7:
+  46               	.LM7:
+  47               	.LVL0:
+  48               	/* prologue: function */
+  49               	/* frame size = 0 */
+  50 0016 582F      		mov r21,r24
+  51               	.LM8:
+  52 0018 4E7F      		andi r20,lo8(-2)
+  53               	.LVL1:
+  54               	.LM9:
+  55 001a E0EA      		ldi r30,lo8(1184)
+  56 001c F4E0      		ldi r31,hi8(1184)
+  57 001e 4683      		std Z+6,r20
+  58 0020 FB01      		movw r30,r22
+  59               	.LVL2:
+  60 0022 90E0      		ldi r25,lo8(0)
+  61               	.LVL3:
+  62               	.LM10:
+  63 0024 A0EA      		ldi r26,lo8(1184)
+  64 0026 B4E0      		ldi r27,hi8(1184)
+  65 0028 00C0      		rjmp .L4
+  66               	.LVL4:
+  67               	.L8:
+  68 002a 8091 A404 		lds r24,1188
+  69 002e 86FF      		sbrs r24,6
+  70 0030 00C0      		rjmp .L8
+  71               	.LM11:
+  72 0032 8091 A404 		lds r24,1188
+  73 0036 84FD      		sbrc r24,4
+  74 0038 00C0      		rjmp .L7
+  75               	.LM12:
+  76 003a 8191      		ld r24,Z+
+  77 003c 1796      		adiw r26,7
+  78 003e 8C93      		st X,r24
+  79 0040 1797      		sbiw r26,7
+  80               	.LM13:
+  81 0042 9F5F      		subi r25,lo8(-(1))
+  82               	.LVL5:
+  83               	.L4:
+  84               	.LM14:
+  85 0044 9517      		cp r25,r21
+  86 0046 00F0      		brlo .L8
+  87               	.L7:
+  88 0048 0895      		ret
+  89               	.LFE7:
+  91               	.global	TWI_receiveBytes
+  93               	TWI_receiveBytes:
+  94               	.LFB8:
+  95               	.LM15:
+  96               	.LVL6:
+  97               	/* prologue: function */
+  98               	/* frame size = 0 */
+  99 004a 582F      		mov r21,r24
+ 100               	.LM16:
+ 101 004c 4160      		ori r20,lo8(1)
+ 102               	.LVL7:
+ 103               	.LM17:
+ 104 004e E0EA      		ldi r30,lo8(1184)
+ 105 0050 F4E0      		ldi r31,hi8(1184)
+ 106 0052 4683      		std Z+6,r20
+ 107 0054 FB01      		movw r30,r22
+ 108               	.LVL8:
+ 109 0056 90E0      		ldi r25,lo8(0)
+ 110               	.LVL9:
+ 111               	.LM18:
+ 112 0058 A0EA      		ldi r26,lo8(1184)
+ 113 005a B4E0      		ldi r27,hi8(1184)
+ 114               	.LM19:
+ 115 005c 22E0      		ldi r18,lo8(2)
+ 116 005e 00C0      		rjmp .L11
+ 117               	.LVL10:
+ 118               	.L14:
+ 119               	.LM20:
+ 120 0060 8091 A404 		lds r24,1188
+ 121 0064 87FF      		sbrs r24,7
+ 122 0066 00C0      		rjmp .L14
+ 123               	.LM21:
+ 124 0068 8091 A704 		lds r24,1191
+ 125 006c 8193      		st Z+,r24
+ 126               	.LM22:
+ 127 006e 1396      		adiw r26,3
+ 128 0070 2C93      		st X,r18
+ 129 0072 1397      		sbiw r26,3
+ 130               	.LM23:
+ 131 0074 9F5F      		subi r25,lo8(-(1))
+ 132               	.LVL11:
+ 133               	.L11:
+ 134               	.LM24:
+ 135 0076 9517      		cp r25,r21
+ 136 0078 00F0      		brlo .L14
+ 137               	.LM25:
+ 138 007a 87E0      		ldi r24,lo8(7)
+ 139 007c E0EA      		ldi r30,lo8(1184)
+ 140 007e F4E0      		ldi r31,hi8(1184)
+ 141 0080 8383      		std Z+3,r24
+ 142               	/* epilogue start */
+ 143               	.LM26:
+ 144 0082 0895      		ret
+ 145               	.LFE8:
+ 187               	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 twi.c
+/var/folders/wz/wzM13vx1HuGiQAygYPOM9k+++TI/-Tmp-//ccajudd8.s:2      *ABS*:0000003f __SREG__
+/var/folders/wz/wzM13vx1HuGiQAygYPOM9k+++TI/-Tmp-//ccajudd8.s:3      *ABS*:0000003e __SP_H__
+/var/folders/wz/wzM13vx1HuGiQAygYPOM9k+++TI/-Tmp-//ccajudd8.s:4      *ABS*:0000003d __SP_L__
+/var/folders/wz/wzM13vx1HuGiQAygYPOM9k+++TI/-Tmp-//ccajudd8.s:5      *ABS*:00000034 __CCP__
+/var/folders/wz/wzM13vx1HuGiQAygYPOM9k+++TI/-Tmp-//ccajudd8.s:6      *ABS*:00000000 __tmp_reg__
+/var/folders/wz/wzM13vx1HuGiQAygYPOM9k+++TI/-Tmp-//ccajudd8.s:7      *ABS*:00000001 __zero_reg__
+/var/folders/wz/wzM13vx1HuGiQAygYPOM9k+++TI/-Tmp-//ccajudd8.s:18     .text:00000000 TWI_init
+/var/folders/wz/wzM13vx1HuGiQAygYPOM9k+++TI/-Tmp-//ccajudd8.s:44     .text:00000016 TWI_sendBytes
+/var/folders/wz/wzM13vx1HuGiQAygYPOM9k+++TI/-Tmp-//ccajudd8.s:93     .text:0000004a TWI_receiveBytes
+
+NO UNDEFINED SYMBOLS
