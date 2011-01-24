@@ -21,6 +21,8 @@ volatile bool		okToSendAirQuality = false;
 uint8_t airQualityString[50];
 uint32_t largeCount;
 uint32_t smallCount;
+uint32_t quickSmall = 0;
+uint32_t quickLarge = 0;
 
 volatile bool rs232Recording = false;
 
@@ -96,6 +98,11 @@ ISR(USARTD0_RXC_vect){
 				airSampleTime = Time_Get32BitTimer();
 				smallCount = atol(strtok(airQualityString,","));
 				largeCount = atol(strtok(NULL,","));
+
+				quickSmall = smallCount;
+				quickLarge = largeCount;
+
+
 				okToSendAirQuality = true;
 			}
 

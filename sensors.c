@@ -53,6 +53,15 @@ bool wantToRecordMicrophone 	= true;
 bool wantToRecordLight		 	= true;
 bool wantToRecordAirQuality		= true;
 
+
+uint8_t quickTemperature = 0;
+uint8_t quickHumidity = 0;
+uint8_t quickPressure = 0;
+uint16_t quickLight = 0;
+uint8_t quickMic = 0;
+uint8_t micSampleCounter = 0;
+
+
 uint32_t result[4];
 
 void Sensors_Init(void){
@@ -204,6 +213,7 @@ ISR(TCD1_OVF_vect)
 				  temperatureSampleStartTime1 = Time_Get32BitTimer();
 			  }
 			  temperatureBuffer1[temperatureBufferCounter] = Sensors_ReadTemperature();
+			  quickTemperature = temperatureBuffer1[temperatureBufferCounter]/10;
 			  temperatureBufferCounter++;
 			  if(temperatureBufferCounter == temperatureNumberOfSamples){
 				  temperatureBufferCounter=0;
@@ -215,6 +225,7 @@ ISR(TCD1_OVF_vect)
 				  temperatureSampleStartTime2 = Time_Get32BitTimer();
 			  }
 			  temperatureBuffer2[temperatureBufferCounter] = Sensors_ReadTemperature();
+			  quickTemperature = temperatureBuffer2[temperatureBufferCounter]/10;
 			  temperatureBufferCounter++;
 			  if(temperatureBufferCounter == temperatureNumberOfSamples){
 				  temperatureBufferCounter=0;
@@ -230,6 +241,7 @@ ISR(TCD1_OVF_vect)
 				  humiditySampleStartTime1 = Time_Get32BitTimer();
 			  }
 			  humidityBuffer1[humidityBufferCounter] = Sensors_ReadHumidity();
+			  quickHumidity = humidityBuffer1[humidityBufferCounter];
 			  humidityBufferCounter++;
 			  if(humidityBufferCounter == humidityNumberOfSamples){
 				  humidityBufferCounter=0;
@@ -241,6 +253,7 @@ ISR(TCD1_OVF_vect)
 				  humiditySampleStartTime2 = Time_Get32BitTimer();
 			  }
 			  humidityBuffer2[humidityBufferCounter] = Sensors_ReadHumidity();
+			  quickHumidity = humidityBuffer2[humidityBufferCounter];
 			  humidityBufferCounter++;
 			  if(humidityBufferCounter == humidityNumberOfSamples){
 				  humidityBufferCounter=0;
@@ -256,6 +269,8 @@ ISR(TCD1_OVF_vect)
 				  pressureSampleStartTime1 = Time_Get32BitTimer();
 			  }
 			  pressureBuffer1[pressureBufferCounter] = Sensors_ReadPressure();
+			  quickPressure = pressureBuffer1[pressureBufferCounter];
+
 			  pressureBufferCounter++;
 			  if(pressureBufferCounter == pressureNumberOfSamples){
 				  pressureBufferCounter=0;
@@ -267,6 +282,7 @@ ISR(TCD1_OVF_vect)
 				  pressureSampleStartTime2 = Time_Get32BitTimer();
 			  }
 			  pressureBuffer2[pressureBufferCounter] = Sensors_ReadPressure();
+			  quickPressure = pressureBuffer2[pressureBufferCounter];
 			  pressureBufferCounter++;
 			if(pressureBufferCounter == pressureNumberOfSamples){
 				pressureBufferCounter=0;
@@ -281,6 +297,8 @@ ISR(TCD1_OVF_vect)
 		  Light_readColors();
 		  Light_readColors();
 		  Light_readColors();
+
+		  quickLight = Light_returnColor(clear);
 
 		  for(uint8_t j = 0; j < 4; j++){
 			  result[j] = 0;
@@ -327,20 +345,28 @@ ISR(TCD1_OVF_vect)
 
 
 		  if((Light_returnColor(clear) > 49000) && (gainSelector!= 0)){			// saturated -> decrease gain
-			gainSelector--;
-			Light_setGain();
+			  gainSelector--;
+			  Light_setGain();
 		  } else if ((Light_returnColor(clear) < 16000) && (gainSelector!= 8)){			// too low  -> increase gain
-			gainSelector++;
-			Light_setGain();
+			  gainSelector++;
+			  Light_setGain();
 		  }
 
 
 	  }
 
+	} else {
+		quickTemperature = Sensors_ReadTemperature()/10;
+		quickHumidity = Sensors_ReadHumidity();
+		quickPressure = Sensors_ReadPressure();
+		Light_readColors();
+		quickLight = Light_returnColor(clear);
+
+	}
 
 
 
-	} 
+
 }
 
 ISR(TCF0_OVF_vect)
@@ -351,8 +377,12 @@ ISR(TCF0_OVF_vect)
 	    	microphoneSampleStartTime1 = Time_Get32BitTimer();
 	    }
 	    microphoneBuffer1[microphoneBufferCounter] = Sensors_ReadMicrophone();
+	    if(micSampleCounter == 0){
+	    	quickMic = microphoneBuffer1[microphoneBufferCounter];
+	    }
 	    microphoneBufferCounter++;
 	    if(microphoneBufferCounter == microphoneNumberOfSamples){
+	    	quickMic = microphoneBuffer1[0];
 	    	microphoneBufferCounter=0;
 	    	microphoneBufferToWriteTo = 2;
 	    	okToSendMicrophoneBuffer1 = true;
@@ -362,12 +392,24 @@ ISR(TCF0_OVF_vect)
 	    	microphoneSampleStartTime2 = Time_Get32BitTimer();
 	    }
 	    microphoneBuffer2[microphoneBufferCounter] = Sensors_ReadMicrophone();
+	    if(micSampleCounter == 0){
+	    	quickMic = microphoneBuffer2[microphoneBufferCounter];
+	    }
+
 	    microphoneBufferCounter++;
 	    if(microphoneBufferCounter == microphoneNumberOfSamples){
+	    	quickMic = microphoneBuffer2[0];
 	    	microphoneBufferCounter=0;
 	    	microphoneBufferToWriteTo = 1;
 	    	okToSendMicrophoneBuffer2 = true;
 	    }
+
+
 	  }
+	} else {
+		if(micSampleCounter == 0){
+			quickMic = Sensors_ReadMicrophone();
+		}
 	}
+	micSampleCounter++;
 }

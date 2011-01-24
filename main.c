@@ -8,6 +8,13 @@
 //				2.00 - 01/17/2011 - Changes made to support new new hardware
 //								  - RTC sync supported
 //								  - recording multiple files supported
+//				2.01 - 01/18/2011 - WEP128 supported
+//				2.02 - 01/21/2011 - uses the wifi "connection status" pin for connection status
+//								  - new GUI
+//								  - time is resynced every time a new logfile is created
+//								  - picoseconds per tick fixed in the SD_StartLogFile() function
+//								  - changed the led pins to go better with the GUI
+//								  - time zones supported (in US only), but no day light savings time
 //
 //___________________________________________
 
@@ -29,10 +36,6 @@
 #include "sensors.c"
 #include "light.c"
 #include "rtc.c"
-
-
-
-
 
 
 // ********************************** Functions *********************************
@@ -70,22 +73,40 @@ char temp [50];
 
 char auth [50] = "set wlan auth ";
 char phrase [50] = "set wlan phrase ";
+char key [50] = "set wlan key ";
 char port [50] = "set ip localport ";
 char ssid [50] = "join ";
+char zone [10] = "GMT";
 
 bool authRead = false;
 bool phraseRead = false;
+bool keyRead = false;
 bool portRead = false;
 bool ssidRead = false;
+bool zoneChanged = false;
 
+uint8_t timeZoneShift = 0;
+uint8_t clockHour = 0;
 
+volatile uint8_t currentMode      = 0;
+uint8_t ssRefreshCounter = 0;
+uint8_t signalStrength   = 0;
+uint8_t uploadPercentBS  = 0;
+uint8_t uploadPercentEXT = 0;
 
+bool rtcSynced			 = false;
 
+bool needToChangeBaud = true;
 
+bool demoMode = false;
+bool demoModeFirstFile = true;
 
-char debugMsg[150];
 
 	
+
+// ********************************** Main Program *********************************
+
+
 int main(void){
 	_delay_ms(5);
 
@@ -116,16 +137,25 @@ int main(void){
 	}
 
 
-	display_putString("booting up",0,0,System5x7);
-	display_writeBufferToScreen();
 	Debug_SendString("booting up...",true);
-	for(uint8_t i = 60; i < 90; i+=6){
-	  display_putString(".",0,i,System5x7);
-	  display_writeBufferToScreen();
-	  _delay_ms(1000);
+
+
+	display_putString("   BaseStation   ",1,0,System5x7);
+	strcat(temp,"  Hardware: v");
+	strcat(temp,HardwareVersion);
+	display_putString(temp,3,0,System5x7);
+	temp[0] = 0;
+	strcat(temp," Firmware: v");
+	strcat(temp,FirmwareVersion);
+	display_putString(temp,5,0,System5x7);
+	display_writeBufferToScreen();
+	if(demoMode){
+		display_putString("    Demo Mode    ",7,0,System5x7);
 	}
+	display_writeBufferToScreen();
+	_delay_ms(2000);
 	
-	SD_CD_Port.PIN1CTRL = PORT_OPC_PULLUP_gc;
+
 
 
 	while(!SD_Inserted()){
@@ -140,157 +170,353 @@ int main(void){
 	
 	Read_config_file();
 
-	while(!connected){
+
+	while(!connected && !demoMode){
 		Config_Wifi();
 		_delay_ms(500);
 	}
-	Leds_Clear(wifi_Red);
-	Time_Set(time_secs);
 	
-	
+	if(demoMode){
+		Leds_Set(wifi_Green);
+	}
+
 
 	_delay_ms(500);
 
 	
 	
-	if(Dpad_CheckButton(Left)){
-		Debug_SendString("Entering Debug to Wifi function",true);
-		Debug_To_Wifi();
-	}
 	
 
 
-	// starting recording
+	display_clearBuffer();
+	display_writeBufferToScreen();
+
+StartRecording:
+	SD_Init();
+	Wifi_EnterCMDMode(500);
+	if(!demoMode){
+		Wifi_GetTime(1000);
+	}else{
+		if(demoModeFirstFile){
+			demoModeFirstFile = false;
+			UNIX_time = 1928383;
+		}
+	}
+	Wifi_ExitCMDMode(500);
+	sprintf(temp,"time: %lu", time_secs);
+	Debug_SendString(temp,true);
+
 	while(true){
 
-		while(true){
-			if(SD_StartLogFile(UNIX_time) == 0){
-				Leds_Clear(sd_Red);
-				break;
-			} else {
-				Leds_Set(sd_Red);
 
-				display_clearBuffer();
-				display_writeBufferToScreen();
-				display_putString("    uSD Error    ",3,0,System5x7);
-				display_putString(" Please Remove & ",6,0,System5x7);
-				display_putString("  Reinsert Card  ",7,0,System5x7);
-				display_writeBufferToScreen();
+		if(SD_StartLogFile(UNIX_time) == 0){								// open file
 
-				while(SD_Inserted());
-				_delay_ms(100);
-				while(!SD_Inserted());
-				_delay_ms(100);
-				SD_Init();
-			}
-		}
+			Leds_Clear(sd_Green);
+			Leds_Clear(wifi_Green);
+			timeRecordingStarted = UNIX_time;
 
-		Leds_Clear(sd_Green);
-		Leds_Clear(wifi_Green);
+			Debug_SendString("RTC Block: ",false);							// send rtc block
+			SD_WriteRTCBlock(Time_Get32BitTimer(),UNIX_time);
+			Debug_SendString(ltoa(UNIX_time,temp,10),false);
+			Debug_SendString(", ",false);
+			Debug_SendString(ltoa(Time_Get32BitTimer(),temp,10),true);
 
-		display_clearBuffer();
-		display_writeBufferToScreen();
-		display_putString("    RECORDING!   ",3,0,System5x7);
-		display_putString(" press select to ",6,0,System5x7);
-		display_putString(" stop recording ",7,0,System5x7);
-		display_writeBufferToScreen();
-	
-		Debug_SendString("RTC Block: ",false);
-		SD_WriteRTCBlock(Time_Get32BitTimer(),UNIX_time);
-		Debug_SendString(ltoa(UNIX_time,temp,10),false);
-		Debug_SendString(", ",false);
-		Debug_SendString(ltoa(Time_Get32BitTimer(),temp,10),true);;
-	
-
-		Rs232_ClearBuffer();
-		rs232Recording = true;
-		recording = true;
-	
-		_delay_ms(2000);
-		while(true){
+			Rs232_ClearBuffer();
+			rs232Recording = true;
+			recording = true;
 
 
-			if((SD_CD_Port.IN & (2)) == 0 ){
 
-				display_clearBuffer();
-				display_writeBufferToScreen();
 
-				Leds_Set(ext_Green);
-				Leds_Set(ext_Red);
-				display_putString("RTC connected... ",3,0,System5x7);
-				display_writeBufferToScreen();
-				_delay_ms(1000);
-				RTC_init();
-				RTC_setUTCSecs(UNIX_time);
-				display_putString("RTC synced... ",5,0,System5x7);
-				display_writeBufferToScreen();
-				Leds_Clear(ext_Red);
-				_delay_ms(1000);
-				while((SD_CD_Port.IN & (2)) == 0 ){
-					sprintf(temp, "Time: %lu", RTC_getUTCSecs());
-					display_putString(temp,7,0,System5x7);
-					display_writeBufferToScreen();
-					_delay_ms(500);
+
+			while(true){
+
+				if(ssRefreshCounter == 0){
+					Wifi_EnterCMDMode(1000);
+					signalStrength = Wifi_GetSignalStrength(1000);
+					Wifi_ExitCMDMode(500);
 				}
-				Leds_Clear(ext_Green);
+				ssRefreshCounter++;
 
-				display_clearBuffer();
-				display_writeBufferToScreen();
-				display_putString("    RECORDING!   ",3,0,System5x7);
-				display_putString(" press select to ",6,0,System5x7);
-				display_putString(" stop recording ",7,0,System5x7);
-				display_writeBufferToScreen();
+				// controls
 
-			}
 
-			if(Dpad_CheckButton(Select)){
-				rs232Recording = false;
-				recording = false;
-				display_clearBuffer();
-				display_writeBufferToScreen();
-				display_putString(" Done Recording! ",3,0,System5x7);
-				display_putString("   Thank You!    ",4,0,System5x7);
-				display_writeBufferToScreen();
-				Sensors_ResetTemperatureBuffers();
-				Sensors_ResetHumidityBuffers();
-				Sensors_ResetPressureBuffers();
-				Sensors_ResetMicrophoneBuffers();
-				Sensors_ResetLightBuffers();
+				if(currentMode == recordMode && Dpad_CheckButton(Up) && !recording){								// start recording
 
-				SD_Close();
-				_delay_ms(2000);
-				Leds_Set(wifi_Green);
-			
+					display_putString("Recording      0m",0,0,System5x7);
+					display_drawLine(1,60,7,60,true);		// up arrow
+					display_drawPixel(2,59,true);
+					display_drawPixel(3,58,true);
+					display_drawPixel(2,61,true);
+					display_drawPixel(3,62,true);
 
-				while(true){
+					display_writeBufferToScreen();
+
+					Leds_Clear(sd_Green);
+					Leds_Clear(sd_Red);
+					Leds_Clear(wifi_Green);
+					Leds_Clear(wifi_Red);
+					Leds_Clear(ext_Green);
+					Leds_Clear(ext_Red);
+
+					_delay_ms(1000);
+					goto StartRecording;
+				} else if(currentMode == recordMode && Dpad_CheckButton(Up) && recording){							// pause recording
+
+					rs232Recording = false;
+					recording = false;
+
+					Sensors_ResetTemperatureBuffers();
+					Sensors_ResetHumidityBuffers();
+					Sensors_ResetPressureBuffers();
+					Sensors_ResetMicrophoneBuffers();
+					Sensors_ResetLightBuffers();
+					SD_Close();
+					display_putString("Paused           ",0,0,System5x7);
+					display_drawLine(1,60,7,60,true);		// up arrow
+					display_drawPixel(2,59,true);
+					display_drawPixel(3,58,true);
+					display_drawPixel(2,61,true);
+					display_drawPixel(3,62,true);
+					display_writeBufferToScreen();
+
+
+					if(demoMode){
+						Leds_Set(wifi_Green);
+					} else {
+						Wifi_EnterCMDMode(500);
+						if(Wifi_GetTime(500)){
+							Leds_Set(wifi_Green);
+						} else {
+							Leds_Set(wifi_Red);
+						}
+						Wifi_ExitCMDMode(500);
+					}
 					if(SD_Inserted()){
 						Leds_Set(sd_Green);
-						Leds_Clear(sd_Red);
-						display_writeBufferToScreen();
-						display_putString(" Press Select To ",3,0,System5x7);
-						display_putString("  Record Again   ",4,0,System5x7);
-						display_writeBufferToScreen();
-						_delay_ms(100);
-						if(Dpad_CheckButton(Select)){
-							break;
+					} else {
+						Leds_Set(sd_Red);
+					}
+					if(!chargeComplete && SD2_Inserted()){
+						Leds_Set(ext_Red);
+						Leds_Set(ext_Green);
+
+					} else if(chargeComplete && SD2_Inserted()){
+						Leds_Clear(ext_Red);
+						Leds_Set(ext_Green);
+					}
+
+
+
+					_delay_ms(500);
+				} else if(currentMode == recordMode && Dpad_CheckButton(Down)){										// go to sensorMode
+
+					currentMode = sensorMode;
+					display_clearBuffer();
+					display_writeBufferToScreen();
+				} else if(currentMode == sensorMode && Dpad_CheckButton(Up)){										// go to recordMode
+
+					currentMode = recordMode;
+					display_clearBuffer();
+					display_writeBufferToScreen();
+					_delay_ms(400);
+				} else if(currentMode == recordMode && !recording && !SD_Inserted()){											// dont allow to start recording
+					Leds_Set(sd_Red);
+					Leds_Clear(sd_Green);
+				} else if(currentMode == recordMode && !recording && SD_Inserted() && !Dpad_CheckButton(Up)){
+					Leds_Clear(sd_Red);
+					Leds_Set(sd_Green);
+				}
+
+				// load displays
+
+				if(currentMode == recordMode){																		// show record screen
+
+					if(recording){
+						sprintf(temp, "Recording   %4lum", (UNIX_time - timeRecordingStarted)/60);		// load recording screen
+						display_putString(temp,0,0,System5x7);
+					} else {
+						display_putString("Paused           ",0,0,System5x7);
+					}
+
+					display_drawLine(1,60,7,60,true);		// up arrow
+					display_drawPixel(2,59,true);
+					display_drawPixel(3,58,true);
+					display_drawPixel(2,61,true);
+					display_drawPixel(3,62,true);
+
+					sprintf(temp, "Uploading    %3u", uploadPercentBS);
+					strcat(temp,"%");
+					display_putString(temp,1,0,System5x7);
+
+
+
+					if(chargePercent == 100){
+						chargeComplete = true;
+						okToCharge  = false;
+					}
+
+
+					if(SD2_Inserted() && chargeComplete){
+						display_putString("Ext Charged      ",3,0,System5x7);
+						if(!recording){
+							Leds_Clear(ext_Red);
+							Leds_Set(ext_Green);
+						}
+					} else if(SD2_Inserted() && !chargeComplete){
+						sprintf(temp, "Ext Charging  %2u",chargePercent);
+						strcat(temp,"%");
+						display_putString(temp,3,0,System5x7);
+						okToCharge = true;
+						if(!rtcSynced){
+							Debug_SendString("Syncing RTC", true);
+							RTC_init();
+							RTC_setUTCSecs(UNIX_time);
+							rtcSynced = true;
+							Debug_SendString("RTC synced", true);
+						}
+						if(!recording){
+							Leds_Set(ext_Red);
+							Leds_Set(ext_Green);
+						}
+					}else{
+						display_putString("Ext Removed      ",3,0,System5x7);
+						chargePercent = 0;
+						chargeComplete = false;
+						rtcSynced = false;
+						Leds_Clear(ext_Red);
+						Leds_Clear(ext_Green);
+					}
+
+
+
+
+
+					sprintf(temp, "Uploading    %3u", uploadPercentEXT);
+					strcat(temp,"%");
+					display_putString(temp,4,0,System5x7);
+
+					RTC_UTCSecsToTime(UNIX_time,&time);
+					clockHour = time.Hour + 24;
+					clockHour -= timeZoneShift;
+					if(clockHour > 24){
+						clockHour -= 24;
+					}
+
+					sprintf(temp,"Time %2u:%02u:%02u ", clockHour, time.Minute, time.Second);
+					strcat(temp,zone);
+					display_putString(temp,6,0,System5x7);
+
+					sprintf(temp, "Wifi %3u",signalStrength);
+					strcat(temp,"%   more");
+					display_putString(temp,7,0,System5x7);
+
+
+					display_drawLine(56,98,63,98,true);		// down arrow
+					display_drawPixel(62,97,true);
+					display_drawPixel(61,96,true);
+					display_drawPixel(62,99,true);
+					display_drawPixel(61,100,true);
+
+					display_writeBufferToScreen();
+					_delay_ms(50);
+
+
+
+
+
+				} else if(currentMode == sensorMode){																// show sensor screen
+
+					display_clearBuffer();
+					display_putString("   Sensors  back",0,0,System5x7);
+					display_drawLine(8, 15, 8,61,true);
+
+					display_drawLine(1,99,7,99,true);		// up arrow
+					display_drawPixel(2,98,true);
+					display_drawPixel(3,97,true);
+					display_drawPixel(2,100,true);
+					display_drawPixel(3,101,true);
+
+
+					sprintf(temp,"Temperature: %3uC", quickTemperature);
+					display_putString(temp,2,0,System5x7);
+					sprintf(temp,"Humidity:  %3u", quickHumidity);
+					strcat(temp, "%RH");
+					display_putString(temp,3,0,System5x7);
+					sprintf(temp,"Pressure:  %3ukPa", quickPressure);
+					display_putString(temp,4,0,System5x7);
+					sprintf(temp,"Light:      %5u", quickLight);
+					display_putString(temp,5,0,System5x7);
+					sprintf(temp,"Air: %5lu, %5lu", quickSmall, quickLarge);
+					display_putString(temp,6,0,System5x7);
+					display_putString("Sound:           ",7,0,System5x7);
+					display_drawRectangle(57,50,7,quickMic/2,true,false,true);
+					display_writeBufferToScreen();
+					_delay_ms(50);
+
+					if(chargePercent == 100){
+						chargeComplete = true;
+						okToCharge  = false;
+					}
+
+					if(SD2_Inserted() && chargeComplete && !recording){
+						Leds_Clear(ext_Red);
+						Leds_Set(ext_Green);
+					} else if(SD2_Inserted() && !chargeComplete){
+						okToCharge = true;
+						if(!rtcSynced){
+							Debug_SendString("Syncing RTC", true);
+							if(!demoMode){
+								RTC_init();
+								RTC_setUTCSecs(UNIX_time);
+							}
+							rtcSynced = true;
+						}
+						if(!recording){
+							Leds_Set(ext_Red);
+							Leds_Set(ext_Green);
 						}
 
-					} else {
-						Leds_Clear(sd_Green);
-						Leds_Set(sd_Red);
-						display_writeBufferToScreen();
-						display_putString("  Please Replace ",3,0,System5x7);
-						display_putString("  The uSD card   ",4,0,System5x7);
-						display_writeBufferToScreen();
-						_delay_ms(250);
-						SD_Init();
-
-
+					}else{
+						chargePercent = 0;
+						chargeComplete = false;
+						rtcSynced = false;
+						Leds_Clear(ext_Red);
+						Leds_Clear(ext_Green);
 					}
+
+
 				}
-				break;
+
+
+
+
+
+
+
+
+
+
+
+
 			}
+		} else {
+			Leds_Set(sd_Red);
+
+			display_clearBuffer();
+			display_writeBufferToScreen();
+			display_putString("    uSD Error    ",3,0,System5x7);
+			display_putString(" Please Remove & ",6,0,System5x7);
+			display_putString("  Reinsert Card  ",7,0,System5x7);
+			display_writeBufferToScreen();
+
+			while(SD_Inserted());
+			_delay_ms(100);
+			while(!SD_Inserted());
+			_delay_ms(100);
+			SD_Init();
 		}
+
 	}
 
 
@@ -713,6 +939,10 @@ void Read_config_file(void){
 	      strtok(temp,"=");
 	      strcat(phrase,strtok(NULL,"="));
 	      phraseRead = true;
+	    } else if(strstr(temp,"key") != 0){
+	      strtok(temp,"=");
+	      strcat(key,strtok(NULL,"="));
+	      keyRead = true;
 	    } else if(strstr(temp,"port") != 0){
 	      strtok(temp,"=");
 	      strcat(port,strtok(NULL,"="));
@@ -721,7 +951,28 @@ void Read_config_file(void){
 	      strtok(temp,"=");
 	      strcat(auth,strtok(NULL,"="));
 	      authRead = true;
+	    } else if(strstr(temp,"zone") != 0){
+	      strtok(temp,"=");
+	      strcpy(zone,strtok(NULL,"="));
+	      zoneChanged = true;
+	      Debug_SendString("Time Zone changed to: ",false);
+	      Debug_SendString(zone,true);
+	      if(strcmp(zone,"EST") == 0){
+	    	  timeZoneShift = 5;
+	      } else if(strcmp(zone,"CST") == 0){
+	    	  timeZoneShift = 6;
+	      } else if(strcmp(zone,"MST") == 0){
+	    	  timeZoneShift = 7;
+	      } else if(strcmp(zone,"PST") == 0){
+	    	  timeZoneShift = 8;
+	      }
+	      sprintf(temp,"shifted by %u",timeZoneShift);
+	      Debug_SendString(temp,true);
+
 	    }
+
+
+
 	  } else {
 	    break;
 	  }
@@ -753,7 +1004,25 @@ void Config_Wifi(void){
 	
 	_delay_ms(1000);
 	
-	Wifi_ClearBuffer();
+	if(needToChangeBaud){
+		Wifi_SendCommand("set sys iofunc 0x10","AOK","AOK",500);
+		_delay_ms(1000);
+		Wifi_SendCommand("save","Storing in config","Storing in config",500);
+		_delay_ms(1000);
+		Wifi_SendCommand("reboot","*Reboot*","*Reboot*",500);
+		_delay_ms(1000);
+		Wifi_ClearBuffer();
+
+
+		Wifi_EnterCMDMode(1000);
+		_delay_ms(1000);
+		Wifi_SendCommand("set uart instant 115200","AOK","AOK",500);
+		Wifi_Init(115200);
+		_delay_ms(1000);
+		needToChangeBaud = false;
+	}
+
+	Wifi_EnterCMDMode(1000);
 	Wifi_SendCommand("set comm remote 0","AOK","AOK",500);
 	_delay_ms(1000);
 
@@ -762,7 +1031,7 @@ void Config_Wifi(void){
 	
 	Wifi_SendCommand("set comm close AOK","AOK","AOK",500);		
 	_delay_ms(1000);
-	
+
 	if(Wifi_SendCommand("set time enable 1","AOK","AOK",500)){
 		display_putString("enable time....OK",col,0,System5x7);
 	} else {
@@ -788,6 +1057,15 @@ void Config_Wifi(void){
 			display_putString("phrase.........OK",col,0,System5x7);
 		} else {
 			display_putString("phrase.......FAIL",col,0,System5x7);
+		}
+		display_writeBufferToScreen();
+		_delay_ms(1000);
+		col++;
+	} else if(keyRead){
+		if(Wifi_SendCommand(key,"AOK","AOK",500)){
+			display_putString("key............OK",col,0,System5x7);
+		} else {
+			display_putString("key..........FAIL",col,0,System5x7);
 		}
 		display_writeBufferToScreen();
 		_delay_ms(1000);
@@ -818,36 +1096,34 @@ void Config_Wifi(void){
 	
 	
 	Wifi_SendCommand("get time","TimeEna=1","TimeEna=1",500);
-	_delay_ms(1000);
+	_delay_ms(500);
 	
 	Wifi_ExitCMDMode(500);
+
+	_delay_ms(500);
 	
-	_delay_ms(1000);
-	
-	Wifi_EnterCMDMode(500);
-	_delay_ms(1000);
 	if(Wifi_Connected(1000)){
-		display_putString("connection.....OK",col,0,System5x7);
+		display_putString("network........OK",col,0,System5x7);
 		connected = true;
 	} else {
-		display_putString("connection...FAIL",col,0,System5x7);
+		display_putString("network......FAIL",col,0,System5x7);
 		connected = false;
 	}
 	display_writeBufferToScreen();
-	_delay_ms(1000);
 	col++;
-	Wifi_ExitCMDMode(500);
 	
 	if(connected){
 		_delay_ms(1000);
 		Wifi_EnterCMDMode(500);
 		if(Wifi_GetTime(1000)){
 			display_putString("internet.......OK",col,0,System5x7);
+			Time_Set(time_secs);
 			Leds_Set(wifi_Green);
-
+			Leds_Clear(wifi_Red);
 		} else{
 			display_putString("internet.....FAIL",col,0,System5x7);
 			Leds_Set(wifi_Red);
+			Leds_Clear(wifi_Green);
 			connected = false;
 		}
 

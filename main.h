@@ -1,5 +1,6 @@
 
-
+#define FirmwareVersion "2.02"
+#define HardwareVersion "2"
 
 #define temperatureNumberOfSamples   	10
 #define humidityNumberOfSamples   		10
@@ -7,6 +8,10 @@
 #define microphoneNumberOfSamples   	1000
 #define lightNumberOfSamples   			10
 #define lightNumberOfChannels			4
+
+#define recordMode						0
+#define sensorMode						1
+
 
 uint32_t temperatureSampleStartTime1 = 0;
 uint32_t temperatureSampleStartTime2 = 0;
@@ -34,3 +39,5 @@ uint32_t lightBuffer1 [lightNumberOfSamples*lightNumberOfChannels];
 uint32_t lightBuffer2 [lightNumberOfSamples*lightNumberOfChannels];
 
 uint32_t airSampleTime = 0;
+
+uint32_t timeRecordingStarted = 0;

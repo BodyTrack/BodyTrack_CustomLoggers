@@ -15,8 +15,7 @@
 #define RTYPE_PERIODIC_DATA 3
 
 #define DeviceClass	"BaseStation"
-#define FirmwareVersion "2.00"
-#define HardwareVersion "2"
+
 #define StartFileLength 308
 
 static FATFS file_system_object;
@@ -31,10 +30,16 @@ char tmpArray[20];
 
 volatile uint32_t CRC;
 
+uint8_t chargePercent    = 0;
+uint16_t chargeCounter   = 0;
+bool chargeComplete   	 = false;
+bool okToCharge 		 = false;
+
 
 
 void SD_Init(void){
 	SD_CD_Port.SD_CD_CNTL = PORT_OPC_PULLUP_gc;
+	SD_CD_Port.SD_CD2_CNTL = PORT_OPC_PULLUP_gc;
 	SD_Timer_Init();
 	disk_initialize(0);
 	f_mount(0, &file_system_object);
@@ -48,11 +53,20 @@ uint8_t SD_Open(char string []){
 }
 
 void SD_Close(void){
+	Debug_SendString("Closing File",true);
 	f_close(&Log_File);
 }
 
 bool SD_Inserted(void){
 	if((SD_CD_Port.IN & (1<<SD_CD)) > 0 ){
+		return false;
+	} else {
+		return true;
+	}
+}
+
+bool SD2_Inserted(void){
+	if((SD_CD_Port.IN & (1<<SD_CD2)) > 0 ){
 		return false;
 	} else {
 		return true;
@@ -137,7 +151,7 @@ uint8_t SD_StartLogFile(uint32_t time){
 	SD_Write16(0x0100);				// protocol version
 	SD_Write8(0x02);					// time protocol
 	SD_Write32(Time_Get32BitTimer());					// time
-	SD_Write32(460800);			// picoseconds per tick (48bit)
+	SD_Write32(542535);			// picoseconds per tick (48bit) (truly is 542534.722)
 	SD_Write16(0);
 		
 	SD_WriteString("device_class");
@@ -206,6 +220,15 @@ void SD_Timer_Init(void)			// Initialize 100 Hz timer needed for SD access
 ISR(TCE0_OVF_vect)
 {
 	disk_timerproc();
+
+
+	if(okToCharge){
+		chargeCounter++;
+		if(chargeCounter >= 16200){
+			chargeCounter=0;
+			chargePercent++;
+		}
+	}
 }
 
 

@@ -9,12 +9,12 @@
 #include "avr_compiler.h"
 #include "leds.h"
 
-#define wifi_Green	0
-#define wifi_Red 	1
-#define sd_Green	4
-#define sd_Red	 	5
-#define ext_Green 	6
-#define ext_Red		7
+#define wifi_Green	6 //0
+#define wifi_Red 	7 //1
+#define sd_Green	0 //4
+#define sd_Red	 	1 //5
+#define ext_Green 	4 //6
+#define ext_Red		5 //7
 
 
 

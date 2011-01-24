@@ -16,15 +16,16 @@
 
 #define SD_CD_Port					PORTF
 #define SD_CD						0 // main
-//#define SD_CD						1 // acc
+#define SD_CD2						1 // acc
 #define SD_CD_CNTL					PIN0CTRL	// main
-//#define SD_CD_CNTL					PIN1CTRL // acc
+#define SD_CD2_CNTL					PIN1CTRL // acc
 
 
 void SD_Init(void);
 uint8_t SD_Open(char string []);
 void SD_Close(void);
 bool SD_Inserted(void);
+bool SD2_Inserted(void);
 
 void SD_Write8(uint8_t var);
 void SD_Write16(uint16_t var);

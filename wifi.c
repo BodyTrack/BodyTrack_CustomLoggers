@@ -37,8 +37,12 @@ volatile uint32_t time_nanos = 0;
 volatile bool connected = false;
 volatile char connectionStatus[3];
 char macAddr[20];
+char rssi[10];
 
 void Wifi_Init(uint32_t baud){
+
+	//Wifi_Connected_Port.Wifi_Connected_PinCTRL = PORT_OPC_PULLUP_gc;
+	Wifi_Connected_Port.DIRCLR = (1<<Wifi_Connected_pin);
 
 	Wifi_Usart.CTRLB &= (~USART_RXEN_bm);
 	Wifi_Usart.CTRLB &= (~USART_TXEN_bm);
@@ -49,10 +53,22 @@ void Wifi_Init(uint32_t baud){
 
 	Wifi_Usart.CTRLC = USART_CHSIZE_8BIT_gc | USART_PMODE_DISABLED_gc | (false ? USART_SBMODE_bm : 0);
 	 	    	
-
-	Wifi_Usart.BAUDCTRLA = 95 & 0xFF;
-	Wifi_Usart.BAUDCTRLB = (0 << USART_BSCALE0_bp)|(95 >> 8);
-
+	if(baud == 9600){
+		Wifi_Usart.BAUDCTRLA = 95 & 0xFF;
+		Wifi_Usart.BAUDCTRLB = (0 << USART_BSCALE0_bp)|(95 >> 8);
+	} else if(baud == 115200){
+		Wifi_Usart.BAUDCTRLA = 7 & 0xFF;
+		Wifi_Usart.BAUDCTRLB = (0 << USART_BSCALE0_bp)|(7 >> 8);
+	} else if(baud == 230400){
+		Wifi_Usart.BAUDCTRLA = 3 & 0xFF;
+		Wifi_Usart.BAUDCTRLB = (0 << USART_BSCALE0_bp)|(3 >> 8);
+	} else if(baud == 460800){
+		Wifi_Usart.BAUDCTRLA = 1 & 0xFF;
+		Wifi_Usart.BAUDCTRLB = (0 << USART_BSCALE0_bp)|(1 >> 8);
+	} else if(baud == 921600){
+		Wifi_Usart.BAUDCTRLA = 0 & 0xFF;
+		Wifi_Usart.BAUDCTRLB = (0 << USART_BSCALE0_bp)|(0 >> 8);
+	}
 	
 	Wifi_Usart.CTRLB |= USART_RXEN_bm;
 	Wifi_Usart.CTRLB |= USART_TXEN_bm;
@@ -212,6 +228,7 @@ bool Wifi_GetTime(uint16_t timeOut){
 	Debug_SendByte(13);
 	
 	if(tmp < 4){
+		time_secs = 0;
 		return false;
 	}
 	
@@ -221,7 +238,7 @@ bool Wifi_GetTime(uint16_t timeOut){
 
 	strtok(string,"=");
 	strtok(NULL,"=");
-	strcat(timeString,strtok(NULL," "));
+	strcpy(timeString,strtok(NULL," "));
 		
 	for(uint8_t i = 0; i < 8; i++){
 		timeUpper[i] = timeString[i];
@@ -244,22 +261,10 @@ bool Wifi_GetTime(uint16_t timeOut){
 }
 
 bool Wifi_Connected(uint16_t timeOut){
-	uint8_t tmp = 0;
-	Wifi_ClearBuffer();
-	Wifi_SendCommand("show connection","8","8",timeOut);	
-	for(uint8_t i = 0; i < timeOut; i++){
-		if(Wifi_CharReadyToRead()){ 
-			connectionStatus[tmp] = Wifi_GetByte(false);
-			tmp++;
-			if(tmp == 3){
-				if(connectionStatus[2] == '3'){
-					connected = false;
-					return false;
-				} else {
-					connected = true;
-					return true;
-				}
-			}
+	for(uint16_t i = 0; i < timeOut; i++){
+		if((Wifi_Connected_Port.IN & (1<<Wifi_Connected_pin)) >0 ){
+			connected = true;
+			return true;
 		}
 		_delay_ms(1);
 	}
@@ -271,7 +276,7 @@ bool Wifi_GetMac(uint16_t timeOut){
 	uint8_t tmp = 0;
 	Wifi_ClearBuffer();
 	Wifi_SendCommand("get mac","Mac Addr=","Mac Addr=",timeOut);
-	for(uint8_t i = 0; i < timeOut; i++){
+	for(uint16_t i = 0; i < timeOut; i++){
 		if(Wifi_CharReadyToRead()){ 
 			macAddr[tmp] = Wifi_GetByte(false);
 			tmp++;
@@ -284,4 +289,36 @@ bool Wifi_GetMac(uint16_t timeOut){
 		_delay_ms(1);
 	}
 	return false;
+}
+
+uint8_t Wifi_GetSignalStrength(uint16_t timeOut){
+	uint8_t tmp = 0;
+	uint8_t ss = 0;
+	uint32_t worker = 0;
+	Wifi_SendCommand("show rssi","RSSI=(-","RSSI=(-",timeOut);
+	for(uint16_t i = 0; i < timeOut; i++){
+		if(Wifi_CharReadyToRead()){
+			rssi[tmp] = Wifi_GetByte(false);
+			if(rssi[tmp] == ')'){
+				rssi[tmp] = 0;
+				//Debug_SendString("rssi: ", false);
+				//Debug_SendString(rssi, true);
+				worker = atoi(rssi);
+				worker*=9208;
+				worker = 1045100 - worker;
+				worker /= 10000;
+				ss = worker & 0xFF;
+
+				//sprintf(string, "strength: %u %",ss);
+				//Debug_SendString(string,true);
+
+				return ss;
+			}
+			tmp++;
+		}
+		_delay_ms(1);
+	}
+	return 0;
+
+
 }

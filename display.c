@@ -39,7 +39,7 @@ void display_init() {
 	//Set SS to wired and pull up
 	Display_Port.Display_SS_CTRL = PORT_OPC_WIREDANDPULL_gc;
 	Display_CDPort.Display_CD_CTRL = PORT_OPC_WIREDANDPULL_gc;
-
+	Display_Port.OUTSET = Display_SS_bm;
 	
 	Display_ResetPort.DIRSET = Display_Reset_bm;
 
@@ -57,7 +57,7 @@ void display_init() {
 				| SPI_ENABLE_bm 
 				| SPI_MASTER_bm 
 				| SPI_MODE_3_gc 
-				| SPI_PRESCALER_DIV64_gc; //Can be 4, 16, 64 or 128
+				| SPI_PRESCALER_DIV16_gc; //Can be 4, 16, 64 or 128
 
 	Display_Port.DIRSET = Display_MOSI_bm | Display_SCK_bm | Display_SS_bm;
 	Display_CDPort.DIRSET = Display_CD_bm;
@@ -194,7 +194,9 @@ void display_putString(char* text, uint8_t page, uint8_t column, uint8_t* fontTa
 		}
 
 		//Add a 1px gap between characters
-		displayBuffer[page+i][offset+1] = 0x00;
+ 		if(offset != 101){
+ 			displayBuffer[page+i][offset+1] = 0x00;
+ 		}
 		offset++;
  	
  		j++;

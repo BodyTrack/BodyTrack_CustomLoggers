@@ -48,7 +48,9 @@ void Time_Init(void)
 }
 
 void Time_Set(uint32_t time){
+  cli();
   UNIX_time = time;
+  sei();
 }
 
 uint32_t Time_Get32BitTimer(void){
