@@ -309,12 +309,12 @@ DSTATUS disk_initialize (
 	BYTE n, cmd, ty, ocr[4];
 
 
-	if (drv) return STA_NOINIT;			/* Supports only single drive */
+	//if (drv) return STA_NOINIT;			/* Supports only single drive */
 	if (Stat & STA_NODISK) return Stat;	/* No card in the socket */
 
 	
 	power_on();							/* Force socket power on */
-	CCPWrite(&CLK.PSCTRL, (CLK_PSADIV_2_gc | CLK_PSBCDIV_1_1_gc)); // 16MHz
+	//CCPWrite(&CLK.PSCTRL, (CLK_PSADIV_2_gc | CLK_PSBCDIV_1_1_gc)); // 16MHz
 	FCLK_SLOW();
 	for (n = 10; n; n--) rcvr_spi();	/* 80 dummy clocks */
 
@@ -351,7 +351,7 @@ DSTATUS disk_initialize (
 		power_off();
 	}
 
-	CCPWrite(&CLK.PSCTRL, (CLK_PSADIV_1_gc | CLK_PSBCDIV_1_1_gc)); // 32MHz
+	//CCPWrite(&CLK.PSCTRL, (CLK_PSADIV_1_gc | CLK_PSBCDIV_1_1_gc)); // 32MHz
 	return Stat;
 }
 

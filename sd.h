@@ -21,7 +21,7 @@
 #define SD_CD2_CNTL					PIN1CTRL // acc
 
 
-void SD_Init(void);
+uint8_t SD_Init(void);
 uint8_t SD_Open(char string []);
 void SD_Close(void);
 bool SD_Inserted(void);

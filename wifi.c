@@ -38,15 +38,25 @@ volatile bool connected = false;
 volatile char connectionStatus[3];
 char macAddr[20];
 char rssi[10];
+volatile bool wifiBufferWasFull = false;
+
+volatile uint16_t bufferDelayCounter = 0;
+
 
 void Wifi_Init(uint32_t baud){
 
-	//Wifi_Connected_Port.Wifi_Connected_PinCTRL = PORT_OPC_PULLUP_gc;
+
 	Wifi_Connected_Port.DIRCLR = (1<<Wifi_Connected_pin);
+    Wifi_Flow_Port.DIRCLR = (1<<Wifi_RTS_pin);
+    Wifi_Flow_Port.Wifi_RTS_CNTL = PORT_OPC_PULLUP_gc;
+    Wifi_Flow_Port.DIRSET = (1<<Wifi_CTS_pin);
+    Wifi_Flow_Port.OUTCLR = (1<<Wifi_CTS_pin);
+
 
 	Wifi_Usart.CTRLB &= (~USART_RXEN_bm);
 	Wifi_Usart.CTRLB &= (~USART_TXEN_bm);
-	_delay_ms(1000);
+	//_delay_ms(1000);
+
 
 	Wifi_Port.DIRSET = Wifi_TX_pin_bm;
 	Wifi_Port.DIRCLR = Wifi_RX_pin_bm;
@@ -72,7 +82,9 @@ void Wifi_Init(uint32_t baud){
 	
 	Wifi_Usart.CTRLB |= USART_RXEN_bm;
 	Wifi_Usart.CTRLB |= USART_TXEN_bm;
-		
+
+	Wifi_ClearBuffer();
+
 }
 
 void Wifi_ClearBuffer(void){
@@ -111,8 +123,12 @@ uint8_t Wifi_GetByte(bool blocking){
 
 
 void Wifi_SendByte(uint8_t data){
+
 	while(!(Wifi_Usart.STATUS & USART_DREIF_bm));
+    while(((Wifi_Flow_Port.IN)&(1<<Wifi_RTS_pin)) > 0);                              // Wait for RTS to be low
+
 	Wifi_Usart.DATA = data;
+
 }
 
 void Wifi_SendString(char string [],bool CR){
@@ -120,7 +136,7 @@ void Wifi_SendString(char string [],bool CR){
 		Wifi_SendByte(string[i]);
 	}
 
-if(CR){
+    if(CR){
 		Wifi_SendByte(13);
 		Wifi_SendByte(10);
 	}
@@ -179,7 +195,7 @@ bool Wifi_SendCommand(char toSend [], char ok [], char ok2 [], uint16_t timeOut)
 			respLen++;
 			if(respLen == okLen + toSendLen + 3){		
 				
-				Debug_SendString("Responce: ",false);
+				Debug_SendString("Response: ",false);
 				for(uint8_t j = 0; j < respLen; j++){
 					Debug_SendByte(resp[j]);
 				}
@@ -213,8 +229,10 @@ bool Wifi_GetTime(uint16_t timeOut){
 	uint32_t tmp32 = 0;
 	
 	Wifi_ClearBuffer();
-	Wifi_SendCommand("show t t","Time=","Time=",500);
-	_delay_ms(10);
+	if(!Wifi_SendCommand("show t t","Time=","Time=",500)){
+	    return false;
+	}
+	_delay_ms(100);
 	
 	while(Wifi_CharReadyToRead()){
 		if(tmp < 50){
@@ -225,14 +243,13 @@ bool Wifi_GetTime(uint16_t timeOut){
 		}
 	}
 
-	Debug_SendByte(13);
 	
 	if(tmp < 4){
-		time_secs = 0;
 		return false;
 	}
 	
-	if(string[0] == 'N'){
+	if(strstr(string,"NOT SET") != 0){
+	    Debug_SendString("Time is not set",true);
 		return false;
 	}
 
@@ -308,7 +325,9 @@ uint8_t Wifi_GetSignalStrength(uint16_t timeOut){
 				worker = 1045100 - worker;
 				worker /= 10000;
 				ss = worker & 0xFF;
-
+                if(ss > 100){
+                    ss = 100;
+                }
 				//sprintf(string, "strength: %u %",ss);
 				//Debug_SendString(string,true);
 

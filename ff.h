@@ -256,8 +256,15 @@ typedef struct _PARTITION {
 	BYTE pt;	/* Partition # (0-3) */
 } PARTITION;
 
-extern
-const PARTITION Drives[];			/* Logical drive# to physical location conversion table */
+//extern
+//const PARTITION Drives[];			/* Logical drive# to physical location conversion table */
+
+const PARTITION Drives[] = {
+    {0, 0},     /* Logical drive 0 ==> Physical drive 0, 1st partition */
+    {0, 1}     /* Logical drive 1 ==> Physical drive 0, 2nd partition */
+};
+
+
 #define LD2PD(drv) (Drives[drv].pd)	/* Get physical drive# */
 #define LD2PT(drv) (Drives[drv].pt)	/* Get partition# */
 

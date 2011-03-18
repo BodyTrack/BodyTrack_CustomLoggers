@@ -24,6 +24,8 @@ static  const uint8_t monthDays[]={31,28,31,30,31,30,31,31,30,31,30,31};
 //Global time variable
 time_t time;
 
+uint8_t initialRTCRegisters [17];
+
 void RTC_init(void) {
 	RTCPort.MASTER.CTRLA = TWI_MASTER_ENABLE_bm;
 	//Don't need to set smart mode
@@ -40,16 +42,6 @@ void RTC_init(void) {
 	RTCPort.MASTER.STATUS =TWI_MASTER_BUSSTATE_IDLE_gc;
 
 
-	int i;
-	uint8_t msg[50];
-
-	//Clear all memory of RTC
-	for (i = 0; i < 17; i++) {
-		msg[i] = 0;
-	}
-
-
-	RTC_sendBytes(17,msg,RTCAddress);
 }
 
 //Takes in UTC Epoch Time since 1970

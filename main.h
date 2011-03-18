@@ -1,5 +1,5 @@
 
-#define FirmwareVersion "2.02"
+#define FirmwareVersion "2.04"
 #define HardwareVersion "2"
 
 #define temperatureNumberOfSamples   	10

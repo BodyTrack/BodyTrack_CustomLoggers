@@ -49,9 +49,9 @@ uint8_t  rtcBlockCounter = 0;
 bool wantToRecordTemperature 	= true;
 bool wantToRecordPressure 		= true;
 bool wantToRecordHumidity 		= true;
-bool wantToRecordMicrophone 	= true;
 bool wantToRecordLight		 	= true;
 bool wantToRecordAirQuality		= true;
+bool wantToRecordMicrophone 	= false;
 
 
 uint8_t quickTemperature = 0;
@@ -201,6 +201,7 @@ void Sensors_ResetLightBuffers(void){
 
 ISR(TCD1_OVF_vect)
 {
+    UNIX_time++;
 	if(recording){
 	  rtcBlockCounter++;
 	  if(rtcBlockCounter == 0){

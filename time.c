@@ -10,18 +10,37 @@ volatile uint32_t UNIX_time = 0;
 
 void Time_Init(void)			 
 {
-	// fclk = 14745600
-	// div  = 14400
-	// => 14745600/14400/1024 => 1 samples per second
-	
-	// Set period/TOP value
-	TCD0.PER = 14400;
 
-	// Select clock source
-	TCD0.CTRLA = (TCD0.CTRLA & ~TC0_CLKSEL_gm) | TC_CLKSEL_DIV1024_gc;
-	
-	// Enable CCA interrupt
-	TCD0.INTCTRLA = (TCD0.INTCTRLA & ~TC0_OVFINTLVL_gm) | TC_CCAINTLVL_MED_gc;
+	// internal rtc
+	/* Turn on internal 32kHz. */
+
+	//OSC.CTRL |= OSC_RC32KEN_bm;
+
+	//do {
+		/* Wait for the 32kHz oscillator to stabilize. */
+//	} while ( ( OSC.STATUS & OSC_RC32KRDY_bm ) == 0);
+
+	/* Set internal 32kHz oscillator as clock source for RTC. */
+//	CLK.RTCCTRL = CLK_RTCSRC_RCOSC_gc | CLK_RTCEN_bm;
+
+
+//	do {
+		/* Wait until RTC is not busy. */
+//	} while (RTC.STATUS & RTC_SYNCBUSY_bm);
+
+
+	/* Configure RTC period to 1 second. */
+//	//RTC_Initialize( RTC_CYCLES_1S, 0, 0, RTC_PRESCALER_DIV1_gc );
+//	RTC.PER = 1024 - 1;
+//	RTC.CNT = 0;
+//	RTC.COMP = 0;
+//	RTC.CTRL = ( RTC.CTRL & ~RTC_PRESCALER_gm ) | RTC_PRESCALER_DIV1_gc;
+
+	/* Enable overflow interrupt. */
+	//RTC_SetIntLevels( RTC_OVFINTLVL_LO_gc, RTC_COMPINTLVL_OFF_gc );
+//	RTC.INTCTRL = ( RTC.INTCTRL &
+//	              ~( RTC_COMPINTLVL_gm | RTC_OVFINTLVL_gm ) ) |
+//	              RTC_OVFINTLVL_MED_gc;
 	
 	// 32 bit counter
   /* We need to set up the event user
@@ -68,8 +87,3 @@ uint32_t Time_Get32BitTimer(void){
   return result;
 }
 
-
-ISR(TCD0_OVF_vect)
-{
-	UNIX_time++;
- }

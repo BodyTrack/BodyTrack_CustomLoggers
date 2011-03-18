@@ -40,7 +40,7 @@
 /* To enable string functions, set _USE_STRFUNC to 1 or 2. */
 
 
-#define	_USE_MKFS	0		/* 0 or 1 */
+#define	_USE_MKFS	1		/* 0 or 1 */		//****
 /* To enable f_mkfs function, set _USE_MKFS to 1 and set _FS_READONLY to 0 */
 
 
@@ -116,7 +116,7 @@
 / Physical Drive Configurations
 /----------------------------------------------------------------------------*/
 
-#define _DRIVES		1
+#define _DRIVES		2	// 1
 /* Number of volumes (logical drives) to be used. */
 
 
@@ -128,7 +128,7 @@
 /  to the disk_ioctl function. */
 
 
-#define	_MULTI_PARTITION	0	/* 0 or 1 */
+#define	_MULTI_PARTITION	1	/* 0 or 1 */
 /* When _MULTI_PARTITION is set to 0, each volume is bound to the same physical
 / drive number and can mount only first primaly partition. When it is set to 1,
 / each volume is tied to the partitions listed in Drives[]. */

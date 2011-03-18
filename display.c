@@ -67,8 +67,7 @@ void display_init() {
 	
 	//Enable display (write a 0 to SS)
 	Display_Port.OUTCLR = Display_SS_bm;
-	
-	
+	display_sendCommand(0xE2);	// 	reset
 	display_sendCommand(0x40);	// 	scroll line
 	display_sendCommand(0xA1);	//	seg direction
 	display_sendCommand(0xC0);	//	com direction
@@ -86,16 +85,11 @@ void display_init() {
 	display_sendCommand(0x81);	//	set electronic volume
 	display_sendCommand(0x08);	//	PM = 8
 
-
-
 	display_sendCommand(0xAF);	//	enable display
 
-
-
-
-	
 	display_clearBuffer();
 	display_writeBufferToScreen();
+
 }
 
 void display_sendCommand(uint8_t dataByte) {
