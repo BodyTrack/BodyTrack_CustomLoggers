@@ -49,8 +49,8 @@ void Wifi_Init(uint32_t baud){
 	Wifi_Connected_Port.DIRCLR = (1<<Wifi_Connected_pin);
     Wifi_Flow_Port.DIRCLR = (1<<Wifi_RTS_pin);
     Wifi_Flow_Port.Wifi_RTS_CNTL = PORT_OPC_PULLUP_gc;
-    Wifi_Flow_Port.DIRSET = (1<<Wifi_CTS_pin);
-    Wifi_Flow_Port.OUTCLR = (1<<Wifi_CTS_pin);
+    //Wifi_Flow_Port.DIRSET = (1<<Wifi_CTS_pin);
+    //Wifi_Flow_Port.OUTCLR = (1<<Wifi_CTS_pin);
 
 
 	Wifi_Usart.CTRLB &= (~USART_RXEN_bm);
@@ -289,7 +289,7 @@ bool Wifi_Connected(uint16_t timeOut){
 	return false;
 }
 
-bool Wifi_GetMac(uint16_t timeOut){
+bool Wifi_GetMac(uint16_t timeOut){    // 17 characters
 	uint8_t tmp = 0;
 	Wifi_ClearBuffer();
 	Wifi_SendCommand("get mac","Mac Addr=","Mac Addr=",timeOut);

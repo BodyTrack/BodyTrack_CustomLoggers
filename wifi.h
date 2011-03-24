@@ -13,7 +13,7 @@
 #define Wifi_Connected_Port		PORTF
 #define Wifi_Connected_pin		7
 #define Wifi_Flow_Port          PORTD
-#define Wifi_CTS_pin            0
+//#define Wifi_CTS_pin            0
 #define Wifi_RTS_pin            1
 #define Wifi_RTS_CNTL           PIN1CTRL
 

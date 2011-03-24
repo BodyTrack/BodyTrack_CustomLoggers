@@ -34,7 +34,8 @@ void Rs232_Init(void){
 	 	    				
 	Rs232_Usart.BAUDCTRLA = 95 & 0xFF;
 	Rs232_Usart.BAUDCTRLB = (0 << USART_BSCALE0_bp)|(95 >> 8);
-	
+
+
 	Rs232_Usart.CTRLB |= USART_RXEN_bm;
 	Rs232_Usart.CTRLB |= USART_TXEN_bm;
 	

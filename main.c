@@ -34,6 +34,9 @@
 //                                - display is now software and hardware reset
 //                                - improvements to RTC sync
 //                                - day light savings bug fixed
+//				2.05 - 03/18/2011 - uses processing to make a post
+//                                - deviceID uses chip coordinates instead of mac address
+
 //
 //
 //___________________________________________
@@ -86,14 +89,16 @@ void SD_WriteAirSample(void);
 void SD_WriteRTCBlock(uint32_t ticker, uint32_t time);
 
 
+void getDeviceID(void);
+uint8_t SP_ReadCalibrationByte( uint8_t index );
 
 
 // ********************************** Variables *********************************
 
 #define uploadChunkSize 1000
-char temp [50];
-char temp2 [50];        // use in main loop
-char temp3 [50];
+char temp [50];         // use in main loop
+char temp2 [50];        // use in display interrupt
+char temp3 [50];        // use in sd interrupt
 uint8_t tempStringFiller = 0;
 
 char auth [50] = "set wlan auth ";
@@ -158,10 +163,11 @@ volatile bool timeIsValid = false;
 volatile bool displayAM = false;
 volatile bool displayPM = false;
 volatile uint32_t uploadFileSize = 0;
+volatile uint32_t uploadHeaderSize = 0;
 
 char uploadFileBuffer [ uploadChunkSize];
-uint32_t numberOfPacketsToUpload = 0;
-uint32_t  leftOverBytesToUpload = 0;
+volatile uint32_t numberOfPacketsToUpload = 0;
+volatile uint32_t  leftOverBytesToUpload = 0;
 
 volatile uint16_t recordFileRestartCounter = 0;
 
@@ -199,6 +205,8 @@ int main(void){
 
 	Clock_Init();
 	Disable_JTAG();
+
+	getDeviceID();
 	display_init();
 
 	Time_Init();
@@ -216,7 +224,7 @@ int main(void){
 	DMA_Init();
 
 
-	Debug_SendString("booting up...",true);
+	//Debug_SendString("booting up...",true);
 
 	display_putString("   BaseStation   ",1,0,System5x7);
 	strcat(temp,"  Hardware: v");
@@ -238,7 +246,7 @@ int main(void){
     Interrupt_Init();
 
 	while(!SD_Inserted()){
-		Debug_SendString("SD?", true);
+		//Debug_SendString("SD?", true);
 		Leds_Toggle(sd_Red);
 		_delay_ms(500);
 	}
@@ -251,9 +259,23 @@ int main(void){
 
     Wifi_Init(9600);
     needToChangeBaud = true;
+
+
+    Leds_Set(wifi_Red);
+
 	while(!connected && !demoMode){
-		Config_Wifi();
-		_delay_ms(500);
+		//Config_Wifi();
+	    //_delay_ms(500);
+		if(Debug_Connected(500)){
+		   _delay_ms(500);
+		   UNIX_time = Debug_GetTime(1000);
+		   Leds_Set(wifi_Green);
+		   Leds_Clear(wifi_Red);
+		   timeIsValid = true;
+		   connected = true;
+		} else {
+		   Leds_Toggle(wifi_Red);
+		}
 	}
 	
 	if(demoMode){
@@ -267,13 +289,13 @@ int main(void){
 	display_clearBuffer();
 	display_writeBufferToScreen();
 
-
+    signalStrength = 100;
+	okToDisplayGUI = true;
 
 
 	okToOpenLogFile = true;
 	while(!recording);
 
-	okToDisplayGUI = true;
 
 	_delay_ms(100);
 
@@ -289,7 +311,7 @@ int main(void){
 	       okToGetRemainingSpace = true;
 	       while(!okToGetRemainingSpace);
 
-		   Wifi_EnterCMDMode(1000);
+		   /*Wifi_EnterCMDMode(1000);
 		   signalStrength = Wifi_GetSignalStrength(1000);
 		   if(Wifi_Connected(500)){
 		        _delay_ms(500);
@@ -305,44 +327,61 @@ int main(void){
 		        }
 		        _delay_ms(500);
 		    }
-		    Wifi_ExitCMDMode(500);
+		    Wifi_ExitCMDMode(500);*/
 
+
+            if(Debug_Connected(500)){
+		        _delay_ms(500);
+		        time_secs = Debug_GetTime(1000);
+		        if((time_secs - UNIX_time < 100)||(UNIX_time - time_secs < 100)){
+		          Time_Set(time_secs);
+		          timeIsValid = true;
+		        } else {
+		          timeIsValid = false;
+		        }
+		    }
 		    ssRefreshCounter = 0;
 	    }
 
 
 
         _delay_ms(5000);
-        if(okToUpload && Wifi_Connected(500)){
+        //if(okToUpload && Wifi_Connected(500)){
+
+        if(okToUpload && Debug_Connected(500)){
 
             uploading = true;
-			Debug_SendString("",true);
-            Debug_SendString("_____________________________________________", true);
-			Debug_SendString("Uploading File: ", false);
+			//Debug_SendString("",true);
+            //Debug_SendString("_____________________________________________", true);
+			//Debug_SendString("Uploading File: ", false);
 			if(fileToUpload[0] != '/'){
 			    strcpy(newFileName, "/");
 			    strcat(newFileName, fileToUpload);
 			    strcpy(fileToUpload, newFileName);
 			}
-			Debug_SendString(fileToUpload, true);
+			//Debug_SendString(fileToUpload, true);
             okToOpenFileToUpload = true;
             while(!uploadFileOpened);
-            Debug_SendString("File Opened!", true);
-            sprintf(temp2,"File Size: %lu",uploadFileSize);
-            Debug_SendString(temp2, true);
-
-            numberOfPacketsToUpload = uploadFileSize /  uploadChunkSize;
-            leftOverBytesToUpload   = uploadFileSize %  uploadChunkSize;
-
-            sprintf(temp2,"Packets: %lu",numberOfPacketsToUpload);
-            Debug_SendString(temp2, true);
-            sprintf(temp2,"Overflow: %lu",leftOverBytesToUpload);
-            Debug_SendString(temp2, true);
 
 
+            _delay_ms(2000);
+
+            //Debug_SendString("File Opened!", true);
+            //sprintf(temp,"File Size: %lu",uploadFileSize);
+            //Debug_SendString(temp, true);
+
+            numberOfPacketsToUpload = uploadFileSize /  1000;
+            leftOverBytesToUpload   = uploadFileSize %  1000;
+
+            //sprintf(temp,"Packets: %lu",numberOfPacketsToUpload);
+            //Debug_SendString(temp, true);
+            //sprintf(temp,"Overflow: %lu",leftOverBytesToUpload);
+            //Debug_SendString(temp, true);
 
 
-         Open_Connection:
+
+
+         /*Open_Connection:
             Wifi_EnterCMDMode(500);
             _delay_ms(1000);
 
@@ -359,22 +398,22 @@ int main(void){
 
             tempStringFiller = 0;
             while(Wifi_CharReadyToRead()){
-                temp2[tempStringFiller] = Wifi_GetByte(false);
+                temp[tempStringFiller] = Wifi_GetByte(false);
                 tempStringFiller++;
                 if(tempStringFiller == 49){
                     break;
                 }
             }
-            temp2[tempStringFiller] = 0;
+            temp[tempStringFiller] = 0;
 
 
-            if(strstr(temp2,"*OPEN*") != 0){                            // success
-                 Debug_SendString("Connection Open!",true);
-                _delay_ms(1000);
+            if(strstr(temp,"*OPEN*") != 0){                            // success
+                // Debug_SendString("Connection Open!",true);
+                //_delay_ms(1000);
 
 
-            } else if (strstr(temp2,"ERR:Connected!")!=0){
-                Debug_SendString("Let's retry connecting...",true);
+            } else if (strstr(temp,"ERR:Connected!")!=0){
+               // Debug_SendString("Let't retry connecting...",true);
                Wifi_SendCommand("close","*CLOS*","*CLOS*",500);
                _delay_ms(1000);
                Wifi_ExitCMDMode(500);
@@ -385,30 +424,41 @@ int main(void){
                 Wifi_ExitCMDMode(500);
                 _delay_ms(10000);
                 goto Open_Connection;
-            }
+            }                       */
 
             uploadTimeStart = UNIX_time;
-            Debug_SendString("Sending...", true);
+            //Debug_SendString("Sending...", true);
 
 
-            memmove(temp2,strtok(fileToUpload,"/"),12);
+            memmove(temp,strtok(fileToUpload,"/"),12);
+            memmove(fileToUpload,temp,12);
 
+            uploadHeaderSize = 175;
+            uploadHeaderSize += strlen(user);
+            uploadHeaderSize += strlen(fileToUpload);
+            uploadHeaderSize += strlen(nickname);
+            uploadHeaderSize += strlen(ltoa(uploadFileSize,temp,10));
+            uploadHeaderSize += uploadFileSize;
+            if(Debug_TriggerUpload(uploadHeaderSize, 2000)){
 
-            Wifi_SendString("POST /users/",false);
-            Wifi_SendString(user,false);
-            Wifi_SendString("/binupload?dev_nickname=",false);
-            Wifi_SendString(nickname,false);
-            Wifi_SendString("&filename=",false);
-            Wifi_SendString(temp2, false);
-            Wifi_SendString(" HTTP/1.1",true);
+            signalStrength = 100;
+            Rs232_SendString("Connected!",true);
 
-            Wifi_SendString("Host: bodytrack.org",true);
-            Wifi_SendString("Content-Type: application/octet-stream",true);
-            Wifi_SendString("Content-Transfer-Encoding: binary",true);
-            sprintf(temp2, "Content-Length: %lu",uploadFileSize);
-            Wifi_SendString(temp2,true);
-            Wifi_SendByte(0x0D);
-            Wifi_SendByte(0x0A);
+            Debug_SendString("POST /users/",false);                              // 12
+            Debug_SendString(user,false);
+            Debug_SendString("/binupload?dev_nickname=",false);                  // 24
+            Debug_SendString(nickname,false);
+            Debug_SendString("&filename=",false);                                // 10
+            Debug_SendString(fileToUpload, false);
+            Debug_SendString(" HTTP/1.1",true);                                  // 11
+
+            Debug_SendString("Host: bodytrack.org",true);                        // 21
+            Debug_SendString("Content-Type: application/octet-stream",true);     // 40
+            Debug_SendString("Content-Transfer-Encoding: binary",true);          // 35
+            sprintf(temp, "Content-Length: %lu",uploadFileSize);                 // 16
+            Debug_SendString(temp,true);
+            Debug_SendByte(0x0D);                                                // 1
+            Debug_SendByte(0x0A);                                                // 1
 
             for(uint32_t z = 0; z < numberOfPacketsToUpload; z++){
                 uploadFileBufferFull = false;
@@ -417,7 +467,7 @@ int main(void){
                 uploadPercentBS = (z*100)/numberOfPacketsToUpload;
                 while(!uploadFileBufferFull);
                 for(uint16_t j = 0; j <  uploadChunkSize; j++){
-                    Wifi_SendByte(uploadFileBuffer[j]);
+                    Debug_SendByte(uploadFileBuffer[j]);
                 }
             }
 
@@ -426,40 +476,41 @@ int main(void){
             while(!uploadFileBufferFull);
 
             for(uint16_t j = 0; j < leftOverBytesToUpload; j++){
-                Wifi_SendByte(uploadFileBuffer[j]);
+                Debug_SendByte(uploadFileBuffer[j]);
 
             }
 
 
-            Wifi_SendByte(0x0D);
-            Wifi_SendByte(0x0A);
-            Wifi_SendByte(0x0D);
-            Wifi_SendByte(0x0A);
+
+
+            Debug_SendByte(0x0D);                                                // 4
+            Debug_SendByte(0x0A);
+            Debug_SendByte(0x0D);
+            Debug_SendByte(0x0A);
 
 
             uploadPercentBS = 100;
-
-
+            _delay_ms(5000);
 
               //Wait_For_Close:
             httpResponseReceived = false;
             connectionClosed = false;
-            Debug_SendString("Wait for connection to close",true);
+            //Debug_SendString("Wait for connection to close",true);
             httpResponse[0] = 0;
             connectionTimeoutTimer = 0;
             byteReceived = 0;
             while(!connectionClosed){
-                if(Wifi_CharReadyToRead()){
-                  byteReceived = Wifi_GetByte(false);
+                if(Debug_CharReadyToRead()){
+                  byteReceived = Debug_GetByte(false);
                 }
                 if(byteReceived == '*'){
-                  byteReceived = Wifi_GetByte(true);
+                  byteReceived = Debug_GetByte(true);
                   if(byteReceived == 'C'){
-                     byteReceived = Wifi_GetByte(true);
+                     byteReceived = Debug_GetByte(true);
                      if(byteReceived == 'L'){
-                        byteReceived = Wifi_GetByte(true);
+                        byteReceived = Debug_GetByte(true);
                         if(byteReceived == 'O'){
-                           byteReceived = Wifi_GetByte(true);
+                           byteReceived = Debug_GetByte(true);
                            if(byteReceived == 'S'){
                                connectionClosed = true;
                                break;
@@ -468,29 +519,29 @@ int main(void){
                      }
                   }
                 } else if(byteReceived == 'H'){
-                  byteReceived = Wifi_GetByte(true);
+                  byteReceived = Debug_GetByte(true);
                   if(byteReceived == 'T'){
-                     byteReceived = Wifi_GetByte(true);
+                     byteReceived = Debug_GetByte(true);
                      if(byteReceived == 'T'){
-                        byteReceived = Wifi_GetByte(true);
+                        byteReceived = Debug_GetByte(true);
                         if(byteReceived == 'P'){
 
                           httpResponseReceived = true;
                           _delay_ms(1000);
                           tempStringFiller = 0;
-                          while(Wifi_CharReadyToRead()){
-                              temp2[tempStringFiller] = Wifi_GetByte(false);
+                          while(Debug_CharReadyToRead()){
+                              temp[tempStringFiller] = Debug_GetByte(false);
                               tempStringFiller++;
                               if(tempStringFiller == 8){
                                   break;
                               }
                           }
-                          temp2[tempStringFiller] = 0;
-                          memcpy(httpResponse,temp2+5,3);
+                          temp[tempStringFiller] = 0;
+                          memcpy(httpResponse,temp+5,3);
                           lengthOfHttpResponse = 0;
                           _delay_ms(5000);
-                          while(Wifi_CharReadyToRead()){
-                             uploadFileBuffer[lengthOfHttpResponse] = Wifi_GetByte(false);
+                          while(Debug_CharReadyToRead()){
+                             uploadFileBuffer[lengthOfHttpResponse] = Debug_GetByte(false);
                              lengthOfHttpResponse++;
                              if(lengthOfHttpResponse > 999){
                                 break;
@@ -511,12 +562,12 @@ int main(void){
                 _delay_ms(1);
                 connectionTimeoutTimer++;
                 if(connectionTimeoutTimer > 120000){
-                    Debug_SendString("Connection Timed Out",true);
+                    //Debug_SendString("Connection Timed Out",true);
                     connectionTimeoutTimer = 0;
                     break;
                 }
             }
-            Debug_SendString("Connection Closed",true);
+            //Debug_SendString("Connection Closed",true);
 
             uploadTimeStop = UNIX_time;
 
@@ -524,27 +575,27 @@ int main(void){
             if((httpResponseReceived) & (strstr(httpResponse,"200") != 0)){
 
 
-                Debug_SendString("Got a 200 back",true);
+                //Debug_SendString("Got a 200 back",true);
 
-                Debug_SendString("Successful: ",false);
+                //Debug_SendString("Successful: ",false);
 
                 memcpy(successfulBinaryRecordsString,strtok((strstr(uploadFileBuffer,"\"successful_binrecs\":") + 21),","),5);
-                Debug_SendString(successfulBinaryRecordsString,true);
+                //Debug_SendString(successfulBinaryRecordsString,true);
 
-                Debug_SendString("Failed: ",false);
+                //Debug_SendString("Failed: ",false);
 
                 memcpy(failedBinaryRecordsString    ,strtok((strstr(uploadFileBuffer,"\"failed_binrecs\":") + 17),","),5);
-                Debug_SendString(failedBinaryRecordsString,true);
+                //Debug_SendString(failedBinaryRecordsString,true);
 
 
                 strcpy(newFileName, fileToUpload);
 			    strcat(newFileName, "U");
 
 
-                sprintf(temp2,"File TX took: %lu secs",uploadTimeStop - uploadTimeStart);
-                Debug_SendString(temp2,true);
-                sprintf(temp2,"TX speed: %lu kbps", uploadFileSize/(128*(uploadTimeStop - uploadTimeStart)));
-                Debug_SendString(temp2,true);
+                //sprintf(temp,"File TX took: %lu secs",uploadTimeStop - uploadTimeStart);
+                //Debug_SendString(temp,true);
+                //sprintf(temp,"TX speed: %lu kbps", uploadFileSize/(128*(uploadTimeStop - uploadTimeStart)));
+                //Debug_SendString(temp,true);
 
                 okToRenameUploadFile = true;
                 okToCloseUploadFile = true;                   // flags it close file and to be to be renamed
@@ -555,11 +606,11 @@ int main(void){
                 while(okToWriteUploaderLogFile);
 
             } else {
-               Debug_SendString("File did not upload",true);
+               //Debug_SendString("File did not upload",true);
 
-               Debug_SendString("got: *",false);
-               Debug_SendString(httpResponse,false);
-               Debug_SendString("* back",true);
+               //Debug_SendString("got: *",false);
+               //Debug_SendString(httpResponse,false);
+               //Debug_SendString("* back",true);
 
 			   okToCloseUploadFile = true;                    // flags it close file
                 _delay_ms(1000);
@@ -572,13 +623,18 @@ int main(void){
 
 
 
+            }  else {
+              Rs232_SendString("Not connected",true);
+              signalStrength = 0;
+
+            }
 
 
 		    uploading = false;
-			Debug_SendString("Done!", true);
+			//Debug_SendString("Done!", true);
 			okToUpload = false;
 
-            Debug_SendString("_____________________________________________", true);
+            //Debug_SendString("_____________________________________________", true);
 
 		}
 	}
@@ -755,8 +811,8 @@ if(okToDisplayGUI){
 	if(currentMode == recordMode){																		// show record screen
 
 		if(recording){
-			sprintf(temp, "Recording   %4lum", (UNIX_time - timeRecordingStarted)/60);		// load recording screen
-			display_putString(temp,0,0,System5x7);
+			sprintf(temp2, "Recording   %4lum", (UNIX_time - timeRecordingStarted)/60);		// load recording screen
+			display_putString(temp2,0,0,System5x7);
 		} else {
 			display_putString("Paused           ",0,0,System5x7);
 		}
@@ -767,13 +823,13 @@ if(okToDisplayGUI){
 		display_drawPixel(2,61,true);
 		display_drawPixel(3,62,true);
 
-		sprintf(temp, "Uploading    %3u", uploadPercentBS);
-		strcat(temp,"%");
-		display_putString(temp,1,0,System5x7);
+		sprintf(temp2, "Uploading    %3u", uploadPercentBS);
+		strcat(temp2,"%");
+		display_putString(temp2,1,0,System5x7);
 
-        sprintf(temp, "Disk Used: %3u.%1u", ((uint8_t)percentDiskUsed)/10,((uint8_t)percentDiskUsed)%10);
-		strcat(temp,"%");
-		display_putString(temp,2,0,System5x7);
+        sprintf(temp2, "Disk Used: %3u.%1u", ((uint8_t)percentDiskUsed)/10,((uint8_t)percentDiskUsed)%10);
+		strcat(temp2,"%");
+		display_putString(temp2,2,0,System5x7);
 
 
 
@@ -791,18 +847,18 @@ if(okToDisplayGUI){
 				Leds_Set(ext_Green);
 			}
 		} else if(SD2_Inserted() && !chargeComplete){
-			sprintf(temp, "Ext Charging  %2u",chargePercent);
-			strcat(temp,"%");
-			display_putString(temp,3,0,System5x7);
+			sprintf(temp2, "Ext Charging  %2u",chargePercent);
+			strcat(temp2,"%");
+			display_putString(temp2,3,0,System5x7);
 			okToCharge = true;
 			if(!rtcSynced){
 			    _delay_ms(500);
-				Debug_SendString("Syncing RTC", true);
+				//Debug_SendString("Syncing RTC", true);
 				RTC_init();
 
 				RTC_setUTCSecs(UNIX_time+5);
 				rtcSynced = true;
-				Debug_SendString("RTC synced", true);
+				//Debug_SendString("RTC synced", true);
 			}
 			if(!recording){
 				Leds_Set(ext_Red);
@@ -818,9 +874,10 @@ if(okToDisplayGUI){
 		}
 
 
-		sprintf(temp, "Uploading    %3u", uploadPercentEXT);
-		strcat(temp,"%");
-		display_putString(temp,4,0,System5x7);
+		sprintf(temp2, "Uploading    %3u", uploadPercentEXT);
+		strcat(temp2,"%");
+		display_putString(temp2,4,0,System5x7);
+
 
 		RTC_UTCSecsToTime(UNIX_time,&time);
 		clockHour = time.Hour + 24;
@@ -845,17 +902,17 @@ if(okToDisplayGUI){
            displayPM = false;
         }
 
-        sprintf(temp,"Time %2u:%02u:%02u ", clockHour, time.Minute, time.Second);
+        sprintf(temp2,"Time %2u:%02u:%02u ", clockHour, time.Minute, time.Second);
         if(displayAM){
-          strcat(temp,am);
+          strcat(temp2,am);
         } else if(displayPM){
-          strcat(temp,pm);
+          strcat(temp2,pm);
         }
-		display_putString(temp,6,0,System5x7);
+		display_putString(temp2,6,0,System5x7);
 
-		sprintf(temp, "Wifi %3u",signalStrength);
-		strcat(temp,"%   more");
-		display_putString(temp,7,0,System5x7);
+		sprintf(temp2, "Wifi %3u",signalStrength);
+		strcat(temp2,"%   more");
+		display_putString(temp2,7,0,System5x7);
 
 
 		display_drawLine(56,98,63,98,true);		// down arrow
@@ -880,17 +937,17 @@ if(okToDisplayGUI){
 		display_drawPixel(2,100,true);
 		display_drawPixel(3,101,true);
 
-		sprintf(temp,"Temperature: %3uC", quickTemperature);
-		display_putString(temp,2,0,System5x7);
-		sprintf(temp,"Humidity:  %3u", quickHumidity);
-		strcat(temp, "%RH");
-		display_putString(temp,3,0,System5x7);
-		sprintf(temp,"Pressure:  %3ukPa", quickPressure);
-		display_putString(temp,4,0,System5x7);
-		sprintf(temp,"Light:      %5u", quickLight);
-		display_putString(temp,5,0,System5x7);
-		sprintf(temp,"Air: %5lu, %5lu", quickSmall, quickLarge);
-		display_putString(temp,6,0,System5x7);
+		sprintf(temp2,"Temperature: %3uC", quickTemperature);
+		display_putString(temp2,2,0,System5x7);
+		sprintf(temp2,"Humidity:  %3u", quickHumidity);
+		strcat(temp2, "%RH");
+		display_putString(temp2,3,0,System5x7);
+		sprintf(temp2,"Pressure:  %3ukPa", quickPressure);
+		display_putString(temp2,4,0,System5x7);
+		sprintf(temp2,"Light:      %5u", quickLight);
+		display_putString(temp2,5,0,System5x7);
+		sprintf(temp2,"Air: %5lu, %5lu", quickSmall, quickLarge);
+		display_putString(temp2,6,0,System5x7);
 		display_putString("Sound:           ",7,0,System5x7);
 		display_drawRectangle(57,50,7,quickMic/2,true,false,true);
 		display_writeBufferToScreen();
@@ -906,7 +963,7 @@ if(okToDisplayGUI){
 		} else if(SD2_Inserted() && !chargeComplete){
 			okToCharge = true;
 			if(!rtcSynced){
-				Debug_SendString("Syncing RTC", true);
+				//Debug_SendString("Syncing RTC", true);
 				if(!demoMode){
 					RTC_init();
 					RTC_setUTCSecs(UNIX_time);
@@ -1022,11 +1079,11 @@ ISR(TCE1_OVF_vect)
 		Leds_Clear(wifi_Green);
 		timeRecordingStarted = UNIX_time;
 
-		Debug_SendString("RTC Block: ",false);							// send rtc block
+		//Debug_SendString("RTC Block: ",false);							// send rtc block
 		SD_WriteRTCBlock(Time_Get32BitTimer(),UNIX_time);
-		Debug_SendString(ltoa(UNIX_time,temp,10),false);
-		Debug_SendString(", ",false);
-		Debug_SendString(ltoa(Time_Get32BitTimer(),temp,10),true);
+		//Debug_SendString(ltoa(UNIX_time,temp3,10),false);
+		//Debug_SendString(", ",false);
+		//Debug_SendString(ltoa(Time_Get32BitTimer(),temp3,10),true);
 
 		Rs232_ClearBuffer();
 		rs232Recording = true;
@@ -1046,9 +1103,9 @@ ISR(TCE1_OVF_vect)
 	if(okToSendRTCBlock && recording){
 		//Debug_SendString("RTC Block: ",false);
 		SD_WriteRTCBlock(Time_Get32BitTimer(),UNIX_time);
-		//Debug_SendString(ltoa(UNIX_time,temp,10),false);
+		//Debug_SendString(ltoa(UNIX_time,temp3,10),false);
 		//Debug_SendString(", ",false);
-		//Debug_SendString(ltoa(Time_Get32BitTimer(),temp,10),true);
+		//Debug_SendString(ltoa(Time_Get32BitTimer(),temp3,10),true);
 		okToSendRTCBlock = false;
 	}
 
@@ -1110,7 +1167,8 @@ ISR(TCE1_OVF_vect)
 	    f_close(&Upload_File);
 	    if(okToRenameUploadFile){
 	       f_rename(fileToUpload,newFileName);
-	       Debug_SendString("Renaming File",true);
+	       //f_unlink(fileToUpload);
+	       //Debug_SendString("Renaming File",true);
 	       okToRenameUploadFile = false;
 	    }
 		okToCloseUploadFile = false;
@@ -1120,14 +1178,14 @@ ISR(TCE1_OVF_vect)
 
 
 	if(okToWriteUploaderLogFile){
-        Debug_SendString("Updating uploadLg File",true);
+        //Debug_SendString("Updating uploadLg File",true);
         f_stat("/uploadLg.txt",&fno);
         f_open(&Upload_File, "/uploadLg.txt", FA_READ | FA_WRITE | FA_OPEN_ALWAYS);
         f_lseek(&Upload_File, fno.fsize);
         f_puts("File Name: ",&Upload_File);
         f_puts(fileToUpload,&Upload_File);
         f_puts(", Size: ",&Upload_File);
-        f_puts(ltoa(uploadFileSize,temp,10),&Upload_File);
+        f_puts(ltoa(uploadFileSize,temp3,10),&Upload_File);
         f_puts(" bytes, Response: ",&Upload_File);
         f_puts(httpResponse,&Upload_File);
         f_puts(", Successful Records: ",&Upload_File);
@@ -1135,9 +1193,9 @@ ISR(TCE1_OVF_vect)
         f_puts(", Failed Records: ",&Upload_File);
         f_puts(failedBinaryRecordsString,&Upload_File);
         f_puts(", Time to upload: ",&Upload_File);
-        f_puts(ltoa(uploadTimeStop - uploadTimeStart,temp,10),&Upload_File);
+        f_puts(ltoa(uploadTimeStop - uploadTimeStart,temp3,10),&Upload_File);
         f_puts(" secs, Speed of upload: ",&Upload_File);
-        f_puts(ltoa(uploadFileSize/(128*(uploadTimeStop - uploadTimeStart)),temp,10),&Upload_File);
+        f_puts(ltoa(uploadFileSize/(128*(uploadTimeStop - uploadTimeStart)),temp3,10),&Upload_File);
 
         f_puts(" kbps",&Upload_File);
         f_putc(13,&Upload_File);
@@ -1147,7 +1205,7 @@ ISR(TCE1_OVF_vect)
 	}
 
 	if(uploadFailed){
-        Debug_SendString("Updating uploadLg File",true);
+        //Debug_SendString("Updating uploadLg File",true);
         f_stat("/uploadLg.txt",&fno);
         f_open(&Upload_File, "/uploadLg.txt", FA_READ | FA_WRITE | FA_OPEN_ALWAYS);
         if(fno.fsize > 0){
@@ -1156,7 +1214,7 @@ ISR(TCE1_OVF_vect)
         f_puts("File Name: ",&Upload_File);
         f_puts(fileToUpload,&Upload_File);
         f_puts(", Size: ",&Upload_File);
-        f_puts(ltoa(uploadFileSize,temp,10),&Upload_File);
+        f_puts(ltoa(uploadFileSize,temp3,10),&Upload_File);
         f_puts(" bytes, uploadFailed failed...",&Upload_File);
 
         f_putc(13,&Upload_File);
@@ -1175,13 +1233,13 @@ ISR(TCE1_OVF_vect)
 	    percentDiskUsed *= 1000;
 	    percentDiskUsed /= totalDiskSpace;
 
-	    sprintf(temp,"Disk Remaining: %lu",spaceRemainingOnDisk);
-	    Debug_SendString(temp,true);
-	    sprintf(temp,"Disk Total    : %lu",totalDiskSpace);
-	    Debug_SendString(temp,true);
-        sprintf(temp,"Percent Used  : %u.%u",((uint8_t)percentDiskUsed)/10,((uint8_t)percentDiskUsed)%10);
-        Debug_SendString(temp,false);
-        Debug_SendString("%",true);
+	    /*sprintf(temp3,"Disk Remaining: %lu",spaceRemainingOnDisk);
+	    Debug_SendString(temp3,true);
+	    sprintf(temp3,"Disk Total    : %lu",totalDiskSpace);
+	    Debug_SendString(temp3,true);
+        sprintf(temp3,"Percent Used  : %u.%u",((uint8_t)percentDiskUsed)/10,((uint8_t)percentDiskUsed)%10);
+        Debug_SendString(temp3,false);
+        Debug_SendString("%",true);  */
 
 	    okToGetRemainingSpace = false;
 	}
@@ -1484,8 +1542,8 @@ void Read_config_file(void){
                break;
             }
           }
-	      Debug_SendString("User: ",false);
-	      Debug_SendString(user,true);
+	      //Debug_SendString("User: ",false);
+	      //Debug_SendString(user,true);
 	    } else if(strstr(temp,"nickname") != 0){
 	      strtok(temp,"=");
 	      strcpy(nickname,strtok(NULL,"="));
@@ -1496,8 +1554,8 @@ void Read_config_file(void){
             }
           }
 
-          Debug_SendString("Nickname: ",false);
-          Debug_SendString(nickname,true);
+          //Debug_SendString("Nickname: ",false);
+          //Debug_SendString(nickname,true);
 	    } else if(strstr(temp,"server") != 0){
 	      strtok(temp,"=");
 	      strcat(serverOpenCommand,strtok(NULL,"="));
@@ -1537,10 +1595,10 @@ void Read_config_file(void){
        timeZoneShift--;
     }
     if(zoneChanged){
-        Debug_SendString("Time Zone changed to: ",false);
+        /*Debug_SendString("Time Zone changed to: ",false);
 	    Debug_SendString(zone,true);
         sprintf(temp,"shifted by %u",timeZoneShift);
-	    Debug_SendString(temp,true);
+	    Debug_SendString(temp,true);  */
     }
 }
 
@@ -1686,7 +1744,7 @@ void Config_Wifi(void){
 			Time_Set(time_secs);
 			signalStrength = Wifi_GetSignalStrength(1000);
 
-	        Debug_SendString("Getting space remaining",true);
+	        //Debug_SendString("Getting space remaining",true);
 	        okToGetRemainingSpace = true;
 	        while(!okToGetRemainingSpace);
 
@@ -1701,7 +1759,7 @@ void Config_Wifi(void){
 	        _delay_ms(3000);
 			while(!Wifi_EnterCMDMode(500)){
 			    _delay_ms(1000);
-			    Debug_SendString("Retrying CMD Mode",true);
+			    //Debug_SendString("Retrying CMD Mode",true);
 			}
 		} else{
 			display_putString("internet.....FAIL",col,0,System5x7);
@@ -1716,7 +1774,7 @@ void Config_Wifi(void){
         _delay_ms(1000);
 		while(!Wifi_ExitCMDMode(1000)){
 		   _delay_ms(1000);
-		    Debug_SendString("Retrying EXIT CMD Mode",true);
+		   // Debug_SendString("Retrying EXIT CMD Mode",true);
 		}
 
 
@@ -1750,4 +1808,38 @@ void Debug_To_Wifi(void){
 		}	
 	
 	}
+}
+
+void getDeviceID(void){
+	deviceID[0] = SP_ReadCalibrationByte( PROD_SIGNATURES_START + LOTNUM0_offset );
+    deviceID[1] = SP_ReadCalibrationByte( PROD_SIGNATURES_START + LOTNUM1_offset );
+	deviceID[2] = SP_ReadCalibrationByte( PROD_SIGNATURES_START + LOTNUM2_offset );
+	deviceID[3] = SP_ReadCalibrationByte( PROD_SIGNATURES_START + LOTNUM3_offset );
+	deviceID[4] = SP_ReadCalibrationByte( PROD_SIGNATURES_START + LOTNUM4_offset );
+	deviceID[5] = SP_ReadCalibrationByte( PROD_SIGNATURES_START + LOTNUM5_offset );
+	deviceID[6] = SP_ReadCalibrationByte( PROD_SIGNATURES_START + WAFNUM_offset );
+	deviceID[7] = SP_ReadCalibrationByte( PROD_SIGNATURES_START + COORDX0_offset );
+	deviceID[8] = SP_ReadCalibrationByte( PROD_SIGNATURES_START + COORDX1_offset );
+	deviceID[9] = SP_ReadCalibrationByte( PROD_SIGNATURES_START + COORDY0_offset );
+	deviceID[10] = SP_ReadCalibrationByte( PROD_SIGNATURES_START + COORDY1_offset );
+	deviceID[11] = '\0';
+	for(uint8_t i = 0; i < 11; i++){
+	    if(deviceID[i] == 0){
+	       deviceID[i] += 1;
+	    }
+	}
+}
+
+uint8_t SP_ReadCalibrationByte( uint8_t index )
+{
+	uint8_t result;
+
+	/* Load the NVM Command register to read the calibration row. */
+	NVM_CMD = NVM_CMD_READ_CALIB_ROW_gc;
+ 	result = pgm_read_byte(index);
+
+	/* Clean up NVM Command register. */
+ 	NVM_CMD = NVM_CMD_NO_OPERATION_gc;
+
+	return result;
 }

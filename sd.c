@@ -16,7 +16,7 @@
 
 #define DeviceClass	"BaseStation"
 
-#define StartFileLength 577
+#define StartFileLength 571
 
 static FATFS fso0;
 static FATFS fso1;
@@ -94,8 +94,8 @@ uint8_t SD_Init(void){
 
 
 uint8_t SD_Open(char string []){
-	Debug_SendString("File Name= ",false);
-	Debug_SendString(string,true);
+	//Debug_SendString("File Name= ",false);
+	//Debug_SendString(string,true);
 	strcpy(currentLogFile,string);
 	strupr(currentLogFile);
 	for(uint8_t i = 1; i < strlen(currentLogFile); i++){
@@ -106,7 +106,7 @@ uint8_t SD_Open(char string []){
 }
 
 void SD_Close(void){
-	Debug_SendString("Closing File",true);
+	//Debug_SendString("Closing File",true);
 	f_close(&Log_File);
 }
 
@@ -212,7 +212,7 @@ void SD_MakeFileName(uint32_t var){
 uint8_t SD_StartLogFile(uint32_t time){
 	uint8_t resp;
 
-	Debug_SendString("Opening Log File",true);
+	//Debug_SendString("Opening Log File",true);
 
 	SD_MakeFileName(time);
 	resp = SD_Open(fileName);
@@ -235,7 +235,7 @@ uint8_t SD_StartLogFile(uint32_t time){
 		
 	SD_WriteString("device_id");
 	SD_Write8(0x09);
-	SD_WriteString(macAddr);
+	SD_WriteString(deviceID);
 	SD_Write8(0x0A);
 		
 	SD_WriteString("firmware_version");

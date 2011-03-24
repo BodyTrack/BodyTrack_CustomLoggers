@@ -21,18 +21,14 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.lst" afterPath="$PROJECT_DIR$/main.lst" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.map" afterPath="$PROJECT_DIR$/main.map" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.sym" afterPath="$PROJECT_DIR$/main.sym" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/diskio.c" afterPath="$PROJECT_DIR$/diskio.c" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/display.c" afterPath="$PROJECT_DIR$/display.c" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ff.h" afterPath="$PROJECT_DIR$/ff.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ffconf.h" afterPath="$PROJECT_DIR$/ffconf.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BaseStation.iws" afterPath="$PROJECT_DIR$/BaseStation.iws" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/debug.c" afterPath="$PROJECT_DIR$/debug.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/debug.h" afterPath="$PROJECT_DIR$/debug.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.c" afterPath="$PROJECT_DIR$/main.c" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.h" afterPath="$PROJECT_DIR$/main.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rs232.c" afterPath="$PROJECT_DIR$/rs232.c" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rtc.c" afterPath="$PROJECT_DIR$/rtc.c" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sd.c" afterPath="$PROJECT_DIR$/sd.c" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sd.h" afterPath="$PROJECT_DIR$/sd.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sensors.c" afterPath="$PROJECT_DIR$/sensors.c" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/time.c" afterPath="$PROJECT_DIR$/time.c" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wifi.c" afterPath="$PROJECT_DIR$/wifi.c" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wifi.h" afterPath="$PROJECT_DIR$/wifi.h" />
     </list>
@@ -93,40 +89,22 @@
     <favorites_list name="BaseStation" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.6164274">
+    <splitter split-orientation="horizontal" split-proportion="0.6035578">
       <split-first>
         <leaf>
-          <file leaf-file-name="main.c" pinned="false" current="true" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/main.c">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="1521" column="17" selection-start="42291" selection-end="42291" vertical-scroll-proportion="33.8">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="sensors.c" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/sensors.c">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="14" column="28" selection-start="263" selection-end="263" vertical-scroll-proportion="0.0">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="iox256a3.h" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/iox256a3.h">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="2587" column="46" selection-start="105339" selection-end="105345" vertical-scroll-proportion="0.0">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
           <file leaf-file-name="main.h" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/main.h">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="1" column="29" selection-start="30" selection-end="30" vertical-scroll-proportion="0.0">
+                <state line="5" column="0" selection-start="83" selection-end="83" vertical-scroll-proportion="0.0">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="main.c" pinned="false" current="true" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/main.c">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="239" column="48" selection-start="7126" selection-end="7126" vertical-scroll-proportion="3.124183">
                   <folding />
                 </state>
               </provider>
@@ -136,73 +114,19 @@
       </split-first>
       <split-second>
         <leaf>
-          <file leaf-file-name="dpad.c" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/dpad.c">
+          <file leaf-file-name="debug.c" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/debug.c">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="28" column="4" selection-start="623" selection-end="623" vertical-scroll-proportion="0.0">
+                <state line="9" column="35" selection-start="261" selection-end="261" vertical-scroll-proportion="0.0">
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="time.c" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/time.c">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="sensors.c" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/sensors.c">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="14" column="28" selection-start="263" selection-end="263" vertical-scroll-proportion="0.0">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="wifi.c" pinned="false" current="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/wifi.c">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="125" column="0" selection-start="3236" selection-end="3236" vertical-scroll-proportion="0.1978022">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="ff.h" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/ff.h">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="330" column="12" selection-start="20861" selection-end="20870" vertical-scroll-proportion="0.0">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="ffconf.h" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/ffconf.h">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="21" column="0" selection-start="932" selection-end="932" vertical-scroll-proportion="0.0">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="sd.c" pinned="false" current="false" current-in-tab="false">
+          <file leaf-file-name="sd.c" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/sd.c">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="253" column="4" selection-start="7189" selection-end="7256" vertical-scroll-proportion="0.0">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="rs232.c" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/rs232.c">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="89" column="40" selection-start="1932" selection-end="1932" vertical-scroll-proportion="0.0">
+                <state line="227" column="15" selection-start="6570" selection-end="6576" vertical-scroll-proportion="0.66815144">
                   <folding />
                 </state>
               </provider>
@@ -211,16 +135,70 @@
           <file leaf-file-name="ff.c" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/ff.c">
               <provider selected="true" editor-type-id="text-editor">
+                <state line="1211" column="89" selection-start="36448" selection-end="36454" vertical-scroll-proportion="-11.153846">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="ff.h" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/ff.h">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="398" column="43" selection-start="22935" selection-end="22935" vertical-scroll-proportion="0.0">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="time.c" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/time.c">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="68" column="5" selection-start="1972" selection-end="1980" vertical-scroll-proportion="-30.384615">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="leds.h" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/leds.h">
+              <provider selected="true" editor-type-id="text-editor">
                 <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="sd.h" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/sd.h">
+          <file leaf-file-name="leds.c" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/leds.c">
               <provider selected="true" editor-type-id="text-editor">
                 <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="wifi.c" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/wifi.c">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="107" column="56" selection-start="2957" selection-end="2957" vertical-scroll-proportion="0.0">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="wifi.h" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/wifi.h">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="17" column="0" selection-start="487" selection-end="527" vertical-scroll-proportion="0.0">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="debug.h" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/debug.h">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="14" column="37" selection-start="412" selection-end="412" vertical-scroll-proportion="0.0">
                   <folding />
                 </state>
               </provider>
@@ -244,10 +222,15 @@
       <list>
         <option value="$PROJECT_DIR$/sd.c" />
         <option value="$PROJECT_DIR$/display.c" />
-        <option value="$PROJECT_DIR$/main.c" />
-        <option value="$PROJECT_DIR$/sensors.c" />
         <option value="$PROJECT_DIR$/rtc.c" />
+        <option value="$PROJECT_DIR$/time.c" />
+        <option value="$PROJECT_DIR$/sensors.c" />
+        <option value="$PROJECT_DIR$/iox256a3.h" />
+        <option value="$PROJECT_DIR$/rs232.c" />
+        <option value="$PROJECT_DIR$/wifi.h" />
+        <option value="$PROJECT_DIR$/debug.h" />
         <option value="$PROJECT_DIR$/wifi.c" />
+        <option value="$PROJECT_DIR$/main.c" />
       </list>
     </option>
   </component>
@@ -319,9 +302,9 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="Favorites" />
       <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -479,7 +462,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="1920" height="728" extended-state="0" />
+    <frame x="1280" y="-631" width="1920" height="1080" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -493,7 +476,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1373597" sideWeight="0.0" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15873864" sideWeight="0.0" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -574,92 +557,100 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/display.c">
+    <entry file="file://$PROJECT_DIR$/rs232.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="68" column="4" selection-start="1994" selection-end="2030" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wifi.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="8" selection-start="493" selection-end="506" vertical-scroll-proportion="0.0" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/iox256a3.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2587" column="46" selection-start="105339" selection-end="105345" vertical-scroll-proportion="0.0" />
+        <state line="6259" column="9" selection-start="271850" selection-end="271863" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rtc.c">
+    <entry file="file://$PROJECT_DIR$/sensors.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="0" selection-start="407" selection-end="480" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="53" column="38" selection-start="1473" selection-end="1473" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dpad.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="4" selection-start="623" selection-end="623" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/time.c">
+    <entry file="file://$PROJECT_DIR$/leds.h">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ff.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="330" column="12" selection-start="20861" selection-end="20870" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ffconf.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="0" selection-start="932" selection-end="932" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sd.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="253" column="4" selection-start="7189" selection-end="7256" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rs232.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="89" column="40" selection-start="1932" selection-end="1932" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ff.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sd.h">
+    <entry file="file://$PROJECT_DIR$/leds.c">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/wifi.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="125" column="0" selection-start="3236" selection-end="3236" vertical-scroll-proportion="0.1978022">
+        <state line="107" column="56" selection-start="2957" selection-end="2957" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sensors.c">
+    <entry file="file://$PROJECT_DIR$/wifi.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="28" selection-start="263" selection-end="263" vertical-scroll-proportion="0.0">
+        <state line="17" column="0" selection-start="487" selection-end="527" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/debug.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="37" selection-start="412" selection-end="412" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ff.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1211" column="89" selection-start="36448" selection-end="36454" vertical-scroll-proportion="-11.153846">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ff.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="398" column="43" selection-start="22935" selection-end="22935" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/time.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="68" column="5" selection-start="1972" selection-end="1980" vertical-scroll-proportion="-30.384615">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Makefile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="60" column="9" selection-start="1936" selection-end="1953" vertical-scroll-proportion="0.21911922">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/debug.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="35" selection-start="261" selection-end="261" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sd.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="227" column="15" selection-start="6570" selection-end="6576" vertical-scroll-proportion="0.66815144">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="29" selection-start="30" selection-end="30" vertical-scroll-proportion="0.0" />
+        <state line="5" column="0" selection-start="83" selection-end="83" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1521" column="17" selection-start="42291" selection-end="42291" vertical-scroll-proportion="33.8">
+        <state line="239" column="48" selection-start="7126" selection-end="7126" vertical-scroll-proportion="3.124183">
           <folding />
         </state>
       </provider>

@@ -22,19 +22,33 @@ volatile uint16_t   Debug_writeLocation = 0;
 void Debug_Init(void){
 	Debug_Port.DIRSET = Debug_TX_pin_bm;
 	Debug_Port.DIRCLR = Debug_RX_pin_bm;
-   
+
+
+    Debug_Flow_Port.DIRCLR = (1<<Debug_RTS_pin);
+    Debug_Flow_Port.Debug_RTS_CNTL = PORT_OPC_PULLUP_gc;
+
+
 	Debug_Usart.CTRLC = USART_CHSIZE_8BIT_gc | USART_PMODE_DISABLED_gc | (false ? USART_SBMODE_bm : 0);	 	    				
-	
-	Debug_Usart.BAUDCTRLA = 95 & 0xFF;
-	Debug_Usart.BAUDCTRLB = (0 << USART_BSCALE0_bp)|(95 >> 8);
-	
-	
+
+
+
+	//Debug_Usart.BAUDCTRLA = 95 & 0xFF;  // 9600
+    //Debug_Usart.BAUDCTRLB = (0 << USART_BSCALE0_bp)|(95 >> 8);
+
+    //Debug_Usart.BAUDCTRLA = 7 & 0xFF;               // 115200
+    //Debug_Usart.BAUDCTRLB = (0 << USART_BSCALE0_bp)|(7 >> 8);
+
+    Debug_Usart.BAUDCTRLA = 128 & 0xFF;                   // 460800;
+    Debug_Usart.BAUDCTRLB = (0b1001 << USART_BSCALE0_bp)|(128 >> 8);
+
 	Debug_Usart.CTRLB |= USART_RXEN_bm;
 	Debug_Usart.CTRLB |= USART_TXEN_bm;
 	
 	Debug_Usart.CTRLA |= USART_RXCINTLVL_MED_gc;
 }
-
+void Debug_ClearBuffer(void){
+	Debug_writeLocation = Debug_readLocation;
+}
 
 
 bool Debug_CharReadyToRead(void){
@@ -61,7 +75,8 @@ uint8_t Debug_GetByte(bool blocking){
 
 void Debug_SendByte(uint8_t data){
 	while(!(Debug_Usart.STATUS & USART_DREIF_bm));
-	Debug_Usart.DATA = data;	
+	while(((Debug_Flow_Port.IN)&(1<<Debug_RTS_pin)) > 0);                              // Wait for RTS to be low
+	Debug_Usart.DATA = data;
 }
 
 void Debug_SendString(char string [],bool CR){
@@ -81,4 +96,68 @@ ISR(USARTC0_RXC_vect){
 	if(Debug_writeLocation >= Debug_BufferSize){
 		Debug_writeLocation = 0;
 	}
+}
+
+uint32_t Debug_GetTime(uint16_t timeOut){
+    uint16_t to = timeOut;
+    uint32_t tempTime = 0;
+    uint8_t byteCounter = 0;
+    Debug_ClearBuffer();
+    Debug_SendByte('T');             // returns unix time MSB first
+
+    while(to > 0){
+      if(Debug_CharReadyToRead()){
+         tempTime  |= Debug_GetByte(true) & 0xFF;
+         byteCounter++;
+         if(byteCounter == 4){
+            return tempTime;
+         } else {
+             tempTime <<= 8;
+         }
+      }
+      _delay_ms(1);
+      to--;
+    }
+    return 0;
+}
+
+bool Debug_Connected(uint16_t timeOut){
+    uint16_t to = timeOut;
+    Debug_ClearBuffer();
+    Debug_SendByte('P');
+    while(to > 0){
+      if(Debug_CharReadyToRead()){
+         if(Debug_GetByte(true) == 'P'){
+           return true;
+         }
+      }
+      _delay_ms(1);
+      to--;
+    }
+    return false;
+}
+
+bool Debug_TriggerUpload(uint32_t size, uint16_t timeOut){
+   uint16_t to = timeOut;
+   char fileSize [20];
+
+   Debug_ClearBuffer();
+   Debug_SendByte('U');
+
+   sprintf(fileSize, "%12lu",size);
+   Debug_SendString(fileSize,true);
+
+    while(to > 0){
+      if(Debug_CharReadyToRead()){
+         if(Debug_GetByte(true) == 'Y'){
+           return true;
+         } else {
+           return false;
+         }
+      }
+      _delay_ms(1);
+      to--;
+    }
+    return false;
+
 }
