@@ -1,5 +1,5 @@
 
-#define FirmwareVersion "2.05"
+#define FirmwareVersion "2.06"
 #define HardwareVersion "2"
 char deviceID   [20];
 
@@ -56,3 +56,7 @@ uint32_t lightBuffer2 [lightNumberOfSamples*lightNumberOfChannels];
 uint32_t airSampleTime = 0;
 
 uint32_t timeRecordingStarted = 0;
+
+
+bool demoMode = false;
+bool useWifiForUploading = false;

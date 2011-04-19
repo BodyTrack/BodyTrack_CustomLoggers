@@ -15,7 +15,7 @@
 #define Debug_RTS_CNTL           PIN0CTRL
 
 
-void Debug_Init(void);
+void Debug_Init(uint32_t baud);
 void Debug_ClearBuffer(void);
 
 bool Debug_CharReadyToRead(void);

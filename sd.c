@@ -20,8 +20,10 @@
 
 static FATFS fso0;
 static FATFS fso1;
+//static FATFS fso2;
 FATFS *fs;
-FILINFO	fno;
+FILINFO	fno,fno2;
+
 DIR dir;
 
 FIL Log_File, Upload_File;
@@ -41,6 +43,7 @@ bool chargeComplete   	 = false;
 bool okToCharge 		 = false;
 
 char currentLogFile[15];
+
 
 const uint32_t crc_table[256] = {
 0x00000000,0x77073096,0xee0e612c,0x990951ba,0x076dc419,0x706af48f,0xe963a535,0x9e6495a3,
@@ -77,18 +80,20 @@ const uint32_t crc_table[256] = {
 0xb3667a2e,0xc4614ab8,0x5d681b02,0x2a6f2b94,0xb40bbe37,0xc30c8ea1,0x5a05df1b,0x2d02ef8d
 };
 
+//uint32_t crc_table[256];
+
 
 uint8_t SD_Init(void){
 	uint8_t tmp;
+
+
 	SD_CD_Port.SD_CD_CNTL = PORT_OPC_PULLUP_gc;
 	SD_CD_Port.SD_CD2_CNTL = PORT_OPC_PULLUP_gc;
 	SD_Timer_Init();
 	tmp = disk_initialize(0);
 	f_mount(0, &fso0);
 	f_mount(1, &fso1);
-
-
-
+    //f_mount(2, &fso2);
 	return tmp;
 }
 
@@ -102,7 +107,8 @@ uint8_t SD_Open(char string []){
 		currentLogFile[i-1] = currentLogFile[i];
 	}
 	currentLogFile[strlen(currentLogFile) - 1] = 0;
-	return f_open(&Log_File, string, FA_READ | FA_WRITE | FA_OPEN_ALWAYS);	
+
+	return f_open(&Log_File, string, FA_READ | FA_WRITE | FA_OPEN_ALWAYS);
 }
 
 void SD_Close(void){
@@ -148,51 +154,18 @@ void SD_Write32(uint32_t var){
 
 void SD_WriteString(char * string){
 	f_puts (string, &Log_File);
-	
-
-	/*for (uint8_t i=0; i<strlen(string); i++)
-      { 
-      CRC = CRC ^ string[i] ; 
-      for (uint8_t j=0; j<8; j++) 
-         { 
-            CRC = (CRC>>1) ^ (0xEDB88320 * (CRC & 1)) ; 
-         } 
-     }*/
-
-
     for (uint16_t i=0; i<strlen(string); i++){
-      CRC = (CRC >> 8) ^ crc_table[string[i] ^ (CRC & 0xFF)];
+        CRC = (CRC >> 8) ^ crc_table[string[i] ^ (CRC & 0xFF)];
     }
-
 }
 
 void SD_WriteBuffer(uint8_t * buffer, uint16_t length){
     uint16_t tmp;
     f_write (&Log_File, buffer, length, &tmp);
 
-
-    /*for (uint16_t i=0; i<length; i++)
-      { 
-      CRC = CRC ^ buffer[i] ; 
-      for (uint8_t j=0; j<8; j++) 
-         { 
-            CRC = (CRC>>1) ^ (0xEDB88320 * (CRC & 1)) ; 
-         } 
-     }*/
-
-
-
-
-
-
-   for (uint16_t i=0; i<length; i++){
-      CRC = (CRC >> 8) ^ crc_table[buffer[i] ^ (CRC & 0xFF)];
-   }
-
-
-
-
-
+    for (uint16_t i=0; i<length; i++){
+        CRC = (CRC >> 8) ^ crc_table[buffer[i] ^ (CRC & 0xFF)];
+    }
 }
 
 void SD_ClearCRC(void){
@@ -347,14 +320,4 @@ void CCPWrite( volatile uint8_t * address, uint8_t value ) {
 #endif
 	SREG = saved_sreg;
 }
-
-/*unsigned long CalcCRC (unsigned long crc, char *buffer, int length)
-   {
-   int I;
-   for (I=0; I<length; I++)
-      {
-      crc = (crc >> 8) ^ crc_table[*buffer++ ^ (crc & 0xFF)];
-      }
-   return crc;
-   } */
 

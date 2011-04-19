@@ -373,7 +373,7 @@ ISR(TCD1_OVF_vect)
 ISR(TCF0_OVF_vect)
 {
 	if(recording && wantToRecordMicrophone){
-	  if(microphoneBufferToWriteTo == 1){
+	  if((microphoneBufferToWriteTo == 1) && !okToSendMicrophoneBuffer1){
 	    if(microphoneBufferCounter == 0){
 	    	microphoneSampleStartTime1 = Time_Get32BitTimer();
 	    }
@@ -388,7 +388,7 @@ ISR(TCF0_OVF_vect)
 	    	microphoneBufferToWriteTo = 2;
 	    	okToSendMicrophoneBuffer1 = true;
 	    }
-	  } else if (microphoneBufferToWriteTo == 2){
+	  } else if ((microphoneBufferToWriteTo == 2) && !okToSendMicrophoneBuffer2){
 	    if(microphoneBufferCounter == 0){
 	    	microphoneSampleStartTime2 = Time_Get32BitTimer();
 	    }

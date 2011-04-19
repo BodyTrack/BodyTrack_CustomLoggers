@@ -42,6 +42,9 @@ volatile bool wifiBufferWasFull = false;
 
 volatile uint16_t bufferDelayCounter = 0;
 
+volatile uint16_t timeOutCounter = 0;
+bool uploadTimedOut = false;
+
 
 void Wifi_Init(uint32_t baud){
 
@@ -78,13 +81,14 @@ void Wifi_Init(uint32_t baud){
 	} else if(baud == 921600){
 		Wifi_Usart.BAUDCTRLA = 0 & 0xFF;
 		Wifi_Usart.BAUDCTRLB = (0 << USART_BSCALE0_bp)|(0 >> 8);
+		//Wifi_Usart.CTRLB |= USART_CLK2X_bm;
 	}
 	
 	Wifi_Usart.CTRLB |= USART_RXEN_bm;
 	Wifi_Usart.CTRLB |= USART_TXEN_bm;
 
 	Wifi_ClearBuffer();
-
+    timeOutCounter = 0;
 }
 
 void Wifi_ClearBuffer(void){
@@ -125,10 +129,22 @@ uint8_t Wifi_GetByte(bool blocking){
 void Wifi_SendByte(uint8_t data){
 
 	while(!(Wifi_Usart.STATUS & USART_DREIF_bm));
-    while(((Wifi_Flow_Port.IN)&(1<<Wifi_RTS_pin)) > 0);                              // Wait for RTS to be low
+    while(((Wifi_Flow_Port.IN)&(1<<Wifi_RTS_pin)) > 0){
+        timeOutCounter++;
+        _delay_ms(1);
+        if(timeOutCounter > 10000){
+           timeOutCounter = 0;
 
-	Wifi_Usart.DATA = data;
+           Debug_SendString("Hanging",true);
 
+           uploadTimedOut = true;
+           break;
+        }
+    }                              // Wait for RTS to be low
+
+    Wifi_Usart.DATA = data;
+	timeOutCounter = 0;
+    _delay_us(25);
 }
 
 void Wifi_SendString(char string [],bool CR){
@@ -176,6 +192,8 @@ bool Wifi_ExitCMDMode(uint16_t timeOut){
 }
 
 bool Wifi_SendCommand(char toSend [], char ok [], char ok2 [], uint16_t timeOut){
+    char response [50];
+
 	respLen = 0;
 	toSendLen = strlen(toSend);
 	if(strlen(ok) > strlen(ok2)){
@@ -183,7 +201,7 @@ bool Wifi_SendCommand(char toSend [], char ok [], char ok2 [], uint16_t timeOut)
 	} else {
 		okLen = strlen(ok);
 	}
-
+    Wifi_SendString("",true);
 	Debug_SendString("-----------------",true);
 	Debug_SendString("Command: ",false);
 	Debug_SendString(toSend,true);
@@ -191,19 +209,47 @@ bool Wifi_SendCommand(char toSend [], char ok [], char ok2 [], uint16_t timeOut)
 	Wifi_SendString(toSend, true);
 	for(uint16_t i = 0; i < timeOut; i++){
 		if(Wifi_CharReadyToRead()){ 
-			resp[respLen] = Wifi_GetByte(false);
+			response[respLen] = Wifi_GetByte(false);
 			respLen++;
 			if(respLen == okLen + toSendLen + 3){		
 				
 				Debug_SendString("Response: ",false);
 				for(uint8_t j = 0; j < respLen; j++){
-					Debug_SendByte(resp[j]);
+					Debug_SendByte(response[j]);
 				}
-				Debug_SendString(",want: ",false);
-				Debug_SendString(ok,true);
+				Debug_SendString(", want: \"",false);
+				Debug_SendString(ok,false);
+				Debug_SendByte('"');
+				Debug_SendString(", or: \"",false);
+				Debug_SendString(ok2,false);
+				Debug_SendString("\"",true);
 				
-				
-				for(uint8_t k = 0; k < toSendLen; k++){
+				if(strstr(response,toSend) == 0){     // make sure the command is present in the response
+				   Debug_SendString("Command NOT found in response",true);
+				   return false;
+				}   else {
+				   //Debug_SendString("Command found in response",true);
+				}
+
+				if(strstr(response,ok) != 0){                   // check for ok response 1
+				    //Debug_SendString("ok response 1 found",true);
+				    return true;
+				} else {
+				    if(strstr(response,ok2) != 0){              // check for ok response 1
+				        //Debug_SendString("ok response 2 found",true);
+				        return true;
+				    } else {
+				        Debug_SendString("NO ok resonses found",true);
+				        return false;
+				    }
+				}
+
+
+
+
+
+
+				/*for(uint8_t k = 0; k < toSendLen; k++){
 					if(resp[k] != toSend[k]){
 						return false;
 					}
@@ -215,8 +261,7 @@ bool Wifi_SendCommand(char toSend [], char ok [], char ok2 [], uint16_t timeOut)
 						}
 					}
 				}
-				Debug_SendByte(13);
-				return true;
+				return true;*/
 			}
 		}
 		_delay_ms(1);
@@ -226,7 +271,7 @@ bool Wifi_SendCommand(char toSend [], char ok [], char ok2 [], uint16_t timeOut)
 
 bool Wifi_GetTime(uint16_t timeOut){
 	uint8_t tmp=0;
-	uint32_t tmp32 = 0;
+	//uint32_t tmp32 = 0;
 	
 	Wifi_ClearBuffer();
 	if(!Wifi_SendCommand("show t t","Time=","Time=",500)){
@@ -237,6 +282,7 @@ bool Wifi_GetTime(uint16_t timeOut){
 	while(Wifi_CharReadyToRead()){
 		if(tmp < 50){
 			string[tmp] = Wifi_GetByte(false);
+			//Debug_SendByte(string[tmp]);
 			tmp++;
 		} else {
 			break;
@@ -253,7 +299,7 @@ bool Wifi_GetTime(uint16_t timeOut){
 		return false;
 	}
 
-	strtok(string,"=");
+	/*strtok(string,"=");                           // worked on wifly v2.20
 	strtok(NULL,"=");
 	strcpy(timeString,strtok(NULL," "));
 		
@@ -272,8 +318,11 @@ bool Wifi_GetTime(uint16_t timeOut){
 	tmp32 *= 100;
 	tmp32 += ((timeLower[0]-'0')* 10);
 	tmp32 += ((timeLower[1]-'0'));
-	
-	time_secs = tmp32;
+    time_secs = tmp32; */
+
+    memcpy(timeString,(strstr(string,"RTC=")+4),10);        // changed for wifly v2.22
+    time_secs = atol(timeString);
+
 	return true;
 }
 

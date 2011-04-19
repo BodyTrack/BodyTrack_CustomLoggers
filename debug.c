@@ -19,7 +19,8 @@ volatile uint16_t  	Debug_readLocation = 0;
 volatile uint16_t   Debug_writeLocation = 0;
 
 
-void Debug_Init(void){
+
+void Debug_Init(uint32_t baud){
 	Debug_Port.DIRSET = Debug_TX_pin_bm;
 	Debug_Port.DIRCLR = Debug_RX_pin_bm;
 
@@ -30,16 +31,13 @@ void Debug_Init(void){
 
 	Debug_Usart.CTRLC = USART_CHSIZE_8BIT_gc | USART_PMODE_DISABLED_gc | (false ? USART_SBMODE_bm : 0);	 	    				
 
-
-
-	//Debug_Usart.BAUDCTRLA = 95 & 0xFF;  // 9600
-    //Debug_Usart.BAUDCTRLB = (0 << USART_BSCALE0_bp)|(95 >> 8);
-
-    //Debug_Usart.BAUDCTRLA = 7 & 0xFF;               // 115200
-    //Debug_Usart.BAUDCTRLB = (0 << USART_BSCALE0_bp)|(7 >> 8);
-
-    Debug_Usart.BAUDCTRLA = 128 & 0xFF;                   // 460800;
-    Debug_Usart.BAUDCTRLB = (0b1001 << USART_BSCALE0_bp)|(128 >> 8);
+	if(baud == 9600){
+		Debug_Usart.BAUDCTRLA = 95 & 0xFF;
+		Debug_Usart.BAUDCTRLB = (0 << USART_BSCALE0_bp)|(95 >> 8);
+	} else if(baud == 460800){
+		Debug_Usart.BAUDCTRLA = 1 & 0xFF;
+		Debug_Usart.BAUDCTRLB = (0 << USART_BSCALE0_bp)|(1 >> 8);
+	}
 
 	Debug_Usart.CTRLB |= USART_RXEN_bm;
 	Debug_Usart.CTRLB |= USART_TXEN_bm;
@@ -75,7 +73,9 @@ uint8_t Debug_GetByte(bool blocking){
 
 void Debug_SendByte(uint8_t data){
 	while(!(Debug_Usart.STATUS & USART_DREIF_bm));
-	while(((Debug_Flow_Port.IN)&(1<<Debug_RTS_pin)) > 0);                              // Wait for RTS to be low
+	while(((Debug_Flow_Port.IN)&(1<<Debug_RTS_pin)) > 0){
+	    if(useWifiForUploading) {} break;
+	}                              // Wait for RTS to be low
 	Debug_Usart.DATA = data;
 }
 

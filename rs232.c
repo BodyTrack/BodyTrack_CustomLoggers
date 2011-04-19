@@ -39,7 +39,7 @@ void Rs232_Init(void){
 	Rs232_Usart.CTRLB |= USART_RXEN_bm;
 	Rs232_Usart.CTRLB |= USART_TXEN_bm;
 	
-	Rs232_Usart.CTRLA |= USART_RXCINTLVL_MED_gc;
+	Rs232_Usart.CTRLA |= USART_RXCINTLVL_HI_gc;
 }
 
 
@@ -90,23 +90,7 @@ ISR(USARTD0_RXC_vect){
 
 	if(rs232Recording){
 		if(Rs232Buffer[Rs232_writeLocation] == 0x0A){
-			uint8_t counter = 0;
-			while(Rs232_CharReadyToRead()){
-				airQualityString[counter] = Rs232_GetByte(false);
-				counter++;
-			}
-			if(strstr(airQualityString,"Dylos") == NULL){
-				airSampleTime = Time_Get32BitTimer();
-				smallCount = atol(strtok(airQualityString,","));
-				largeCount = atol(strtok(NULL,","));
-
-				quickSmall = smallCount;
-				quickLarge = largeCount;
-
-
-				okToSendAirQuality = true;
-			}
-
+            okToSendAirQuality = true;
 		}
 	}
 	Rs232_writeLocation++;
