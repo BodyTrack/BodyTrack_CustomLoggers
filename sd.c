@@ -99,8 +99,6 @@ uint8_t SD_Init(void){
 
 
 uint8_t SD_Open(char string []){
-	//Debug_SendString("File Name= ",false);
-	//Debug_SendString(string,true);
 	strcpy(currentLogFile,string);
 	strupr(currentLogFile);
 	for(uint8_t i = 1; i < strlen(currentLogFile); i++){
@@ -112,7 +110,6 @@ uint8_t SD_Open(char string []){
 }
 
 void SD_Close(void){
-	//Debug_SendString("Closing File",true);
 	f_close(&Log_File);
 }
 
@@ -184,8 +181,6 @@ void SD_MakeFileName(uint32_t var){
 
 uint8_t SD_StartLogFile(uint32_t time){
 	uint8_t resp;
-
-	//Debug_SendString("Opening Log File",true);
 
 	SD_MakeFileName(time);
 	resp = SD_Open(fileName);

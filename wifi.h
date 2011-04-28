@@ -25,7 +25,7 @@ void Wifi_ClearBuffer(void);
 bool Wifi_CharReadyToRead(void);
 uint8_t Wifi_GetByte(bool blocking);
 
-void Wifi_SendByte(uint8_t data);
+uint16_t Wifi_SendByte(uint8_t data);
 void Wifi_SendString(char string [],bool CR);
 bool Wifi_EnterCMDMode(uint16_t timeOut);
 bool Wifi_ExitCMDMode(uint16_t timeOut);

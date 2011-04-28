@@ -22,7 +22,6 @@ volatile uint16_t  	Wifi_readLocation = 0;
 volatile uint16_t   Wifi_writeLocation = 0;
 
 volatile char resp [50];
-char string[50];
 //volatile char time [25];
  char timeUpper[10];
 volatile char timeLower[10];
@@ -30,7 +29,7 @@ volatile char ip   [20];
 volatile uint8_t respLen = 0;
 volatile uint8_t toSendLen = 0;
 volatile uint8_t okLen = 0;
-char timeString[15];
+
 volatile uint8_t timeLength = 0;
 volatile uint32_t time_secs = 0;
 volatile uint32_t time_nanos = 0;
@@ -88,7 +87,6 @@ void Wifi_Init(uint32_t baud){
 	Wifi_Usart.CTRLB |= USART_TXEN_bm;
 
 	Wifi_ClearBuffer();
-    timeOutCounter = 0;
 }
 
 void Wifi_ClearBuffer(void){
@@ -126,25 +124,25 @@ uint8_t Wifi_GetByte(bool blocking){
 }
 
 
-void Wifi_SendByte(uint8_t data){
-
+uint16_t Wifi_SendByte(uint8_t data){
+    PORTB.OUTSET = (1 << 4);
+    timeOutCounter = 0;
 	while(!(Wifi_Usart.STATUS & USART_DREIF_bm));
     while(((Wifi_Flow_Port.IN)&(1<<Wifi_RTS_pin)) > 0){
         timeOutCounter++;
         _delay_ms(1);
-        if(timeOutCounter > 10000){
-           timeOutCounter = 0;
-
+        if(timeOutCounter > 60000){
+           Wifi_Usart.DATA = data;
            Debug_SendString("Hanging",true);
-
-           uploadTimedOut = true;
-           break;
+           PORTB.OUTCLR = (1 << 4);
+           return timeOutCounter;
         }
     }                              // Wait for RTS to be low
 
     Wifi_Usart.DATA = data;
-	timeOutCounter = 0;
     _delay_us(25);
+    PORTB.OUTCLR = (1 << 4);
+    return 0;
 }
 
 void Wifi_SendString(char string [],bool CR){
@@ -243,25 +241,6 @@ bool Wifi_SendCommand(char toSend [], char ok [], char ok2 [], uint16_t timeOut)
 				        return false;
 				    }
 				}
-
-
-
-
-
-
-				/*for(uint8_t k = 0; k < toSendLen; k++){
-					if(resp[k] != toSend[k]){
-						return false;
-					}
-				}
-				for(uint8_t l = (toSendLen+3); l < (respLen-3); l++){
-					if(resp[l] != ok[l-toSendLen-3]){
-						if(resp[l] != ok2[l-toSendLen-3]){
-							return false;
-						}
-					}
-				}
-				return true;*/
 			}
 		}
 		_delay_ms(1);
@@ -271,18 +250,20 @@ bool Wifi_SendCommand(char toSend [], char ok [], char ok2 [], uint16_t timeOut)
 
 bool Wifi_GetTime(uint16_t timeOut){
 	uint8_t tmp=0;
-	//uint32_t tmp32 = 0;
-	
+	char string [70];
+    char timeString[15];
+
 	Wifi_ClearBuffer();
 	if(!Wifi_SendCommand("show t t","Time=","Time=",500)){
 	    return false;
 	}
-	_delay_ms(100);
+
+
+	_delay_ms(50);
 	
 	while(Wifi_CharReadyToRead()){
-		if(tmp < 50){
+		if(tmp < 70){
 			string[tmp] = Wifi_GetByte(false);
-			//Debug_SendByte(string[tmp]);
 			tmp++;
 		} else {
 			break;
@@ -299,31 +280,10 @@ bool Wifi_GetTime(uint16_t timeOut){
 		return false;
 	}
 
-	/*strtok(string,"=");                           // worked on wifly v2.20
-	strtok(NULL,"=");
-	strcpy(timeString,strtok(NULL," "));
-		
-	for(uint8_t i = 0; i < 8; i++){
-		timeUpper[i] = timeString[i];
-	}
-	
-	tmp = 8;
-	for(uint8_t i = 0; i < 5; i++){
-		timeLower[i] = timeString[tmp];
-		tmp++;
-	}
-
-	tmp32 = atol(timeUpper);
-	tmp32 -= 22089888;
-	tmp32 *= 100;
-	tmp32 += ((timeLower[0]-'0')* 10);
-	tmp32 += ((timeLower[1]-'0'));
-    time_secs = tmp32; */
-
-    memcpy(timeString,(strstr(string,"RTC=")+4),10);        // changed for wifly v2.22
+    memcpy(timeString,(strstr(string,"RTC=")+4),10);
+    timeString[10] = 0;
     time_secs = atol(timeString);
-
-	return true;
+    return true;
 }
 
 bool Wifi_Connected(uint16_t timeOut){
@@ -367,8 +327,6 @@ uint8_t Wifi_GetSignalStrength(uint16_t timeOut){
 			rssi[tmp] = Wifi_GetByte(false);
 			if(rssi[tmp] == ')'){
 				rssi[tmp] = 0;
-				//Debug_SendString("rssi: ", false);
-				//Debug_SendString(rssi, true);
 				worker = atoi(rssi);
 				worker*=9208;
 				worker = 1045100 - worker;
@@ -377,9 +335,6 @@ uint8_t Wifi_GetSignalStrength(uint16_t timeOut){
                 if(ss > 100){
                     ss = 100;
                 }
-				//sprintf(string, "strength: %u %",ss);
-				//Debug_SendString(string,true);
-
 				return ss;
 			}
 			tmp++;

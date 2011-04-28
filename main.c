@@ -53,7 +53,8 @@
 //                                - changed how the 15 minutes file length cutoff is triggered
 //                                - dynamically changes NTP server if it cannot connect
 //                                - handles the card being full better
-//
+//				2.07 - 04/28/2011 - fixes display bug to show the reboot sequence after reset
+//                                - fixes Wifi_GetTime() function that cause time to get out of sync
 //
 //___________________________________________
 
@@ -107,7 +108,7 @@ void getDeviceID(void);
 uint8_t SP_ReadCalibrationByte( uint8_t index );
 
 void Uploader_ClearBuffer(void);
-void Uploader_SendByte(uint8_t data);
+uint16_t Uploader_SendByte(uint8_t data);
 void Uploader_SendString(char string [],bool CR);
 uint8_t Uploader_GetByte(bool blocking);
 bool Uploader_CharReadyToRead(void);
@@ -304,10 +305,9 @@ int main(void){
 	}
 
   Configure_Wifi:
-    Debug_SendString("Configuring Wifi",true);
+    okToDisplayGUI = false;
     connected = false;
     Wifi_Init(9600);
-    //Debug_To_Wifi();
     while(!connected && !demoMode){
         if(useWifiForUploading){
 		    Config_Wifi();
@@ -361,10 +361,12 @@ int main(void){
 
     Main:
 	while(true){
+
         if(Dpad_CheckButton(Left)){
           Debug_To_Wifi();
         }
-	    if(ssRefreshCounter > 5000){
+
+	    if(ssRefreshCounter > 300){
 	       okToGetRemainingSpace = true;
 	       while(!okToGetRemainingSpace);
 
@@ -388,7 +390,6 @@ int main(void){
 		   ssRefreshCounter = 0;
 	    }
 
-        //okToUpload = true;
         if(okToUpload && Uploader_Connected(500)){
             uploading = true;
             if(fileToUpload[0] != '/'){
@@ -487,11 +488,6 @@ int main(void){
 
 
             if(useWifiForUploading || Debug_TriggerUpload(uploadHeaderSize, 2000)){
-                Debug_SendString("File Size: ",false);
-                Debug_SendString(ltoa(uploadFileSize,temp,10),true);
-                Debug_SendString("Total Bytes Uploaded: ",false);
-                Debug_SendString(ltoa(uploadHeaderSize,temp,10),true);
-
                 Uploader_SendString("POST /users/",false);                              // 12
                 Uploader_SendString(user,false);
                 Uploader_SendString("/binupload?dev_nickname=",false);                  // 24
@@ -515,35 +511,34 @@ int main(void){
                     uploadPercentBS = (z*100)/numberOfPacketsToUpload;
                     while(!uploadFileBufferFull);
                     for(uint16_t j = 0; j <  uploadChunkSize; j++){
-                        Uploader_SendByte(uploadFileBuffer[j]);
-                        if(uploadTimedOut){
+                        if(Uploader_SendByte(uploadFileBuffer[j]) > 0){
                             goto Configure_Wifi;
+                        }
+                        if(Wifi_CharReadyToRead()){
+                           Debug_SendByte(Wifi_GetByte(false));
                         }
                     }
                 }
-
                 uploadFileBufferFull = false;
                 okToFillUploadFileBuffer = true;
                 while(!uploadFileBufferFull);
-
                 for(uint16_t j = 0; j < leftOverBytesToUpload; j++){
-                    Uploader_SendByte(uploadFileBuffer[j]);
-                    if(uploadTimedOut){
+                    if(Uploader_SendByte(uploadFileBuffer[j]) != 0){
                         goto Configure_Wifi;
                     }
                 }
-
                 Uploader_SendByte(0x0D);                                                // 4
                 Uploader_SendByte(0x0A);
                 Uploader_SendByte(0x0D);
                 Uploader_SendByte(0x0A);
-
-
-
-                //for(uint32_t j = 0; j< 3000000; j++){
-                //    Uploader_SendByte(0);
-                    //uploadPercentBS = (j/30000);
-                //}
+                Uploader_SendByte(0x0D);                                                // 4
+                Uploader_SendByte(0x0A);
+                Uploader_SendByte(0x0D);
+                Uploader_SendByte(0x0A);
+                Uploader_SendByte(0x0D);                                                // 4
+                Uploader_SendByte(0x0A);
+                Uploader_SendByte(0x0D);
+                Uploader_SendByte(0x0A);
 
                 uploadPercentBS = 100;
                 _delay_ms(1000);
@@ -749,318 +744,306 @@ void Display_BackgroundWriter_Init(void){
 
 ISR(TCD0_OVF_vect){
 
-if(okToDisplayGUI){
+    if(okToDisplayGUI){
+        ssRefreshCounter++;
 
-    ssRefreshCounter++;
-
-    if(recording){
-        if(recordFileRestartCounter == 0){
-            if(UNIX_time > timeToStopRecording){
-	            restartingFile = true;
-	            recordFileRestartCounter = 0;
-		        rs232Recording = false;
-                recording = false;
-	            okToCloseLogFile = true;
-	            while(okToCloseLogFile);
-	            if(percentDiskUsed < 950){
-                    okToOpenLogFile = true;
-	                while(!recording);
+        if(recording){
+            if(recordFileRestartCounter == 0){
+                if(UNIX_time > timeToStopRecording){
+	                restartingFile = true;
+	                recordFileRestartCounter = 0;
+		            rs232Recording = false;
+                    recording = false;
+	                okToCloseLogFile = true;
+	                while(okToCloseLogFile);
+	                if(percentDiskUsed < 950){
+                        okToOpenLogFile = true;
+	                    while(!recording);
+	                }
+	                restartingFile = false;
 	            }
-	            restartingFile = false;
 	        }
-	    }
-	    recordFileRestartCounter++;
-    }
+	        recordFileRestartCounter++;
+        }
 
 
 
 	// controls
 
 
-    if(currentMode == recordMode && Dpad_CheckButton(Down)){											// go to sensorMode
+        if(currentMode == recordMode && Dpad_CheckButton(Down)){
+		    currentMode = sensorMode;
+		    display_clearBuffer();
+		    display_writeBufferToScreen();
+	    } else if(currentMode == sensorMode && Dpad_CheckButton(Up)){
+		    currentMode = recordMode;
+		    display_clearBuffer();
+		    display_writeBufferToScreen();
+		    _delay_ms(400);
+	    } else if(currentMode == recordMode && !recording && SD_Inserted() && !Dpad_CheckButton(Up) && !restartingFile){					// waiting to start recording
+		    Leds_Clear(sd_Red);
+		    Leds_Set(sd_Green);
+		    if(connected){
+		        Leds_Clear(wifi_Red);
+                Leds_Set(wifi_Green);
+		    } else {
+		        Leds_Clear(wifi_Green);
+                Leds_Set(wifi_Red);
+		    }
+	    } else if(currentMode == recordMode && !recording && !SD_Inserted()){
+		    Leds_Set(sd_Red);
+		    Leds_Clear(sd_Green);
+	    } else if(currentMode == recordMode && Dpad_CheckButton(Up) && !recording){
+            if(percentDiskUsed < 950){
+                display_putString("Recording      0m",0,0,System5x7);
+                display_drawLine(1,60,7,60,true);		// up arrow
+		        display_drawPixel(2,59,true);
+		        display_drawPixel(3,58,true);
+                display_drawPixel(2,61,true);
+                display_drawPixel(3,62,true);
+		        display_writeBufferToScreen();
 
-		currentMode = sensorMode;
-		display_clearBuffer();
-		display_writeBufferToScreen();
-	} else if(currentMode == sensorMode && Dpad_CheckButton(Up)){											// go to recordMode
+                okToGetRemainingSpace = true;
+                while(!okToGetRemainingSpace);
 
-		currentMode = recordMode;
-		display_clearBuffer();
-		display_writeBufferToScreen();
-		_delay_ms(400);
-	} else if(currentMode == recordMode && !recording && SD_Inserted() && !Dpad_CheckButton(Up) && !restartingFile){					// waiting to start recording
-		Leds_Clear(sd_Red);
-		Leds_Set(sd_Green);
-		if(connected){
-		    Leds_Clear(wifi_Red);
-            Leds_Set(wifi_Green);
-		} else {
-		    Leds_Clear(wifi_Green);
-            Leds_Set(wifi_Red);
-		}
-	} else if(currentMode == recordMode && !recording && !SD_Inserted()){									// dont allow to start recording
-		Leds_Set(sd_Red);
-		Leds_Clear(sd_Green);
-	} else if(currentMode == recordMode && Dpad_CheckButton(Up) && !recording){								// start recording
-        if(percentDiskUsed < 950){
-           display_putString("Recording      0m",0,0,System5x7);
-            display_drawLine(1,60,7,60,true);		// up arrow
+		        Leds_Clear(sd_Green);
+		        Leds_Clear(sd_Red);
+		        Leds_Clear(wifi_Green);
+		        Leds_Clear(wifi_Red);
+		        Leds_Clear(ext_Green);
+		        Leds_Clear(ext_Red);
+
+                okToOpenLogFile = true;
+		        _delay_ms(50);
+            } else {
+                Leds_Clear(sd_Green);
+		        Leds_Set(sd_Red);
+
+            }
+
+
+	    } else if(currentMode == recordMode && Dpad_CheckButton(Up) && recording){
+		    rs232Recording = false;
+		    recording = false;
+
+		    Sensors_ResetTemperatureBuffers();
+		    Sensors_ResetHumidityBuffers();
+		    Sensors_ResetPressureBuffers();
+		    Sensors_ResetMicrophoneBuffers();
+		    Sensors_ResetLightBuffers();
+		    okToCloseLogFile = true;
+
+
+		    display_putString("Paused           ",0,0,System5x7);
+		    display_drawLine(1,60,7,60,true);		// up arrow
 		    display_drawPixel(2,59,true);
 		    display_drawPixel(3,58,true);
-            display_drawPixel(2,61,true);
-            display_drawPixel(3,62,true);
+		    display_drawPixel(2,61,true);
+		    display_drawPixel(3,62,true);
 		    display_writeBufferToScreen();
 
-            okToGetRemainingSpace = true;
-            while(!okToGetRemainingSpace);
+            if(timeIsValid || demoMode){
+		        Leds_Set(wifi_Green);
+		    } else {
+		        Leds_Set(wifi_Red);
+		    }
 
-		    Leds_Clear(sd_Green);
-		    Leds_Clear(sd_Red);
-		    Leds_Clear(wifi_Green);
-		    Leds_Clear(wifi_Red);
-		    Leds_Clear(ext_Green);
-		    Leds_Clear(ext_Red);
+		    if(SD_Inserted()){
+			    Leds_Set(sd_Green);
+		    } else {
+			    Leds_Set(sd_Red);
+		    }
+		    if(!chargeComplete && SD2_Inserted()){
+			    Leds_Set(ext_Red);
+			    Leds_Set(ext_Green);
+		    } else if(chargeComplete && SD2_Inserted()){
+			    Leds_Clear(ext_Red);
+			    Leds_Set(ext_Green);
+		    }
 
-            okToOpenLogFile = true;
-		    _delay_ms(50);
-        } else {
-           Leds_Clear(sd_Green);
-		   Leds_Set(sd_Red);
-
-        }
-
-
-	} else if(currentMode == recordMode && Dpad_CheckButton(Up) && recording){								// pause recording
-		rs232Recording = false;
-		recording = false;
-
-		Sensors_ResetTemperatureBuffers();
-		Sensors_ResetHumidityBuffers();
-		Sensors_ResetPressureBuffers();
-		Sensors_ResetMicrophoneBuffers();
-		Sensors_ResetLightBuffers();
-		okToCloseLogFile = true;
-
-
-		display_putString("Paused           ",0,0,System5x7);
-		display_drawLine(1,60,7,60,true);		// up arrow
-		display_drawPixel(2,59,true);
-		display_drawPixel(3,58,true);
-		display_drawPixel(2,61,true);
-		display_drawPixel(3,62,true);
-		display_writeBufferToScreen();
-
-        if(timeIsValid || demoMode){
-		    Leds_Set(wifi_Green);
-		} else {
-		    Leds_Set(wifi_Red);
-		}
-
-		if(SD_Inserted()){
-			Leds_Set(sd_Green);
-		} else {
-			Leds_Set(sd_Red);
-		}
-		if(!chargeComplete && SD2_Inserted()){
-			Leds_Set(ext_Red);
-			Leds_Set(ext_Green);
-		} else if(chargeComplete && SD2_Inserted()){
-			Leds_Clear(ext_Red);
-			Leds_Set(ext_Green);
-		}
-
-		_delay_ms(500);
-	}
+		    _delay_ms(500);
+	    }
 
 	// load displays
 
-	if(currentMode == recordMode){																		// show record screen
+	    if(currentMode == recordMode){
+		    if(recording){
+			    sprintf(temp2, "Recording   %4lum", (UNIX_time - timeRecordingStarted)/60);		// load recording screen
+			    display_putString(temp2,0,0,System5x7);
+		    } else {
+			    display_putString("Paused           ",0,0,System5x7);
+		    }
 
-		if(recording){
-			sprintf(temp2, "Recording   %4lum", (UNIX_time - timeRecordingStarted)/60);		// load recording screen
-			display_putString(temp2,0,0,System5x7);
-		} else {
-			display_putString("Paused           ",0,0,System5x7);
-		}
+		    display_drawLine(1,60,7,60,true);		// up arrow
+		    display_drawPixel(2,59,true);
+		    display_drawPixel(3,58,true);
+		    display_drawPixel(2,61,true);
+		    display_drawPixel(3,62,true);
 
-		display_drawLine(1,60,7,60,true);		// up arrow
-		display_drawPixel(2,59,true);
-		display_drawPixel(3,58,true);
-		display_drawPixel(2,61,true);
-		display_drawPixel(3,62,true);
-
-		sprintf(temp2, "Uploading    %3u", uploadPercentBS);
-		strcat(temp2,"%");
-		display_putString(temp2,1,0,System5x7);
-        sprintf(temp2,"Disk Used: %3lu.%lu",percentDiskUsed/10,percentDiskUsed%10);
-		strcat(temp2,"%");
-		display_putString(temp2,2,0,System5x7);
-
+		    sprintf(temp2, "Uploading    %3u", uploadPercentBS);
+		    strcat(temp2,"%");
+		    display_putString(temp2,1,0,System5x7);
+            sprintf(temp2,"Disk Used: %3lu.%lu",percentDiskUsed/10,percentDiskUsed%10);
+		    strcat(temp2,"%");
+		    display_putString(temp2,2,0,System5x7);
 
 
 
-		if(chargePercent == 100){
-			chargeComplete = true;
-			okToCharge  = false;
-		}
+
+		    if(chargePercent == 100){
+			    chargeComplete = true;
+			    okToCharge  = false;
+		    }
 
 
-		if(SD2_Inserted() && chargeComplete){
-			display_putString("Ext Charged      ",3,0,System5x7);
-			if(!recording){
-				Leds_Clear(ext_Red);
-				Leds_Set(ext_Green);
-			}
-		} else if(SD2_Inserted() && !chargeComplete){
-			sprintf(temp2, "Ext Charging  %2u",chargePercent);
-			strcat(temp2,"%");
-			display_putString(temp2,3,0,System5x7);
-			okToCharge = true;
-			if(!rtcSynced){
-			    _delay_ms(500);
-			    if(useWifiForUploading){
-			      Debug_SendString("Syncing RTC", true);
+		    if(SD2_Inserted() && chargeComplete){
+			    display_putString("Ext Charged      ",3,0,System5x7);
+			    if(!recording){
+				    Leds_Clear(ext_Red);
+				    Leds_Set(ext_Green);
 			    }
-				RTC_init();
-				RTC_setUTCSecs(UNIX_time);
-				rtcSynced = true;
-				if(useWifiForUploading){
-				    Debug_SendString("RTC synced", true);
-				}
-			}
-			if(!recording){
-				Leds_Set(ext_Red);
-				Leds_Set(ext_Green);
-			}
-		}else{
-			display_putString("Ext Removed      ",3,0,System5x7);
-			chargePercent = 0;
-			chargeComplete = false;
-			rtcSynced = false;
-			Leds_Clear(ext_Red);
-			Leds_Clear(ext_Green);
-		}
+		    } else if(SD2_Inserted() && !chargeComplete){
+			    sprintf(temp2, "Ext Charging  %2u",chargePercent);
+			    strcat(temp2,"%");
+			    display_putString(temp2,3,0,System5x7);
+			    okToCharge = true;
+			    if(!rtcSynced){
+			        _delay_ms(500);
+			        if(useWifiForUploading){
+			            Debug_SendString("Syncing RTC", true);
+			        }
+				    RTC_init();
+				    RTC_setUTCSecs(UNIX_time);
+				    rtcSynced = true;
+				    if(useWifiForUploading){
+				        Debug_SendString("RTC synced", true);
+				    }
+			    }
+			    if(!recording){
+				    Leds_Set(ext_Red);
+				    Leds_Set(ext_Green);
+			    }
+		    }else{
+			    display_putString("Ext Removed      ",3,0,System5x7);
+			    chargePercent = 0;
+			    chargeComplete = false;
+			    rtcSynced = false;
+			    //Leds_Clear(ext_Red);
+			    //Leds_Clear(ext_Green);
+		    }
 
 
-		sprintf(temp2, "Uploading    %3u", uploadPercentEXT);
-		strcat(temp2,"%");
-		display_putString(temp2,4,0,System5x7);
+		    sprintf(temp2, "Uploading    %3u", uploadPercentEXT);
+		    strcat(temp2,"%");
+		    display_putString(temp2,4,0,System5x7);
 
 
-		RTC_UTCSecsToTime(UNIX_time,&time);
-		clockHour = time.Hour + 24;
-		clockHour -= timeZoneShift;
-		if(clockHour > 24){
-			clockHour -= 24;
-		}
+		    RTC_UTCSecsToTime(UNIX_time,&time);
+		    clockHour = time.Hour + 24;
+		    clockHour -= timeZoneShift;
+		    if(clockHour > 24){
+			    clockHour -= 24;
+		    }
 
-        if(clockHour == 0){
-            displayAM = true;
-            displayPM = false;
-            clockHour += 12;
-        } else if(clockHour == 12){
-           displayAM = false;
-           displayPM = true;
-        } else if(clockHour > 12){
-           displayAM = false;
-           displayPM = true;
-           clockHour -= 12;
-        }  else {
-           displayAM = true;
-           displayPM = false;
-        }
+            if(clockHour == 0){
+                displayAM = true;
+                displayPM = false;
+                clockHour += 12;
+            } else if(clockHour == 12){
+                displayAM = false;
+                displayPM = true;
+            } else if(clockHour > 12){
+                displayAM = false;
+                displayPM = true;
+                clockHour -= 12;
+            }  else {
+                displayAM = true;
+                displayPM = false;
+            }
 
-        sprintf(temp2,"Time %2u:%02u:%02u ", clockHour, time.Minute, time.Second);
-        if(displayAM){
-          strcat(temp2,am);
-        } else if(displayPM){
-          strcat(temp2,pm);
-        }
-		display_putString(temp2,6,0,System5x7);
+            sprintf(temp2,"Time %2u:%02u:%02u ", clockHour, time.Minute, time.Second);
+            if(displayAM){
+                strcat(temp2,am);
+            } else if(displayPM){
+                strcat(temp2,pm);
+            }
+		    display_putString(temp2,6,0,System5x7);
 
-		sprintf(temp2, "Wifi %3u",signalStrength);
-		strcat(temp2,"%   more");
-		display_putString(temp2,7,0,System5x7);
-
-
-		display_drawLine(56,98,63,98,true);		// down arrow
-		display_drawPixel(62,97,true);
-		display_drawPixel(61,96,true);
-		display_drawPixel(62,99,true);
-		display_drawPixel(61,100,true);
-
-		display_writeBufferToScreen();
+		    sprintf(temp2, "Wifi %3u",signalStrength);
+		    strcat(temp2,"%   more");
+		    display_putString(temp2,7,0,System5x7);
 
 
+		    display_drawLine(56,98,63,98,true);		// down arrow
+		    display_drawPixel(62,97,true);
+		    display_drawPixel(61,96,true);
+		    display_drawPixel(62,99,true);
+		    display_drawPixel(61,100,true);
 
-	} else if(currentMode == sensorMode){																// show sensor screen
-
-		display_clearBuffer();
-		display_putString("   Sensors  back",0,0,System5x7);
-		display_drawLine(8, 15, 8,61,true);
-
-		display_drawLine(1,99,7,99,true);		// up arrow
-		display_drawPixel(2,98,true);
-		display_drawPixel(3,97,true);
-		display_drawPixel(2,100,true);
-		display_drawPixel(3,101,true);
-
-		sprintf(temp2,"Temperature: %3uC", quickTemperature);
-		display_putString(temp2,2,0,System5x7);
-		sprintf(temp2,"Humidity:  %3u", quickHumidity);
-		strcat(temp2, "%RH");
-		display_putString(temp2,3,0,System5x7);
-		sprintf(temp2,"Pressure:  %3ukPa", quickPressure);
-		display_putString(temp2,4,0,System5x7);
-		sprintf(temp2,"Light:      %5u", quickLight);
-		display_putString(temp2,5,0,System5x7);
-		sprintf(temp2,"Air: %5lu, %5lu", quickSmall, quickLarge);
-		display_putString(temp2,6,0,System5x7);
-		display_putString("Sound:           ",7,0,System5x7);
-		display_drawRectangle(57,50,7,quickMic/2,true,false,true);
-		display_writeBufferToScreen();
-
-		if(chargePercent == 100){
-			chargeComplete = true;
-			okToCharge  = false;
-		}
-
-		if(SD2_Inserted() && chargeComplete && !recording){
-			Leds_Clear(ext_Red);
-			Leds_Set(ext_Green);
-		} else if(SD2_Inserted() && !chargeComplete){
-			okToCharge = true;
-			if(!rtcSynced){
-				if(useWifiForUploading){
-				    Debug_SendString("Syncing RTC", true);
-				}
-				if(!demoMode){
-					RTC_init();
-					RTC_setUTCSecs(UNIX_time);
-				}
-				rtcSynced = true;
-			}
-			if(!recording){
-				Leds_Set(ext_Red);
-				Leds_Set(ext_Green);
-			}
-
-		}else{
-			chargePercent = 0;
-			chargeComplete = false;
-			rtcSynced = false;
-			Leds_Clear(ext_Red);
-			Leds_Clear(ext_Green);
-		}
-
-
-	}
+		    display_writeBufferToScreen();
 
 
 
-}
+	    } else if(currentMode == sensorMode){
+		    display_clearBuffer();
+		    display_putString("   Sensors  back",0,0,System5x7);
+		    display_drawLine(8, 15, 8,61,true);
 
+		    display_drawLine(1,99,7,99,true);		// up arrow
+		    display_drawPixel(2,98,true);
+		    display_drawPixel(3,97,true);
+		    display_drawPixel(2,100,true);
+		    display_drawPixel(3,101,true);
 
+            sprintf(temp2,"Temperature: %3uC", quickTemperature);
+		    display_putString(temp2,2,0,System5x7);
+            sprintf(temp2,"Humidity:  %3u", quickHumidity);
+		    strcat(temp2, "%RH");
+		    display_putString(temp2,3,0,System5x7);
+		    sprintf(temp2,"Pressure:  %3ukPa", quickPressure);
+		    display_putString(temp2,4,0,System5x7);
+            sprintf(temp2,"Light:      %5u", quickLight);
+		    display_putString(temp2,5,0,System5x7);
+            sprintf(temp2,"Air: %5lu, %5lu", quickSmall, quickLarge);
+		    display_putString(temp2,6,0,System5x7);
+		    display_putString("Sound:           ",7,0,System5x7);
+		    display_drawRectangle(57,50,7,quickMic/2,true,false,true);
+		    display_writeBufferToScreen();
+
+		    if(chargePercent == 100){
+                chargeComplete = true;
+			    okToCharge  = false;
+		    }
+
+    		if(SD2_Inserted() && chargeComplete && !recording){
+    			Leds_Clear(ext_Red);
+    			Leds_Set(ext_Green);
+    		} else if(SD2_Inserted() && !chargeComplete){
+    			okToCharge = true;
+    			if(!rtcSynced){
+    				if(useWifiForUploading){
+	    			    Debug_SendString("Syncing RTC", true);
+		    		}
+			    	if(!demoMode){
+				    	RTC_init();
+					    RTC_setUTCSecs(UNIX_time);
+    				}
+	    			rtcSynced = true;
+		    	}
+			    if(!recording){
+				    Leds_Set(ext_Red);
+    				Leds_Set(ext_Green);
+	    		}
+
+		    }else{
+			    chargePercent = 0;
+    			chargeComplete = false;
+	    		rtcSynced = false;
+		    	Leds_Clear(ext_Red);
+			    Leds_Clear(ext_Green);
+	    	}
+	    }
+    }
 }
 
 void SD_BackroundWriter_Init(void){
@@ -1093,47 +1076,38 @@ ISR(TCE1_OVF_vect)
 	}
 
 	if(okToSendTemperatureBuffer1 && recording && !restartingFile){
-		//Debug_SendString("T Buffer1",true);
 		SD_WriteTemperatureBuffer(1);
 		okToSendTemperatureBuffer1 = false;
 	} else if (okToSendTemperatureBuffer2 && recording && !restartingFile){
-		//Debug_SendString("T Buffer2",true);
 		SD_WriteTemperatureBuffer(2);
 		okToSendTemperatureBuffer2 = false;
 	}
 
 	if(okToSendHumidityBuffer1 && recording && !restartingFile){
-		//Debug_SendString("H Buffer1",true);
 		SD_WriteHumidityBuffer(1);
 		okToSendHumidityBuffer1 = false;
 	} else if (okToSendHumidityBuffer2 && recording && !restartingFile){
-		//Debug_SendString("H Buffer2",true);
 		SD_WriteHumidityBuffer(2);
 		okToSendHumidityBuffer2 = false;
 	}
 
 	if(okToSendPressureBuffer1 && recording && !restartingFile){
-		//Debug_SendString("P Buffer1",true);
 		SD_WritePressureBuffer(1);
 		okToSendPressureBuffer1 = false;
 	} else if (okToSendPressureBuffer2 && recording && !restartingFile){
-		//Debug_SendString("P Buffer2",true);
 		SD_WritePressureBuffer(2);
 		okToSendPressureBuffer2 = false;
 	}
 
 	if(okToSendLightBuffer1 && recording && !restartingFile){
-		//Debug_SendString("L Buffer1",true);
 		SD_WriteLightBuffer(1);
 		okToSendLightBuffer1 = false;
 	} else if (okToSendLightBuffer2 && recording && !restartingFile){
-		//Debug_SendString("L Buffer2",true);
 		SD_WriteLightBuffer(2);
 		okToSendLightBuffer2 = false;
 	}
 
 	if(okToSendAirQuality && rs232Recording && !restartingFile){
-		//Debug_SendString("A Buffer",true);
 		uint8_t counter = 0;
 		while(Rs232_CharReadyToRead()){
 			airQualityString[counter] = Rs232_GetByte(false);
@@ -1152,7 +1126,6 @@ ISR(TCE1_OVF_vect)
 	}
 
 	if(okToOpenLogFile && (percentDiskUsed < 950)){
-		//SD_Init();
 		SD_StartLogFile(UNIX_time);								// open file
 		_delay_ms(100);
 
@@ -1161,12 +1134,7 @@ ISR(TCE1_OVF_vect)
 		Leds_Clear(sd_Green);
 		Leds_Clear(wifi_Green);
 		timeRecordingStarted = UNIX_time;
-
-		//Debug_SendString("RTC Block: ",false);							// send rtc block
 		SD_WriteRTCBlock(Time_Get32BitTimer(),UNIX_time);
-		//Debug_SendString(ltoa(UNIX_time,temp3,10),false);
-		//Debug_SendString(", ",false);
-		//Debug_SendString(ltoa(Time_Get32BitTimer(),temp3,10),true);
 
 		Rs232_ClearBuffer();
 		rs232Recording = true;
@@ -1184,11 +1152,7 @@ ISR(TCE1_OVF_vect)
 	}
 
 	if(okToSendRTCBlock && recording){
-		//Debug_SendString("RTC Block: ",false);
 		SD_WriteRTCBlock(Time_Get32BitTimer(),UNIX_time);
-		//Debug_SendString(ltoa(UNIX_time,temp3,10),false);
-		//Debug_SendString(", ",false);
-		//Debug_SendString(ltoa(Time_Get32BitTimer(),temp3,10),true);
 		okToSendRTCBlock = false;
 	}
 
@@ -1251,7 +1215,6 @@ ISR(TCE1_OVF_vect)
 	    f_close(&Upload_File);
 	    if(okToRenameUploadFile){
 	       f_rename(fileToUpload,newFileName);
-	       //Debug_SendString("Renaming File",true);
 	       okToRenameUploadFile = false;
 	    }
 		okToCloseUploadFile = false;
@@ -1325,14 +1288,6 @@ ISR(TCE1_OVF_vect)
 	    percentDiskUsed *= 1000;
 	    percentDiskUsed /= totalDiskSpace;
 
-	    /*sprintf(temp3,"Disk Remaining: %lu",spaceRemainingOnDisk);
-	    Debug_SendString(temp3,true);
-	    sprintf(temp3,"Disk Total    : %lu",totalDiskSpace);
-	    Debug_SendString(temp3,true);
-	    sprintf(temp3,"Percent Used  : %lu.%lu",percentDiskUsed/10,percentDiskUsed%10);
-        Debug_SendString(temp3,false);
-        Debug_SendString("%",true);
-        */
 	    okToGetRemainingSpace = false;
 	}
 }
@@ -1634,8 +1589,6 @@ void Read_config_file(void){
                break;
             }
           }
-	      //Debug_SendString("User: ",false);
-	      //Debug_SendString(user,true);
 	    } else if(strstr(temp,"nickname") != 0){
 	      strtok(temp,"=");
 	      strcpy(nickname,strtok(NULL,"="));
@@ -1646,8 +1599,6 @@ void Read_config_file(void){
             }
           }
 
-          //Debug_SendString("Nickname: ",false);
-          //Debug_SendString(nickname,true);
 	    } else if(strstr(temp,"server") != 0){
 	      strtok(temp,"=");
 	      strcat(serverOpenCommand,strtok(NULL,"="));
@@ -1725,7 +1676,7 @@ void Config_Wifi(void){
 
 
 
-    Wifi_SendCommand("set sys iofunc 0x10","AOK","AOK",500);
+    Wifi_SendCommand("set sys iofunc 0x50","AOK","AOK",500);    // 0x10
     _delay_ms(1000);
 
 
@@ -1867,10 +1818,6 @@ void Config_Wifi(void){
             Wifi_SendCommand("set uart instant 460800","AOK","AOK",5);
             Wifi_Init(460800);
 	        _delay_ms(3000);
-			//while(!Wifi_EnterCMDMode(500)){
-			//    _delay_ms(1000);
-			//    Debug_SendString("Retrying CMD Mode",true);
-			//}
 		} else{
 			display_putString("internet.....FAIL",col,0,System5x7);
             if(!recording){
@@ -1968,11 +1915,12 @@ void Uploader_ClearBuffer(void){
     }
 }
 
-void Uploader_SendByte(uint8_t data){
+uint16_t Uploader_SendByte(uint8_t data){
     if(useWifiForUploading){
-        Wifi_SendByte(data);
+        return Wifi_SendByte(data);
     } else {
         Debug_SendByte(data);
+        return 0;
     }
 
 }
