@@ -125,7 +125,6 @@ uint8_t Wifi_GetByte(bool blocking){
 
 
 uint16_t Wifi_SendByte(uint8_t data){
-    PORTB.OUTSET = (1 << 4);
     timeOutCounter = 0;
 	while(!(Wifi_Usart.STATUS & USART_DREIF_bm));
     while(((Wifi_Flow_Port.IN)&(1<<Wifi_RTS_pin)) > 0){
@@ -134,7 +133,6 @@ uint16_t Wifi_SendByte(uint8_t data){
         if(timeOutCounter > 60000){
            Wifi_Usart.DATA = data;
            Debug_SendString("Hanging",true);
-           PORTB.OUTCLR = (1 << 4);
            return timeOutCounter;
         }
     }                              // Wait for RTS to be low

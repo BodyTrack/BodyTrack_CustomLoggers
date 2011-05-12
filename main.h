@@ -1,5 +1,5 @@
 
-#define FirmwareVersion "2.07"
+#define FirmwareVersion "2.08"
 #define HardwareVersion "2"
 char deviceID   [20];
 

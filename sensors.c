@@ -51,7 +51,7 @@ bool wantToRecordPressure 		= true;
 bool wantToRecordHumidity 		= true;
 bool wantToRecordLight		 	= true;
 bool wantToRecordAirQuality		= true;
-bool wantToRecordMicrophone 	= true;
+bool wantToRecordMicrophone 	= false;
 
 
 uint8_t quickTemperature = 0;

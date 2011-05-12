@@ -8,11 +8,11 @@
 
 #define Debug_Port				PORTC
 #define Debug_Usart				USARTC0
-#define Debug_RX_pin_bm		PIN2_bm
-#define Debug_TX_pin_bm		PIN3_bm
-#define Debug_Flow_Port          PORTD
-#define Debug_RTS_pin            0
-#define Debug_RTS_CNTL           PIN0CTRL
+#define Debug_RX_pin_bm		    PIN2_bm
+#define Debug_TX_pin_bm		    PIN3_bm
+#define Debug_Flow_Port         PORTD
+#define Debug_RTS_pin           0
+#define Debug_RTS_CNTL          PIN0CTRL
 
 
 void Debug_Init(uint32_t baud);
