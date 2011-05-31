@@ -59,6 +59,8 @@ uint8_t quickHumidity = 0;
 uint8_t quickPressure = 0;
 uint16_t quickLight = 0;
 uint8_t quickMic = 0;
+uint32_t quickLarge = 0;
+uint32_t quickSmall = 0;
 uint8_t micSampleCounter = 0;
 
 
@@ -137,12 +139,12 @@ uint16_t Sensors_ReadTemperature(void){
 	return tmp2;
 }
 
-uint8_t Sensors_ReadHumidity(void){
+uint16_t Sensors_ReadHumidity(void){
 	uint32_t tmp =  ADCA.humidityResult;
-	uint8_t tmp2 = 0;
+	uint16_t tmp2 = 0;
 
-	tmp *= 7623;
-	tmp -= 1776796;
+	tmp *= 76230;
+	tmp -= 17767960;
 	tmp2 = tmp / 81880;
 
 	return tmp2;
@@ -152,12 +154,12 @@ uint8_t Sensors_ReadMicrophone(void){
 	return ADCA.microphoneResult/16;
 }
 
-uint8_t Sensors_ReadPressure(void){
+uint16_t Sensors_ReadPressure(void){
 	uint32_t tmp =  ADCA.pressureResult;
-	uint8_t tmp2 = 0;
+	uint16_t tmp2 = 0;
 
-	tmp *= 41250;
-	tmp += 6417345;
+	tmp *= 412500;
+	tmp += 64173450;
 	tmp2 = tmp / 607959;
 
 	return tmp2;
@@ -242,7 +244,7 @@ ISR(TCD1_OVF_vect)
 				  humiditySampleStartTime1 = Time_Get32BitTimer();
 			  }
 			  humidityBuffer1[humidityBufferCounter] = Sensors_ReadHumidity();
-			  quickHumidity = humidityBuffer1[humidityBufferCounter];
+			  quickHumidity = humidityBuffer1[humidityBufferCounter]/10;
 			  humidityBufferCounter++;
 			  if(humidityBufferCounter == humidityNumberOfSamples){
 				  humidityBufferCounter=0;
@@ -254,7 +256,7 @@ ISR(TCD1_OVF_vect)
 				  humiditySampleStartTime2 = Time_Get32BitTimer();
 			  }
 			  humidityBuffer2[humidityBufferCounter] = Sensors_ReadHumidity();
-			  quickHumidity = humidityBuffer2[humidityBufferCounter];
+			  quickHumidity = humidityBuffer2[humidityBufferCounter]/10;
 			  humidityBufferCounter++;
 			  if(humidityBufferCounter == humidityNumberOfSamples){
 				  humidityBufferCounter=0;
@@ -270,7 +272,7 @@ ISR(TCD1_OVF_vect)
 				  pressureSampleStartTime1 = Time_Get32BitTimer();
 			  }
 			  pressureBuffer1[pressureBufferCounter] = Sensors_ReadPressure();
-			  quickPressure = pressureBuffer1[pressureBufferCounter];
+			  quickPressure = pressureBuffer1[pressureBufferCounter]/10;
 
 			  pressureBufferCounter++;
 			  if(pressureBufferCounter == pressureNumberOfSamples){
@@ -283,7 +285,7 @@ ISR(TCD1_OVF_vect)
 				  pressureSampleStartTime2 = Time_Get32BitTimer();
 			  }
 			  pressureBuffer2[pressureBufferCounter] = Sensors_ReadPressure();
-			  quickPressure = pressureBuffer2[pressureBufferCounter];
+			  quickPressure = pressureBuffer2[pressureBufferCounter]/10;
 			  pressureBufferCounter++;
 			if(pressureBufferCounter == pressureNumberOfSamples){
 				pressureBufferCounter=0;
@@ -358,8 +360,8 @@ ISR(TCD1_OVF_vect)
 
 	} else {
 		quickTemperature = Sensors_ReadTemperature()/10;
-		quickHumidity = Sensors_ReadHumidity();
-		quickPressure = Sensors_ReadPressure();
+		quickHumidity = Sensors_ReadHumidity()/10;
+		quickPressure = Sensors_ReadPressure()/10;
 		Light_readColors();
 		quickLight = Light_returnColor(clear);
 

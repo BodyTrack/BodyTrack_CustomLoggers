@@ -1,5 +1,5 @@
 
-#define FirmwareVersion "2.08"
+#define FirmwareVersion "2.09"
 #define HardwareVersion "2"
 char deviceID   [20];
 
@@ -35,13 +35,13 @@ uint16_t temperatureBuffer2 [temperatureNumberOfSamples];
 
 uint32_t humiditySampleStartTime1 = 0;
 uint32_t humiditySampleStartTime2 = 0;
-uint8_t  humidityBuffer1 [humidityNumberOfSamples];
-uint8_t  humidityBuffer2 [humidityNumberOfSamples];
+uint16_t  humidityBuffer1 [humidityNumberOfSamples];
+uint16_t  humidityBuffer2 [humidityNumberOfSamples];
 
 uint32_t pressureSampleStartTime1 = 0;
 uint32_t pressureSampleStartTime2 = 0;
-uint8_t  pressureBuffer1 [pressureNumberOfSamples];
-uint8_t  pressureBuffer2 [pressureNumberOfSamples];
+uint16_t  pressureBuffer1 [pressureNumberOfSamples];
+uint16_t  pressureBuffer2 [pressureNumberOfSamples];
 
 uint32_t microphoneSampleStartTime1 = 0;
 uint32_t microphoneSampleStartTime2 = 0;

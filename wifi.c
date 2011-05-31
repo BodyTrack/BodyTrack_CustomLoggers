@@ -139,7 +139,6 @@ uint16_t Wifi_SendByte(uint8_t data){
 
     Wifi_Usart.DATA = data;
     _delay_us(25);
-    PORTB.OUTCLR = (1 << 4);
     return 0;
 }
 

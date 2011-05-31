@@ -16,11 +16,10 @@
 
 #define DeviceClass	"BaseStation"
 
-#define StartFileLength 571
+#define StartFileLength 839
 
 static FATFS fso0;
 static FATFS fso1;
-//static FATFS fso2;
 FATFS *fs;
 FILINFO	fno,fno2;
 
@@ -219,12 +218,18 @@ uint8_t SD_StartLogFile(uint32_t time){
 	SD_WriteString("channel_specs");
 	SD_Write8(0x09);
 	SD_WriteString("{\"Temperature\":{\"units\": \"deg C\", \"scale\": 0.1},");
-	SD_WriteString("\"Humidity\":{\"units\": \"%RH\", \"scale\": 1},");
-	SD_WriteString("\"Pressure\":{\"units\": \"kPa\", \"scale\": 1},");
+	SD_WriteString("\"Humidity\":{\"units\": \"%RH\", \"scale\": 0.1},");
+	SD_WriteString("\"Pressure\":{\"units\": \"kPa\", \"scale\": 0.1},");
 	SD_WriteString("\"Light_Green\":{\"units\": \"bits\", \"scale\": 1},");				// 44
 	SD_WriteString("\"Light_Red\":{\"units\": \"bits\", \"scale\": 1},");				// 42
 	SD_WriteString("\"Light_Blue\":{\"units\": \"bits\", \"scale\": 1},");				// 43
 	SD_WriteString("\"Light_Clear\":{\"units\": \"bits\", \"scale\": 1},");				// 44
+	SD_WriteString("\"Air_1\":{\"units\": \"#particles\", \"scale\": 1},");				// 44
+	SD_WriteString("\"Air_2\":{\"units\": \"#particles\", \"scale\": 1},");				// 44
+	SD_WriteString("\"Air_3\":{\"units\": \"#particles\", \"scale\": 1},");				// 44
+	SD_WriteString("\"Air_4\":{\"units\": \"#particles\", \"scale\": 1},");				// 44
+	SD_WriteString("\"Air_5\":{\"units\": \"#particles\", \"scale\": 1},");				// 44
+	SD_WriteString("\"Air_6\":{\"units\": \"#particles\", \"scale\": 1},");				// 44
 	SD_WriteString("\"Air_Small\":{\"units\": \"#particles\", \"scale\": 1},");				// 48
 	SD_WriteString("\"Air_Large\":{\"units\": \"#particles\", \"scale\": 1},");				// 48
 	SD_WriteString("\"Microphone\":{\"units\": \"bits\", \"scale\": 1}}");

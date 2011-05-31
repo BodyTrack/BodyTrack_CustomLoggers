@@ -26,8 +26,8 @@
 
 void Sensors_Init(void);
 uint16_t Sensors_ReadTemperature(void);
-uint8_t Sensors_ReadHumidity(void);
-uint8_t Sensors_ReadPressure(void);
+uint16_t Sensors_ReadHumidity(void);
+uint16_t Sensors_ReadPressure(void);
 uint8_t Sensors_ReadMicrophone(void);
 
 void Sensors_ResetTemperatureBuffers(void);

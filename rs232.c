@@ -18,11 +18,15 @@ volatile uint8_t    Rs232Buffer[Rs232_BufferSize];
 volatile uint16_t  	Rs232_readLocation = 0;
 volatile uint16_t   Rs232_writeLocation = 0;
 volatile bool		okToSendAirQuality = false;
-char airQualityString[50];
-uint32_t largeCount;
-uint32_t smallCount;
-uint32_t quickSmall = 0;
-uint32_t quickLarge = 0;
+
+char airQualityString[100];
+uint32_t airCount[6];
+
+
+//uint32_t largeCount;
+//uint32_t smallCount;
+//uint32_t quickSmall = 0;
+//uint32_t quickLarge = 0;
 
 volatile bool rs232Recording = false;
 
