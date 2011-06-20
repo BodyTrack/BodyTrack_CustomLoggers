@@ -92,7 +92,6 @@ uint8_t SD_Init(void){
 	tmp = disk_initialize(0);
 	f_mount(0, &fso0);
 	f_mount(1, &fso1);
-    //f_mount(2, &fso2);
 	return tmp;
 }
 
@@ -183,6 +182,9 @@ uint8_t SD_StartLogFile(uint32_t time){
 
 	SD_MakeFileName(time);
 	resp = SD_Open(fileName);
+	if(resp != FR_OK){
+	    return resp;
+	}
 	SD_ClearCRC();
 	SD_Write32(MAGIC_NUMBER);               // magic number
 	SD_Write32(StartFileLength);		    // record size

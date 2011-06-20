@@ -63,6 +63,8 @@ uint32_t quickLarge = 0;
 uint32_t quickSmall = 0;
 uint8_t micSampleCounter = 0;
 
+uint8_t fakeMic = 0;
+
 
 uint32_t result[4];
 

@@ -61,6 +61,9 @@
 //                                - speed ups to wifi setup
 //                                - increased resolution on humidity and pressure sensors
 //                                - dynamic dylos detection supports standard dylos, as well as custom (1hz refresh rate, 6 bins)
+//				2.10 - 06/20/2011 - if incorrect number of bytes is read on when getting a command through debug, board resets
+//                                - checks for errors while starting a log file. will re-init sd card and retry until successful
+//                                - baud rate for upload through computer is raised to 460800
 //
 //___________________________________________
 
@@ -120,8 +123,9 @@ void sendAuthType(void);
 void sendKey(void);
 void sendUser(void);
 void sendNickname(void);
-void uploadFile(void);
-void eraseFile(void);
+void sendFilename(void);
+bool uploadFile(void);
+bool eraseFile(void);
 void sendServer(void);
 void sendPort(void);
 
@@ -165,7 +169,7 @@ uint8_t clockHour = 0;
 volatile uint8_t currentMode      = 0;
 volatile uint16_t ssRefreshCounter = 0;
 uint8_t signalStrength   = 0;
-uint8_t uploadPercentBS  = 0;
+volatile uint8_t uploadPercentBS  = 0;
 uint8_t uploadPercentEXT = 0;
 
 bool rtcSynced			 = false;
@@ -237,8 +241,9 @@ uint8_t timeServerAttempts = 0;
 //volatile uint16_t timeOutCounter = 0;
 volatile uint8_t command [50];
 uint8_t commandCounter = '0';
-uint32_t tempTime = 0;
 char fileToErase [20];
+
+bool fileExists = false;
 
 
 
@@ -309,7 +314,7 @@ int main(void){
     if(useWifiForUploading){
 	   Debug_Init(9600);
 	} else {
-	   Debug_Init(115200);
+	   Debug_Init(460800);
 	}
 
 
@@ -384,6 +389,7 @@ int main(void){
                         }
             	    } else {
                         timeIsValid = false;
+                        goto Reset;
 			        }
     			} else if(command[0] == 'S'){                          // request SSID
                     sendSSID();
@@ -393,21 +399,18 @@ int main(void){
                     sendKey();
                 } else if(command[0] == 'U'){                          // request user
 			        sendUser();
-    			} else if(command[0] == 'N'){                   // request nickname
+    			} else if(command[0] == 'N'){                           // request nickname
 	    		    sendNickname();
-    			} else if(command[0] == 'D'){                   // request data from file
-    			    if(okToUpload){
-    			        uploading = true;
-    			        _delay_ms(100);
-                        okToOpenFileToUpload = true;
-                        while(!uploadFileOpened);
-
-    			        _delay_ms(1000);
+	    		} else if(command[0] == 'F'){                           // request filename
+	    		    sendFilename();
+    			} else if(command[0] == 'D'){                           // request data from file
+    			    if(!uploadFile()){
+    			        goto Reset;
     			    }
-                    uploadFile();
                 } else if(command[0] == 'E'){                   // erase file
-                    eraseFile();
-
+                    if(!eraseFile()){
+                       goto Reset;
+                    }
                 } else if(command[0] == 'V'){                   // request server for post
                     sendServer();
                 } else if(command[0] == 'O'){                   // request port for post
@@ -1166,23 +1169,25 @@ ISR(TCE1_OVF_vect)
 	}
 
 	if(okToOpenLogFile && (percentDiskUsed < 950)){
-		SD_StartLogFile(UNIX_time);								// open file
-		_delay_ms(100);
+		if(SD_StartLogFile(UNIX_time) == FR_OK){  // open file
+		    _delay_ms(100);
 
-        timeToStopRecording = UNIX_time + 900;
+            timeToStopRecording = UNIX_time + 900;
 
-		Leds_Clear(sd_Green);
-		Leds_Clear(wifi_Green);
-		timeRecordingStarted = UNIX_time;
-		SD_WriteRTCBlock(Time_Get32BitTimer(),UNIX_time);
+		    Leds_Clear(sd_Green);
+		    Leds_Clear(wifi_Green);
+		    timeRecordingStarted = UNIX_time;
+		    SD_WriteRTCBlock(Time_Get32BitTimer(),UNIX_time);
 
-		Rs232_ClearBuffer();
-		rs232Recording = true;
-		recording = true;
-		okToOpenLogFile = false;
-		directoryOpened = false;
-		okToReopenDirectory = true;
-		goto sdInterrupt;
+		    Rs232_ClearBuffer();
+		    rs232Recording = true;
+		    recording = true;
+		    okToOpenLogFile = false;
+		    directoryOpened = false;
+		    okToReopenDirectory = true;
+		} else {
+		    SD_Init();
+		}
 	}
 
 	if(okToCloseLogFile){
@@ -1235,7 +1240,12 @@ ISR(TCE1_OVF_vect)
 	if(okToOpenFileToUpload){
 	   f_stat(fileToUpload,&fno);
 	   uploadFileSize = fno.fsize;
-	   f_open(&Upload_File, fileToUpload, FA_READ | FA_WRITE | FA_OPEN_ALWAYS);
+
+	   if(f_open(&Upload_File, fileToUpload, FA_READ | FA_WRITE | FA_OPEN_EXISTING) == FR_OK){
+	      fileExists = true;
+	   } else {
+	      fileExists = false;
+	   }
 	   f_lseek(&Upload_File, 0);
 	   uploadFileOpened = true;
 	   okToOpenFileToUpload = false;
@@ -1254,6 +1264,7 @@ ISR(TCE1_OVF_vect)
 	if(okToCloseUploadFile){
 	    f_sync(&Upload_File);
 	    f_close(&Upload_File);
+	    strcpy(fileToUpload,"");
 		okToCloseUploadFile = false;
 		goto sdInterrupt;
 	}
@@ -1343,7 +1354,8 @@ ISR(TCE1_OVF_vect)
 
 	if(okToEraseFile){
         eraseFileReturn = f_unlink(fileToErase);
-	    okToEraseFile = false;
+        strcpy(fileToUpload,"");
+        okToEraseFile = false;
 	    goto sdInterrupt;
 	}
 }
@@ -1904,7 +1916,7 @@ void Config_Wifi(void){
      	_delay_ms(500);
      	col++;
     } else if(keyRead){
-     	strcpy(temp,"set wlan phrase ");
+     	strcpy(temp,"set wlan key ");
      	strcat(temp,key);
      	if(Wifi_SendCommand(temp,"AOK","AOK",500)){
      		display_putString("key............OK",col,0,System5x7);
@@ -2093,29 +2105,33 @@ void connectToComputer(void){
 }
 
 bool getTime(void){
-
-    _delay_ms(100);
-
-    command[1] = Debug_GetByte(false);
-	command[2] = Debug_GetByte(false);
-	command[3] = Debug_GetByte(false);
-	command[4] = Debug_GetByte(false);
-
-    tempTime = command[1];
-    tempTime <<= 8;
-    tempTime += command[2];
-    tempTime <<= 8;
-    tempTime += command[3];
-    tempTime <<= 8;
-    tempTime += command[4];
-    Time_Set(tempTime);
-
-    // echo back to cpu
-    for(uint8_t j = 0; j < 5; j++){
-        Debug_SendByte(command[j]);
+    uint32_t tempTime = 0;
+    uint8_t timeOutCounter = 0;
+    uint8_t commandCounter = 0;
+    Debug_SendByte('T');
+    while(true){
+        if(Debug_CharReadyToRead()){
+            command[commandCounter+1] = Debug_GetByte(false);
+            Debug_SendByte(command[commandCounter+1]);
+            commandCounter++;
+            if(commandCounter == 4){
+                tempTime = command[1];
+                tempTime <<= 8;
+                tempTime += command[2];
+                tempTime <<= 8;
+                tempTime += command[3];
+                tempTime <<= 8;
+                tempTime += command[4];
+                Time_Set(tempTime);
+                return true;
+            }
+        }
+        _delay_ms(1);
+        timeOutCounter++;
+        if(timeOutCounter > 100){
+            return false;
+        }
     }
-
-    return true;
 }
 
 
@@ -2189,24 +2205,68 @@ void sendNickname(void){
 	Debug_SendString(nickname,true);
 }
 
-void uploadFile(void){
-    if(!uploading){
-        Debug_SendByte('D');
-        Debug_SendByte(0);
-        Debug_SendByte(0);
-        Debug_SendByte(0);
-        Debug_SendByte(0);
-        return;
+void sendFilename(void){
+    Debug_SendByte('F');
+	Debug_SendByte(strlen(fileToUpload)+2);
+	Debug_SendString(fileToUpload,true);
+}
+
+bool uploadFile(void){
+
+
+    uint8_t timeOutCounter = 0;
+    uint8_t commandCounter = 0;
+    uint8_t numBytesToRead = 0;
+    bool gotFileName = false;
+
+    uploading = true;
+    _delay_ms(100);
+
+    Debug_SendByte('D');
+
+    while(!gotFileName){
+        if(Debug_CharReadyToRead()){
+            if(commandCounter == 0){
+                numBytesToRead = Debug_GetByte(false);
+                Debug_SendByte(numBytesToRead);
+                commandCounter++;
+            } else {
+                fileToUpload[commandCounter-1] = Debug_GetByte(false);
+                Debug_SendByte(fileToUpload[commandCounter-1]);
+                commandCounter++;
+                if(commandCounter == (numBytesToRead+1)){
+                    fileToUpload[numBytesToRead+1] = 0;
+                    gotFileName = true;
+                }
+            }
+        }
+        _delay_ms(1);
+        timeOutCounter++;
+        if(timeOutCounter > 100){
+            return false;
+        }
     }
 
-    uint32_t lengthOfResp = 0;
-    lengthOfResp = uploadFileSize + strlen(fileToUpload) + 2;
-    Debug_SendByte('D');
-    Debug_SendByte((lengthOfResp >> 24) & 0xFF);
-    Debug_SendByte((lengthOfResp >> 16) & 0xFF);
-    Debug_SendByte((lengthOfResp >>  8) & 0xFF);
-    Debug_SendByte((lengthOfResp >>  0) & 0xFF);
-    Debug_SendString(fileToUpload,true);
+    okToOpenFileToUpload = true;
+    while(!uploadFileOpened);
+	_delay_ms(1000);
+
+	if(!fileExists){
+        Debug_SendByte(0);
+        Debug_SendByte(0);
+        Debug_SendByte(0);
+        Debug_SendByte(0);
+        okToCloseUploadFile = true;
+        while(okToCloseUploadFile);
+        uploading = false;
+        okToUpload = false;
+        return true;
+    }
+
+    Debug_SendByte((uploadFileSize >> 24) & 0xFF);
+    Debug_SendByte((uploadFileSize >> 16) & 0xFF);
+    Debug_SendByte((uploadFileSize >>  8) & 0xFF);
+    Debug_SendByte((uploadFileSize >>  0) & 0xFF);
 
     numberOfPacketsToUpload = uploadFileSize /  1000;
     leftOverBytesToUpload   = uploadFileSize %  1000;
@@ -2230,35 +2290,37 @@ void uploadFile(void){
 
     okToCloseUploadFile = true;
     while(okToCloseUploadFile);
-    uploadPercentBS = 100;
     uploading = false;
     okToUpload = false;
+    uploadPercentBS = 100;
+    return true;
 }
 
-void eraseFile(void){
+bool eraseFile(void){
     uint8_t timeOutCounter = 0;
     uint8_t commandCounter = 0;
     uint8_t numBytesToRead = 0;
     Debug_SendByte('E');
-    _delay_ms(100);
     while(true){
         if(Debug_CharReadyToRead()){
             if(commandCounter == 0){
                 numBytesToRead = Debug_GetByte(false);
-                Debug_SendByte(numBytesToRead+1);
+                Debug_SendByte(numBytesToRead);
                 commandCounter++;
             } else {
                 fileToErase[commandCounter-1] = Debug_GetByte(false);
                 Debug_SendByte(fileToErase[commandCounter-1]);
                 commandCounter++;
-                if(commandCounter == (numBytesToRead-1)){
-                    fileToErase[numBytesToRead-1] = 0;
+                if(commandCounter == (numBytesToRead+1)){
+                    fileToErase[numBytesToRead+1] = 0;
                     okToEraseFile = true;
                     while(okToEraseFile);
                     if(eraseFileReturn == FR_OK){
                         Debug_SendByte('T');
+                        return true;
                     } else {
                         Debug_SendByte('F');
+                        return true;
                     }
                 }
             }
@@ -2266,7 +2328,7 @@ void eraseFile(void){
         _delay_ms(1);
         timeOutCounter++;
         if(timeOutCounter > 100){
-            return;
+            return false;
         }
     }
 }

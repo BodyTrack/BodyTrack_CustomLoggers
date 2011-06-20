@@ -37,9 +37,15 @@ void Debug_Init(uint32_t baud){
 	} else if(baud == 115200){
 		Debug_Usart.BAUDCTRLA = 7 & 0xFF;
 		Debug_Usart.BAUDCTRLB = (0 << USART_BSCALE0_bp)|(7 >> 8);
-	} else if(baud == 460800){
+	} else if(baud == 230400){
+		Debug_Usart.BAUDCTRLA = 3 & 0xFF;
+		Debug_Usart.BAUDCTRLB = (0 << USART_BSCALE0_bp)|(3 >> 8);
+	}else if(baud == 460800){
 		Debug_Usart.BAUDCTRLA = 1 & 0xFF;
 		Debug_Usart.BAUDCTRLB = (0 << USART_BSCALE0_bp)|(1 >> 8);
+	} else if(baud == 921600){
+		Debug_Usart.BAUDCTRLA = 0 & 0xFF;
+		Debug_Usart.BAUDCTRLB = (0 << USART_BSCALE0_bp)|(0 >> 8);
 	}
 
 	Debug_Usart.CTRLB |= USART_RXEN_bm;
