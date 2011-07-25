@@ -6,11 +6,6 @@
 //
 //___________________________________________
 
-#define Rs232_Port				PORTD
-#define Rs232_Usart				USARTD0
-#define Rs232_RX_pin_bm		PIN2_bm
-#define Rs232_TX_pin_bm		PIN3_bm
-
 
 void Rs232_Init(void);
 

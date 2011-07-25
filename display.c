@@ -14,10 +14,7 @@
 	-Non-straight lines are hard! For now just draw straight (same row or same column) ones. Something about floats that I'm missing...
 */
 
-#include "avr_compiler.h"
 #include "display.h"
-//#include "arial_bold_14.h"
-//#include "Arial14.h"
 #include "SystemFont5X7.h"
 
 // Font Indices
@@ -31,9 +28,6 @@
 #define DISPLAY_ROWS		64
 #define DISPLAY_COLS		102
 #define DISPLAY_PAGES		(DISPLAY_ROWS/8)
-
-volatile uint8_t displayBuffer[DISPLAY_PAGES][DISPLAY_COLS];
-
 
 void display_init() {
 	//Set SS to wired and pull up
@@ -62,9 +56,6 @@ void display_init() {
 	Display_Port.DIRSET = Display_MOSI_bm | Display_SCK_bm | Display_SS_bm;
 	Display_CDPort.DIRSET = Display_CD_bm;
 
-
-
-	
 	//Enable display (write a 0 to SS)
 	Display_Port.OUTCLR = Display_SS_bm;
 	display_sendCommand(0xE2);	// 	reset
@@ -87,9 +78,45 @@ void display_init() {
 
 	display_sendCommand(0xAF);	//	enable display
 
-	display_clearBuffer();
-	display_writeBufferToScreen();
+	display_clearScreen();
+	
+	Backlight_Port.DIRSET = 1 << Backlight_Pin;
 
+}
+
+void display_showSplashScreen(bool showsd, bool showconnected, bool demo){
+	char tmp [50];
+	display_putString("   BaseStation   ",1,0,System5x7);
+	strcpy(tmp,"  Hardware: v");
+	strcat(tmp,HardwareVersion);
+	display_putString(tmp,3,0,System5x7);
+	tmp[0] = 0;
+	strcpy(tmp," Firmware: v");
+	strcat(tmp,FirmwareVersion);
+	display_putString(tmp,5,0,System5x7);
+	
+	if(showsd){
+		display_putString("    SD Removed   ",7,0,System5x7);
+	} else if(showconnected){
+		display_putString("Waiting for sync ",7,0,System5x7);
+	} else if(demo){
+		display_putString("    Demo Mode    ",7,0,System5x7);
+	} else {
+		display_clearPage(7);
+	}
+}
+
+void display_setBacklight(bool state){
+	if(state){
+		Backlight_Port.OUTSET = 1 << Backlight_Pin;
+	} else {
+		Backlight_Port.OUTCLR = 1 << Backlight_Pin;
+	}
+}
+
+void display_toggleBacklight(void){
+	Backlight_Port.OUTTGL = 1 << Backlight_Pin;
+	
 }
 
 void display_sendCommand(uint8_t dataByte) {
@@ -118,28 +145,23 @@ void display_setCursor(uint8_t page, uint8_t column) {
 }
 
 
-void display_writeBufferToScreen(void) {
-	uint8_t i, j;
-	for (i = 0; i < DISPLAY_PAGES; i++) {
-		display_setCursor(i,0);
-		for (j = 0; j < DISPLAY_COLS; j++) {
-			display_sendData(displayBuffer[i][j]);
-		}
-	}	
-}
-
 
 void display_clearPage(uint8_t page) {
 	uint8_t j;
-	for (j = 0; j < DISPLAY_COLS; j++) displayBuffer[page][j] = 0x0A;
+	for (j = 0; j < DISPLAY_COLS; j++) {
+	    //displayBuffer[page][j] = 0x00;
+	    display_setCursor(page,j);
+ 		display_sendData(0x00);
+	}
 }
 
 
-void display_clearBuffer() {
+void display_clearScreen() {
 	uint8_t i, j;
 	for (i = 0; i < DISPLAY_PAGES; i++) {
 		for (j = 0; j < DISPLAY_COLS; j++) {
-			displayBuffer[i][j] = 0x00;
+		    display_setCursor(i,j);
+ 			display_sendData(0);
 		}
 	}
 }
@@ -183,13 +205,17 @@ void display_putString(char* text, uint8_t page, uint8_t column, uint8_t* fontTa
  			if (fontHeight > 8 && fontHeight < (i+1)*8) {
  				data >>= (i+1)*8-fontHeight;
  			}
- 			displayBuffer[page+i][offset] = data;
+ 			display_setCursor(page+i,offset);
+ 			display_sendData(data);
+ 			//displayBuffer[page+i][offset] = data;
  			offset++;
 		}
 
 		//Add a 1px gap between characters
  		if(offset != 101){
- 			displayBuffer[page+i][offset+1] = 0x00;
+ 			display_setCursor(page+i,offset+1);
+ 			display_sendData(0x00);
+ 			//displayBuffer[page+i][offset+1] = 0x00;
  		}
 		offset++;
  	
@@ -198,177 +224,4 @@ void display_putString(char* text, uint8_t page, uint8_t column, uint8_t* fontTa
  	i++;
  }
 
-}
-
-void display_drawPixel(uint8_t row, uint8_t column, bool black) {
-	if (black) displayBuffer[row/DISPLAY_PAGES][column] |= (0x01 << row%8);
-	else displayBuffer[row/DISPLAY_PAGES][column] &= ~(0x01 << row%8);
-}
-
-void swap(uint8_t* val1, uint8_t* val2) {
-	uint8_t tempVal = *val2;
-	*val2 = *val1;
-	*val1 = tempVal;
-}
-
-void display_drawLine(uint8_t row1, uint8_t column1, uint8_t row2, uint8_t column2, bool black) {
-	int8_t i,j;
-	//float deltaError, sumErrors;
-	int8_t step = 1;
-	//int8_t deltaRow,deltaColumn;
-	//bool steep = abs(row2 - row1) > abs(column2 - column1);
-	//char debugMsg[50];
-
-
-/*
-//Wikipedia's code that is currently running on the micro
-//I'm not sure what it is doing...so I might go back to my old code
-
-	sprintf(debugMsg,"Before: %d, %d; %d, %d",row1,column1,row2,column2);
-	USART_sendString(debugMsg,true);
-	//Just to make things easier to work with, check wikipedia
-	if (steep) {
-		swap(&row1,&column1);
-		swap(&row2,&column2);
-	} 
-	if (row1 > row2) {
-		swap(&row1,&row2);
-		swap(&column1, &column2);
-	}
-	sprintf(debugMsg,"After: %d, %d; %d, %d",row1,column1,row2,column2);
-	USART_sendString(debugMsg,true);
-
-	deltaRow = row2 - row1;
-	deltaColumn = abs(column2 - column1);
-	if (column2 < column1) step = -1;
-	
-	//deltaError = ((double)deltaColumn/(double)deltaRow);
-//	sprintf(debugMsg,"%e",deltaError*10);
-//	USART_sendString(debugMsg,true);
-	sumErrors = deltaRow/2;
-	j = column1;
-	for (i = row1; i <= row2; i++) {
-		sprintf(debugMsg,"%d,%d",i,j);
-		USART_sendString(debugMsg,true);
-		if (steep) display_drawPixel(j,i,black);
-		else display_drawPixel(i,j,black);
-		
-		sumErrors -= deltaColumn;
-		if (sumErrors < 0) {
-			j += step;
-			sumErrors--;
-		}
-
-	}
-	*/
-
-	if (row1 == row2) {
-		//Draw horizontal line
-		if (column1 > column2) step = -1;
-		j = column1;
-		while (j != column2) {
-			display_drawPixel(row1,j,black);
-			j += step;
-		}
-		display_drawPixel(row1,j,black);
-	
-	} else if (column1 == column2) {
-		//Draw vertical line
-		if (row1 > row2) step = -1;
-		i = row1;
-		while(i != row2) {
-			display_drawPixel(i,column1,black);
-			i += step;
-		}
-		display_drawPixel(i,column1,black);
-	} else {
-		
-		/* No angles yet...complain to Nolan or write it yourself :)
-		
-		
-		
-		//Angled line :P
-		//Check out http://www.cs.unc.edu/~mcmillan/comp136/Lecture6/Lines.html
-		//and http://en.wikipedia.org/wiki/Bresenham's_line_algorithm
-		//for a great explanation of Bresenham's algorithm
-		//Basically, we're incrementing error by deltaError (the slope)
-		//until we hit a threshold of .5,
-		//where we increment the non-incremented variable and decrement error
-		
-		
-		
-		
-		//Check if abs(slope) is "steep"
-		deltaRow = row2 - row1;
-		deltaColumn = column2 - column1;
-		sumErrors = 0;
-		if (abs(deltaRow) < abs(deltaColumn)) { 	//Slope < 1
-			//Iterate by columns
-			deltaError = (float)((float)deltaColumn/(float)deltaRow);
-			//Still having problems with this deltaError value not being a float >.<
-			//Play around with it some more?
-			if (deltaError > -1) {
-				USART_sendString(">-1",true);
-				
-			} else {
-				USART_sendString("NOT",true);
-			}
-			
-			i = row1;
-			//deltaRow*deltaError = deltaColumn;
-			if (column1 > column2) step = -1;
-			for (j = column1; j != column2; j+= step) {
-				sumErrors += deltaError;
-				if (sumErrors >= .5) {
-					sumErrors--;
-					i++;
-				}
-				display_drawPixel(i,j,black);
-			}
-		} else {					  	//Slope >= 1
-			//Iterate by rows so that "slope" is less than 1
-			deltaError = deltaRow/deltaColumn;
-			if (row2 > row1) step = -1;
-			
-			
-		}
-		*/
-	}
-}
-
-
-void display_drawRectangle(uint8_t topRow, uint8_t leftColumn, uint8_t height, uint8_t width, bool filled, bool invertOrig, bool blackBorder) {
-	uint8_t i,j, remainder, bottom, right, byteOut, page;
-
-	if (!filled) {
-		display_drawLine(topRow,leftColumn,topRow,leftColumn+width,blackBorder); //Top
-		display_drawLine(topRow+height,leftColumn,topRow+height,leftColumn+width,blackBorder); //Bottom
-		display_drawLine(topRow,leftColumn,topRow+height,leftColumn,blackBorder); //Left
-		display_drawLine(topRow,leftColumn+width,topRow+height,leftColumn+width,blackBorder); //Right
-	} else {
-		i = topRow;
-		bottom = topRow + height;
-		right = leftColumn + width;
-		while (i <= topRow + height) {
-			remainder = i%8;
-			if (i+(7-remainder) <= bottom) {
-				//Deals with first page and middle pages
-				byteOut = 0xFF << remainder;
-			} else {
-				//Final page is a little tricky
-				byteOut = 0xFF >> (7-(bottom-i));
-			}
-			page = i/8;
-			for (j = leftColumn; j <= right; j++) {
-				if (invertOrig) {
-					displayBuffer[page][j] = ((~(displayBuffer[page][j] & byteOut)) & byteOut) | (displayBuffer[page][j] & ~byteOut);
-				} else {
-					displayBuffer[page][j] = byteOut;	
-				}
-			}
-			i += (8 - remainder);	
-		}
-	
-	}
-			
 }

@@ -7,28 +7,16 @@
 //___________________________________________
 
 
-#include "avr_compiler.h"
-#include "string.h"
 #include "rs232.h"
-#include "time.h"
 
-#define Rs232_BufferSize 1024
 
 volatile uint8_t    Rs232Buffer[Rs232_BufferSize];
 volatile uint16_t  	Rs232_readLocation = 0;
 volatile uint16_t   Rs232_writeLocation = 0;
 volatile bool		okToSendAirQuality = false;
 
-char airQualityString[100];
-uint32_t airCount[6];
-
-
-//uint32_t largeCount;
-//uint32_t smallCount;
-//uint32_t quickSmall = 0;
-//uint32_t quickLarge = 0;
-
-volatile bool rs232Recording = false;
+char				airQualityString[100];
+uint32_t			airCount[6];
 
 void Rs232_Init(void){
 	Rs232_Port.DIRSET = Rs232_TX_pin_bm;
@@ -89,13 +77,11 @@ void Rs232_SendString(char string [],bool CR){
 	}
 }
 
-ISR(USARTD0_RXC_vect){
+ISR(Rs232_RXC_vect){
 	Rs232Buffer[Rs232_writeLocation] = Rs232_Usart.DATA;
 
-	if(rs232Recording){
-		if(Rs232Buffer[Rs232_writeLocation] == 0x0A){
-            okToSendAirQuality = true;
-		}
+	if(Rs232Buffer[Rs232_writeLocation] == 0x0A){
+		okToSendAirQuality = true;
 	}
 	Rs232_writeLocation++;
 	if(Rs232_writeLocation >= Rs232_BufferSize){

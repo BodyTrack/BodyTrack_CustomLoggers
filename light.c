@@ -6,17 +6,14 @@
 //
 //___________________________________________
 
-#include "avr_compiler.h"
 #include "light.h"
 
+uint8_t		deviceAddress;
+uint8_t		writeAddress;
+uint8_t		commandCode;
 
-uint8_t	deviceAddress;
-uint8_t writeAddress;
-uint8_t commandCode;
-
-uint16_t colors[4];
-uint8_t  colors8[8];
-
+uint16_t	colors[4];
+uint8_t		colors8[8];
 
 
 void Light_Init(uint8_t address){

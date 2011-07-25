@@ -9,19 +9,15 @@
 #ifndef LIGHT_H_
 #define LIGHT_H_
 
-#define LightPort 			TWIC
-#define LightAddress 		0x72
-
-
 // Register Addresses
-#define Control		0x00
-#define Timing		0x01
-#define Gain		0x07
+#define Control					0x00
+#define Timing					0x01
+#define Gain					0x07
 
 // Control Register
-#define ADC_Valid_bm 		0b00010000
-#define ADC_En_bm			0b00000010
-#define Power_bm			0b00000001
+#define ADC_Valid_bm			0b00010000
+#define ADC_En_bm				0b00000010
+#define Power_bm				0b00000001
 
 // Timing Register
 #define Integ_Mode_Auto_bm		0b00000000

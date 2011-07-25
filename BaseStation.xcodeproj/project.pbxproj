@@ -1,0 +1,150 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXFileReference section */
+		0301C9CD13CB7C0000B39AC5 /* mainChestStrap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mainChestStrap.h; sourceTree = "<group>"; };
+		0301C9CE13CB7C0000B39AC5 /* mainChestStrap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mainChestStrap.c; sourceTree = "<group>"; };
+		0301C9D113CB7C1F00B39AC5 /* configChestStrap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = configChestStrap.h; sourceTree = "<group>"; };
+		0301C9D513CB7CBE00B39AC5 /* sensorsCS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sensorsCS.h; sourceTree = "<group>"; };
+		0301C9D613CB7CBE00B39AC5 /* sensorsCS.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sensorsCS.c; sourceTree = "<group>"; };
+		0301C9DB13CB7F7A00B39AC5 /* accel.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = accel.c; sourceTree = "<group>"; };
+		0301C9DC13CB7F7A00B39AC5 /* accel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = accel.h; sourceTree = "<group>"; };
+		0301CA0913CB83DB00B39AC5 /* leds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = leds.h; sourceTree = "<group>"; };
+		0301CA0A13CB83DB00B39AC5 /* leds.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = leds.c; sourceTree = "<group>"; };
+		0320131913C5DFFE006F6A2F /* avr_compiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = avr_compiler.h; sourceTree = "<group>"; };
+		0320131B13C5E00A006F6A2F /* debug.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = debug.c; sourceTree = "<group>"; };
+		0320131C13C5E00A006F6A2F /* debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = debug.h; sourceTree = "<group>"; };
+		0320131F13C5E00A006F6A2F /* diskio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = diskio.c; sourceTree = "<group>"; };
+		0320132013C5E00A006F6A2F /* diskio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = diskio.h; sourceTree = "<group>"; };
+		0320132113C5E00A006F6A2F /* display.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = display.c; sourceTree = "<group>"; };
+		0320132213C5E00A006F6A2F /* display.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = display.h; sourceTree = "<group>"; };
+		0320132513C5E00A006F6A2F /* ff.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ff.c; sourceTree = "<group>"; };
+		0320132613C5E00A006F6A2F /* ff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ff.h; sourceTree = "<group>"; };
+		0320132713C5E00A006F6A2F /* ffconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffconf.h; sourceTree = "<group>"; };
+		0320132813C5E00A006F6A2F /* integer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = integer.h; sourceTree = "<group>"; };
+		0320132C13C5E00A006F6A2F /* light.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = light.c; sourceTree = "<group>"; };
+		0320132D13C5E00A006F6A2F /* light.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = light.h; sourceTree = "<group>"; };
+		0320133013C5E01F006F6A2F /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		0320133113C5E02B006F6A2F /* rs232.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = rs232.c; sourceTree = "<group>"; };
+		0320133213C5E02B006F6A2F /* rs232.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rs232.h; sourceTree = "<group>"; };
+		0320133513C5E034006F6A2F /* sd.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sd.c; sourceTree = "<group>"; };
+		0320133613C5E034006F6A2F /* sd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sd.h; sourceTree = "<group>"; };
+		0320133713C5E034006F6A2F /* sensorsBS.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sensorsBS.c; sourceTree = "<group>"; };
+		0320133813C5E034006F6A2F /* sensorsBS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sensorsBS.h; sourceTree = "<group>"; };
+		0320133913C5E03C006F6A2F /* time.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = time.c; sourceTree = "<group>"; };
+		0320133A13C5E03C006F6A2F /* time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = time.h; sourceTree = "<group>"; };
+		0320137213C5E2B2006F6A2F /* iox256a3b.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iox256a3b.h; sourceTree = "<group>"; };
+		032013FC13C6008F006F6A2F /* button.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = button.c; sourceTree = "<group>"; };
+		032013FD13C6008F006F6A2F /* button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = button.h; sourceTree = "<group>"; };
+		032014C013C62F7E006F6A2F /* mainBaseStation.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mainBaseStation.c; sourceTree = "<group>"; };
+		032014C113C62F7E006F6A2F /* mainBaseStation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mainBaseStation.h; sourceTree = "<group>"; };
+		0320152413C63657006F6A2F /* configBaseStation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = configBaseStation.h; sourceTree = "<group>"; };
+		032016AE13C73CBE006F6A2F /* uploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = uploader.h; sourceTree = "<group>"; };
+		032016AF13C73CBE006F6A2F /* uploader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = uploader.c; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0320130513C5DF93006F6A2F = {
+			isa = PBXGroup;
+			children = (
+				0301CA0913CB83DB00B39AC5 /* leds.h */,
+				0301CA0A13CB83DB00B39AC5 /* leds.c */,
+				0320137213C5E2B2006F6A2F /* iox256a3b.h */,
+				0320131913C5DFFE006F6A2F /* avr_compiler.h */,
+				0301C9DB13CB7F7A00B39AC5 /* accel.c */,
+				0301C9DC13CB7F7A00B39AC5 /* accel.h */,
+				032013FC13C6008F006F6A2F /* button.c */,
+				032013FD13C6008F006F6A2F /* button.h */,
+				0320131B13C5E00A006F6A2F /* debug.c */,
+				0320131C13C5E00A006F6A2F /* debug.h */,
+				0320131F13C5E00A006F6A2F /* diskio.c */,
+				0320132013C5E00A006F6A2F /* diskio.h */,
+				0320132113C5E00A006F6A2F /* display.c */,
+				0320132213C5E00A006F6A2F /* display.h */,
+				0320132513C5E00A006F6A2F /* ff.c */,
+				0320132613C5E00A006F6A2F /* ff.h */,
+				0320132713C5E00A006F6A2F /* ffconf.h */,
+				0320132813C5E00A006F6A2F /* integer.h */,
+				0320132C13C5E00A006F6A2F /* light.c */,
+				0320132D13C5E00A006F6A2F /* light.h */,
+				032014C013C62F7E006F6A2F /* mainBaseStation.c */,
+				032014C113C62F7E006F6A2F /* mainBaseStation.h */,
+				0320152413C63657006F6A2F /* configBaseStation.h */,
+				0301C9CE13CB7C0000B39AC5 /* mainChestStrap.c */,
+				0301C9CD13CB7C0000B39AC5 /* mainChestStrap.h */,
+				0301C9D113CB7C1F00B39AC5 /* configChestStrap.h */,
+				0320133013C5E01F006F6A2F /* Makefile */,
+				0320133113C5E02B006F6A2F /* rs232.c */,
+				0320133213C5E02B006F6A2F /* rs232.h */,
+				0320133513C5E034006F6A2F /* sd.c */,
+				0320133613C5E034006F6A2F /* sd.h */,
+				0320133713C5E034006F6A2F /* sensorsBS.c */,
+				0320133813C5E034006F6A2F /* sensorsBS.h */,
+				0301C9D513CB7CBE00B39AC5 /* sensorsCS.h */,
+				0301C9D613CB7CBE00B39AC5 /* sensorsCS.c */,
+				0320133913C5E03C006F6A2F /* time.c */,
+				0320133A13C5E03C006F6A2F /* time.h */,
+				032016AF13C73CBE006F6A2F /* uploader.c */,
+				032016AE13C73CBE006F6A2F /* uploader.h */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXProject section */
+		0320130713C5DF93006F6A2F /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 0320130A13C5DF93006F6A2F /* Build configuration list for PBXProject "BaseStation" */;
+			compatibilityVersion = "Xcode 2.4";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 0320130513C5DF93006F6A2F;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		0320130813C5DF93006F6A2F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = Debug;
+		};
+		0320130913C5DF93006F6A2F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0320130A13C5DF93006F6A2F /* Build configuration list for PBXProject "BaseStation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0320130813C5DF93006F6A2F /* Debug */,
+				0320130913C5DF93006F6A2F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0320130713C5DF93006F6A2F /* Project object */;
+}

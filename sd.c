@@ -5,43 +5,57 @@
 //			  updated: 10/12/2010
 //___________________________________________
 
-#include "avr_compiler.h"
 #include "sd.h"
-#include "time.h"
 
-#define MAGIC_NUMBER 0xb0de744c
-#define RTYPE_START_OF_FILE 1
-#define RTYPE_RTC 			2
-#define RTYPE_PERIODIC_DATA 3
+#define MAGIC_NUMBER			0xb0de744c
+#define RTYPE_START_OF_FILE		1
+#define RTYPE_RTC				2
+#define RTYPE_PERIODIC_DATA		3
 
-#define DeviceClass	"BaseStation"
 
-#define StartFileLength 839
+static FATFS		fso0;
+static FATFS		fso1;
+FATFS				*fs;
+FILINFO				fno,fno2;
 
-static FATFS fso0;
-static FATFS fso1;
-FATFS *fs;
-FILINFO	fno,fno2;
+DIR					dir;
 
-DIR dir;
+FIL					Log_File, Upload_File;
 
-FIL Log_File, Upload_File;
+char				fileName [20];
 
-char fileName [20];
+uint8_t				tmp8[1];
+uint8_t				tmp16[2];
+uint8_t				tmp32[4];
 
-uint8_t tmp8[1];
-uint8_t tmp16[2];
-uint8_t tmp32[4];
-char tmpArray[20];
+volatile uint32_t	CRC;
 
-volatile uint32_t CRC;
+char				currentLogFile[15];
 
-uint8_t chargePercent    = 0;
-uint16_t chargeCounter   = 0;
-bool chargeComplete   	 = false;
-bool okToCharge 		 = false;
+char auth [50];
+char phrase [50];
+char key [50];
+char ssid [50];
+char nickname [50];
+char serverOpenCommand [50] = "open ";
+char port [50];
+char server [50];
+char zone [10] = "GMT";
+char user [10];
+char am [5] = "AM";
+char pm [5] = "PM";
+char daylightTime[10];
+char demoModeString[10];
+char fastString[10];
 
-char currentLogFile[15];
+uint8_t timeZoneShift = 0;
+
+
+bool authRead = false;
+bool phraseRead = false;
+bool keyRead = false;
+bool ssidRead = false;
+bool zoneChanged = false;
 
 
 const uint32_t crc_table[256] = {
@@ -79,15 +93,11 @@ const uint32_t crc_table[256] = {
 0xb3667a2e,0xc4614ab8,0x5d681b02,0x2a6f2b94,0xb40bbe37,0xc30c8ea1,0x5a05df1b,0x2d02ef8d
 };
 
-//uint32_t crc_table[256];
-
 
 uint8_t SD_Init(void){
 	uint8_t tmp;
 
-
-	SD_CD_Port.SD_CD_CNTL = PORT_OPC_PULLUP_gc;
-	SD_CD_Port.SD_CD2_CNTL = PORT_OPC_PULLUP_gc;
+	SD_CD_Port.DIRCLR = 1 << SD_CD;
 	SD_Timer_Init();
 	tmp = disk_initialize(0);
 	f_mount(0, &fso0);
@@ -113,14 +123,6 @@ void SD_Close(void){
 
 bool SD_Inserted(void){
 	if((SD_CD_Port.IN & (1<<SD_CD)) > 0 ){
-		return false;
-	} else {
-		return true;
-	}
-}
-
-bool SD2_Inserted(void){
-	if((SD_CD_Port.IN & (1<<SD_CD2)) > 0 ){
 		return false;
 	} else {
 		return true;
@@ -177,75 +179,110 @@ void SD_MakeFileName(uint32_t var){
 	strcat(fileName, ".bt");
 }
 
-uint8_t SD_StartLogFile(uint32_t time){
-	uint8_t resp;
-
-	SD_MakeFileName(time);
-	resp = SD_Open(fileName);
-	if(resp != FR_OK){
-	    return resp;
-	}
-	SD_ClearCRC();
-	SD_Write32(MAGIC_NUMBER);               // magic number
-	SD_Write32(StartFileLength);		    // record size
-	SD_Write16(RTYPE_START_OF_FILE); 		// record type
-
-														// payload
-	SD_Write16(0x0100);				// protocol version
-	SD_Write8(0x02);					// time protocol
-	SD_Write32(Time_Get32BitTimer());					// time
-	SD_Write32(542535);			// picoseconds per tick (48bit) (truly is 542534.722)
-	SD_Write16(0);
-
-	SD_WriteString("device_class");
-	SD_Write8(0x09);
-	SD_WriteString(DeviceClass);
-	SD_Write8(0x0A);
-		
-	SD_WriteString("device_id");
-	SD_Write8(0x09);
-	SD_WriteString(deviceID);
-	SD_Write8(0x0A);
-		
-	SD_WriteString("firmware_version");
-	SD_Write8(0x09);
-	SD_WriteString(FirmwareVersion);
-	SD_Write8(0x0A);
-		
-	SD_WriteString("hardware_version");
-	SD_Write8(0x09);
-	SD_WriteString(HardwareVersion);
-	SD_Write8(0x0A);
-
-	SD_WriteString("channel_specs");
-	SD_Write8(0x09);
-	SD_WriteString("{\"Temperature\":{\"units\": \"deg C\", \"scale\": 0.1},");
-	SD_WriteString("\"Humidity\":{\"units\": \"%RH\", \"scale\": 0.1},");
-	SD_WriteString("\"Pressure\":{\"units\": \"kPa\", \"scale\": 0.1},");
-	SD_WriteString("\"Light_Green\":{\"units\": \"bits\", \"scale\": 1},");				// 44
-	SD_WriteString("\"Light_Red\":{\"units\": \"bits\", \"scale\": 1},");				// 42
-	SD_WriteString("\"Light_Blue\":{\"units\": \"bits\", \"scale\": 1},");				// 43
-	SD_WriteString("\"Light_Clear\":{\"units\": \"bits\", \"scale\": 1},");				// 44
-	SD_WriteString("\"Air_1\":{\"units\": \"#particles\", \"scale\": 1},");				// 44
-	SD_WriteString("\"Air_2\":{\"units\": \"#particles\", \"scale\": 1},");				// 44
-	SD_WriteString("\"Air_3\":{\"units\": \"#particles\", \"scale\": 1},");				// 44
-	SD_WriteString("\"Air_4\":{\"units\": \"#particles\", \"scale\": 1},");				// 44
-	SD_WriteString("\"Air_5\":{\"units\": \"#particles\", \"scale\": 1},");				// 44
-	SD_WriteString("\"Air_6\":{\"units\": \"#particles\", \"scale\": 1},");				// 44
-	SD_WriteString("\"Air_Small\":{\"units\": \"#particles\", \"scale\": 1},");				// 48
-	SD_WriteString("\"Air_Large\":{\"units\": \"#particles\", \"scale\": 1},");				// 48
-	SD_WriteString("\"Microphone\":{\"units\": \"bits\", \"scale\": 1}}");
-	SD_Write8(0x0A);
+void SD_Read_config_file(void){
+	char temp [50];
 	
-	SD_Write8(0x00);
-
-	SD_WriteCRC();			// CRC			
-
-
-	f_sync(&Log_File);
-
-	return resp;
+	SD_Open("/config.txt");
+    f_lseek(&Log_File, 0);
+	
+	while(true){
+        f_gets(temp,50,&Log_File);
+        if(temp[0] != 0){
+            if(strstr(temp,"ssid") != 0){
+                strtok(temp,"=");
+                strcpy(ssid,strtok(NULL,"="));
+                ssidRead = true;
+            } else if(strstr(temp,"phrase") != 0){
+                strtok(temp,"=");
+                strcpy(phrase,strtok(NULL,"="));
+                phraseRead = true;
+            } else if(strstr(temp,"key") != 0){
+                strtok(temp,"=");
+                strcpy(key,strtok(NULL,"="));
+                keyRead = true;
+            } else if(strstr(temp,"port") != 0){
+                strtok(temp,"=");
+				strcpy(port,strtok(NULL,"="));
+            } else if(strstr(temp,"auth") != 0){
+				strtok(temp,"=");
+                strcpy(auth,strtok(NULL,"="));
+				authRead = true;
+            } else if(strstr(temp,"user") != 0){
+                strtok(temp,"=");
+                strcpy(user,strtok(NULL,"="));
+                for(uint8_t i = 0; i < strlen(user); i++){
+                    if(user[i] < ' '){
+                        user[i] = 0;
+                        break;
+                    }
+                }
+            } else if(strstr(temp,"nickname") != 0){
+                strtok(temp,"=");
+	            strcpy(nickname,strtok(NULL,"="));
+                for(uint8_t i = 0; i < strlen(nickname); i++){
+                    if(nickname[i] < ' '){
+                        nickname[i] = 0;
+                        break;
+                    }
+                }
+				
+            } else if(strstr(temp,"server") != 0){
+                strtok(temp,"=");
+                strcpy(server,strtok(NULL,"="));
+            } else if(strstr(temp,"daylightTime") != 0){
+                strtok(temp,"=");
+                strcpy(daylightTime,strtok(NULL,"="));
+            } else if(strstr(temp,"demoMode") != 0){
+                strtok(temp,"=");
+                strcpy(demoModeString,strtok(NULL,"="));
+            } else if(strstr(temp,"recordFast") != 0){
+                strtok(temp,"=");
+                strcpy(fastString,strtok(NULL,"="));
+            } else if(strstr(temp,"zone") != 0){
+				strtok(temp,"=");
+                memmove(zone,strtok(NULL,"="),4);
+                for(uint8_t i = 0;  i < strlen(zone); i++){
+                    if(zone[i] < ' '){
+                        zone[i] = 0;
+                    }
+                }
+                if(strcmp(zone,"EST") == 0){
+                    timeZoneShift = 5;
+                    zoneChanged = true;
+                } else if(strcmp(zone,"CST") == 0){
+                    timeZoneShift = 6;
+                    zoneChanged = true;
+                } else if(strcmp(zone,"MST") == 0){
+                    timeZoneShift = 7;
+                    zoneChanged = true;
+                } else if(strcmp(zone,"PST") == 0){
+                    timeZoneShift = 8;
+                    zoneChanged = true;
+                }
+	        }
+	    } else {
+	        break;
+	    }
+	}
+    if(server[strlen(server)-1] < 32){
+        server[strlen(server)-1] = 0;
+    }
+	strcat(serverOpenCommand,server);
+	strcat(serverOpenCommand," ");
+	strcat(serverOpenCommand,port);
+	
+    if((strstr(daylightTime,"true") != 0) && (zoneChanged)){
+        timeZoneShift--;
+    }
+    if((strstr(demoModeString,"true") != 0)){
+        demoMode = true;
+    }
+    if((strstr(fastString,"true") != 0)){
+        wantToRecordFast = true;
+    }
 }
+
+
 
 void SD_Timer_Init(void)			// Initialize 100 Hz timer needed for SD access 
 {
@@ -255,71 +292,21 @@ void SD_Timer_Init(void)			// Initialize 100 Hz timer needed for SD access
 	// => 14745600/256/576 => 100 samples per second
 	
 	// Set period/TOP value
-	TCE0.PER = 576;
+	SD_Timer.PER = 576;
 
 	// Select clock source
-	TCE0.CTRLA = (TCE0.CTRLA & ~TC0_CLKSEL_gm) | TC_CLKSEL_DIV256_gc;
+	SD_Timer.CTRLA = (SD_Timer.CTRLA & ~TC0_CLKSEL_gm) | TC_CLKSEL_DIV256_gc;
 	
 	// Enable CCA interrupt
-	TCE0.INTCTRLA = (TCE0.INTCTRLA & ~TC0_OVFINTLVL_gm) | TC_CCAINTLVL_MED_gc;
+	SD_Timer.INTCTRLA = (SD_Timer.INTCTRLA & ~TC0_OVFINTLVL_gm) | TC_CCAINTLVL_MED_gc;
 	
 }
 
 
 // Called every 10 ms (100 Hz)
-ISR(TCE0_OVF_vect)
+ISR(SD_Timer_vect)
 {
 	disk_timerproc();
-
-
-	if(okToCharge){
-		chargeCounter++;
-		if(chargeCounter >= 16200){
-			chargeCounter=0;
-			chargePercent++;
-		}
-	}
 }
 
-
-
-// From Application Note AVR1003
-// Used to slow down clock in disk_initialize()
-void CCPWrite( volatile uint8_t * address, uint8_t value ) {
-    uint8_t volatile saved_sreg = SREG;
-    cli();
-
-#ifdef __ICCAVR__
-	asm("movw r30, r16");
-#ifdef RAMPZ
-	RAMPZ = 0;
-#endif
-	asm("ldi  r16,  0xD8 \n"
-	    "out  0x34, r16  \n"
-#if (__MEMORY_MODEL__ == 1)
-	    "st     Z,  r17  \n");
-#elif (__MEMORY_MODEL__ == 2)
-	    "st     Z,  r18  \n");
-#else /* (__MEMORY_MODEL__ == 3) || (__MEMORY_MODEL__ == 5) */
-	    "st     Z,  r19  \n");
-#endif /* __MEMORY_MODEL__ */
-
-#elif defined __GNUC__
-	volatile uint8_t * tmpAddr = address;
-#ifdef RAMPZ
-	RAMPZ = 0;
-#endif
-	asm volatile(
-		"movw r30,  %0"	      "\n\t"
-		"ldi  r16,  %2"	      "\n\t"
-		"out   %3, r16"	      "\n\t"
-		"st     Z,  %1"       "\n\t"
-		:
-		: "r" (tmpAddr), "r" (value), "M" (CCP_IOREG_gc), "i" (&CCP)
-		: "r16", "r30", "r31"
-		);
-
-#endif
-	SREG = saved_sreg;
-}
 
