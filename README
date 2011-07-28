@@ -1,0 +1,72 @@
+*************************************
+ABOUT
+
+This is a common repository for the custom loggers made in the BodyTrack project.
+
+Right now, the only loggers developed are the "BaseStation" and "ChestStrap". Everything is structured in such a way to provide room for more devices to adhere to the same logging protocol and well as uploading strategy. 
+
+Many files are shared between the devices, such as the uSD and uploader libraries.  
+
+*************************************
+SENSORS
+
+* BaseStation - It is designed to be a desk top device and record environmental sensors.
+     - Temperature   - captures with 0.1 degree C resolution at 1HZ
+     - Pressure      - captures with 0.1 kPa resolution at 1HZ
+     - Humidity      - captures with 0.1 %RH resolution at 1HZ
+     - Light         - captures a 32-bit representation of light levels, in RGB and clear filter at 1HZ
+     - Audio         - captures 8-bit audio at 7.2kHZ
+     - Air Quality   - A dylos air quality monitor can be attached to it's serial port for logging.
+
+* ChestStrap - It is designed to be a wearable device and record things about the body.
+     - Temperature   - captures with 0.1 degree C resolution at 1HZ
+     - Humidity      - captures with 0.1 %RH resolution at 1HZ
+     - Respiration   - captures a 12-bit representation of respiration at 300HZ
+     - EKG           - captures a 12-bit representation of EKG at 300HZ
+     - Accelerometer - captures acceleration in 3-axis, plus or minus 16-G's at 320HZ. 
+
+*************************************
+CONFIGURATION
+
+Both devices use a configuration file on the uSD card to change some settings. This file is saved as "config.txt" in the main directory of the card. The following is an example of one of those files:
+
+auth=3
+phrase=password
+ssid=linksys
+zone=EST
+daylightTime=true
+server=bodytrack.org
+port=80
+nickname=Home_BaseStation
+user=7
+demoMode=false
+recordFast=true
+
+All of the fields are used by the BaseStation, but not all are used by the ChestStrap.
+
+* auth - type of encryption on your wireless network (used by both)
+       - '0' - open
+       - '1' - WEP-128
+       - '2' - WPA1
+       - '3' - Mixed WPA1 & WPA2-PSK
+       - '4' - WPA2-PSK
+       - '5' - WEP-64
+       - '6' - adhoc
+* phrase - your encryption phrase/key on your wireless network (used by both)
+* ssid  - SSID of your wireless network (used by both)
+* zone - time zone. only EST, CST, MST and PST are supported. default is GMT (used by basestation only)
+* daylight - wether you are in daylight savings time right now or not  (used by basestation only)
+* server - the server you would like to post your data to (used by both)
+* port - the port your server uses (used by both)
+* nickname - the nickname for your divice. This is used to distinguish your different devices apart (used by both)
+* user - your user id (used by both)
+* demoMode - allows your device to be usable even without a valid time. This is helpful for giving demos (used by basestation only)
+* recordFast - used to enable recording of the fastest recording sensors in the system. BaseStation uses the microphone, ChestStrap used the Accelerometer (used by both)
+
+*************************************
+TIME SYNC AND DATA TRANSFER
+
+using the 
+
+
+
