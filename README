@@ -66,7 +66,9 @@ All of the fields are used by the BaseStation, but not all are used by the Chest
 *************************************
 TIME SYNC AND DATA TRANSFER
 
-using the 
+using the logger gateway, the time can be synced to your device. The gateway will also gather all of the data from your configuration file. It then begins to look for files to upload.
+
+Once files are successfully transfered to the computer, it will be uploaded to the server specified in your configuration file. Only then will it erase your files from the uSD card.
 
 
 
