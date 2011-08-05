@@ -1,17 +1,7 @@
 
-#define FirmwareVersion "3.00"
-#define HardwareVersion "3"
+
 char deviceID   [50];
 
-
-#define fileLengthInSeconds				900
-
-#define temperatureNumberOfSamples   	10
-#define respirationNumberOfSamples      200
-#define EKGNumberOfSamples              200
-#define humidityNumberOfSamples         10
-#define accelNumberOfSamples            200
-#define accelNumberOfChannels           3
 
 #define LOTNUM0_offset                  0x08
 #define LOTNUM1_offset                  0x09

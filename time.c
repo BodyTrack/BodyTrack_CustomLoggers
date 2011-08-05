@@ -92,22 +92,15 @@ void Time_Set(uint32_t time){
 
 bool Time_CheckVBatSystem(void){
 	if (VBAT.STATUS & VBAT_BBPWR_bm){
-		//Debug_SendByte('A');
 		return false;
 	} else {
 		if (VBAT.STATUS & VBAT_BBPORF_bm) {
-			
-			//Debug_SendByte('B');
 			return false;
 		} else if (VBAT.STATUS & VBAT_BBBORF_bm){
-			
-			//Debug_SendByte('C');
 			return false;
 		} else {
 			VBAT.CTRL = VBAT_ACCEN_bm;
 			if (VBAT.STATUS & VBAT_XOSCFAIL_bm){
-				
-				//Debug_SendByte('D');
 				return false;
 			} 
 		}

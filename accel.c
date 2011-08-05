@@ -31,11 +31,11 @@ void Accel_Init(void){
 
     	// fclk = 14745600
     	// div  = 8
-    	// per  = 5760
+    	// per  = 5760 (remember to subtract 1)
     	//  => 320 samples per second
 
     	// Set period/TOP value
-    Accel_Sample_Timer.PER = 5760;
+    Accel_Sample_Timer.PER = 5759;
 
     	// Select clock source
     Accel_Sample_Timer.CTRLA = (TCF0.CTRLA & ~TC0_CLKSEL_gm) | TC_CLKSEL_DIV8_gc;

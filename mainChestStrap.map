@@ -48,28 +48,28 @@ ssid                0x32              mainChestStrap.o
 zeroOffsetB         0x2               mainChestStrap.o
 uploadFileBuffer    0x3e8             mainChestStrap.o
 fileToUpload        0xf               mainChestStrap.o
-respirationBuffer1  0x190             mainChestStrap.o
+respirationBuffer1  0x258             mainChestStrap.o
 currentLogFile      0xf               mainChestStrap.o
-EKGBuffer2          0x190             mainChestStrap.o
+EKGBuffer2          0xc8              mainChestStrap.o
 fno                 0x16              mainChestStrap.o
 fs                  0x2               mainChestStrap.o
 fileName            0x14              mainChestStrap.o
 auth                0x32              mainChestStrap.o
 tmp32               0x4               mainChestStrap.o
 command             0x32              mainChestStrap.o
-temperatureBuffer1  0x14              mainChestStrap.o
+temperatureBuffer1  0xa               mainChestStrap.o
 temp                0x32              mainChestStrap.o
 user                0xa               mainChestStrap.o
-accelBuffer2        0x4b0             mainChestStrap.o
+accelBuffer2        0x708             mainChestStrap.o
 ledState            0x2               mainChestStrap.o
 demoModeString      0xa               mainChestStrap.o
 server              0x32              mainChestStrap.o
 deviceID            0x32              mainChestStrap.o
-temperatureBuffer2  0x14              mainChestStrap.o
+temperatureBuffer2  0xa               mainChestStrap.o
 fno2                0x16              mainChestStrap.o
 daylightTime        0xa               mainChestStrap.o
 uploadCRC           0x4               mainChestStrap.o
-humidityBuffer1     0x14              mainChestStrap.o
+humidityBuffer1     0x1e              mainChestStrap.o
 tmp8                0x1               mainChestStrap.o
 okToGetRemainingSpace
                     0x1               mainChestStrap.o
@@ -83,17 +83,17 @@ Log_File            0x220             mainChestStrap.o
 dir                 0x16              mainChestStrap.o
 Upload_File         0x220             mainChestStrap.o
 fileToErase         0x14              mainChestStrap.o
-humidityBuffer2     0x14              mainChestStrap.o
+humidityBuffer2     0x1e              mainChestStrap.o
 zeroOffsetA         0x2               mainChestStrap.o
-accelBuffer1        0x4b0             mainChestStrap.o
-EKGBuffer1          0x190             mainChestStrap.o
+accelBuffer1        0x708             mainChestStrap.o
+EKGBuffer1          0xc8              mainChestStrap.o
 CRC                 0x4               mainChestStrap.o
 availableFileName   0xf               mainChestStrap.o
 port                0x32              mainChestStrap.o
 nickname            0x32              mainChestStrap.o
 fastString          0xa               mainChestStrap.o
 tmp16               0x2               mainChestStrap.o
-respirationBuffer2  0x190             mainChestStrap.o
+respirationBuffer2  0x258             mainChestStrap.o
 
 Memory Configuration
 
@@ -205,7 +205,7 @@ LOAD /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x8b56
+.text           0x00000000     0x8fae
  *(.vectors)
  .vectors       0x00000000      0x1e8 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/crtx256a3b.o
                 0x00000000                __vectors
@@ -262,7 +262,6 @@ LOAD /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a
  *(.text)
  .text          0x0000022a        0x4 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/crtx256a3b.o
                 0x0000022a                __vector_38
-                0x0000022a                __vector_104
                 0x0000022a                __vector_22
                 0x0000022a                __vector_63
                 0x0000022a                __vector_28
@@ -378,208 +377,209 @@ LOAD /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a
                 0x0000022a                __vector_87
                 0x0000022a                __vector_65
                 0x0000022a                __vector_120
- .text          0x0000022e     0x860e mainChestStrap.o
-                0x000068fc                Charged
-                0x00006318                Uploader_eraseFile
-                0x00005de0                Sensors_ResetTemperatureBuffers
-                0x00005532                f_gets
-                0x000063d4                Uploader_WriteCRC
-                0x0000148c                get_fat
+ .text          0x0000022e     0x8a66 mainChestStrap.o
+                0x00006cd6                Charged
+                0x00006bca                __vector_104
+                0x00006582                Uploader_eraseFile
+                0x00006018                Sensors_ResetTemperatureBuffers
+                0x00005732                f_gets
+                0x00006652                Uploader_WriteCRC
+                0x000015d6                get_fat
                 0x00000258                Debug_CharReadyToRead
-                0x00000498                Leds_Toggle
-                0x0000858a                f_printf
-                0x000063ba                Uploader_ClearCRC
-                0x00007846                Uploader_Update
-                0x00006426                Uploader_uploadFile
-                0x00005d4e                Sensors_ReadRespiration
-                0x000068b0                Disable_JTAG
-                0x00005914                Accel_Init
-                0x00005d5a                Sensors_ReadEKG
-                0x00006930                __vector_77
-                0x00007282                SD_WriteHumidityBuffer
-                0x00007738                Uploader_sendSSID
-                0x000058d0                Accel_Read_Byte
-                0x00000b1a                disk_initialize
-                0x00004846                f_rename
-                0x000067da                Uploader_UpdateCRC
-                0x00000ce6                disk_status
-                0x000041e2                f_truncate
-                0x000057de                SD_Timer_Init
-                0x000068e0                Interrupt_Init
-                0x000057c0                SD_WriteCRC
-                0x00006912                GUI_Init
-                0x0000046c                Leds_Set
-                0x00000ea4                disk_ioctl
+                0x000004fc                Leds_Toggle
+                0x000089e2                f_printf
+                0x00006638                Uploader_ClearCRC
+                0x00007c72                Uploader_Update
+                0x000066ba                Uploader_uploadFile
+                0x00005f86                Sensors_ReadRespiration
+                0x00006b8c                Disable_JTAG
+                0x00005b4c                Accel_Init
+                0x00005f92                Sensors_ReadEKG
+                0x00006d0a                __vector_77
+                0x000075da                SD_WriteHumidityBuffer
+                0x00007b30                Uploader_sendSSID
+                0x00005b08                Accel_Read_Byte
+                0x00000b7e                disk_initialize
+                0x000049e0                f_rename
+                0x00006ab6                Uploader_UpdateCRC
+                0x00000d4a                disk_status
+                0x00004354                f_truncate
+                0x000059de                SD_Timer_Init
+                0x00006bbc                Interrupt_Init
+                0x000059c0                SD_WriteCRC
+                0x00006cec                GUI_Init
+                0x000004d0                Leds_Set
+                0x00000f08                disk_ioctl
                 0x0000022e                CCPWrite
-                0x00006856                Clock_Init
-                0x0000757e                Uploader_sendServer
-                0x00007798                Uploader_sendFilename
-                0x000042fc                f_unlink
+                0x00006b32                Clock_Init
+                0x00007908                Uploader_sendServer
+                0x00007baa                Uploader_sendFilename
+                0x0000446e                f_unlink
                 0x00000308                Debug_Init
-                0x000058c0                Accel_Write_Byte
-                0x00006264                SP_ReadCalibrationByte
-                0x000055ce                f_putc
-                0x0000567c                SD_WriteBuffer
-                0x00007650                Uploader_sendKey
-                0x0000798c                SD_Open
-                0x0000561a                f_puts
-                0x00006c7a                SD_WriteRTCBlock
-                0x000004d0                Time_Set
-                0x00000578                Time_CheckVBatSystem
-                0x00005d42                Sensors_ReadTemperature
-                0x00005d66                Sensors_ReadHumidity
-                0x00006f98                SD_WriteAccelBuffer
-                0x00005a86                Sensors_ResetAccelBuffers
-                0x00007fce                SD_Read_config_file
-                0x0000574a                SD_Write32
-                0x00005662                SD_Close
-                0x00005e28                Sensors_ResetHumidityBuffers
-                0x0000124a                disk_timerproc
-                0x00003948                f_close
-                0x0000596a                Accel_ReadFromAddress
-                0x00002fe4                f_read
-                0x00003e82                f_readdir
-                0x000057fc                SD_Init
+                0x00005af8                Accel_Write_Byte
+                0x000064c4                SP_ReadCalibrationByte
+                0x000057ce                f_putc
+                0x0000587c                SD_WriteBuffer
+                0x00007a10                Uploader_sendKey
+                0x00007db8                SD_Open
+                0x0000581a                f_puts
+                0x00006fd2                SD_WriteRTCBlock
+                0x00000534                Time_Set
+                0x000005dc                Time_CheckVBatSystem
+                0x00005f7a                Sensors_ReadTemperature
+                0x00005f9e                Sensors_ReadHumidity
+                0x000072f0                SD_WriteAccelBuffer
+                0x00005cbe                Sensors_ResetAccelBuffers
+                0x00008426                SD_Read_config_file
+                0x0000594a                SD_Write32
+                0x00005862                SD_Close
+                0x00006060                Sensors_ResetHumidityBuffers
+                0x000012ae                disk_timerproc
+                0x00003aba                f_close
+                0x00005ba2                Accel_ReadFromAddress
+                0x00003138                f_read
+                0x00003ff4                f_readdir
+                0x000059fc                SD_Init
                 0x00000424                Debug_SendByte
-                0x00005e10                Sensors_ResetEKGBuffers
-                0x000004ae                Time_Init
-                0x00006c5c                SD_BackroundWriter_Init
-                0x00004722                f_chmod
-                0x0000577e                SD_Write16
-                0x00006ee2                SD_WriteString
-                0x0000566c                SD_Inserted
-                0x000076d8                Uploader_sendAuthType
-                0x0000744e                Debug_SendString
-                0x00000622                Time_UTCSecsToTime
-                0x000074a4                Uploader_connectToComputer
-                0x0000582c                __vector_47
-                0x000058e4                Accel_WriteToAddress
-                0x00001272                get_fattime
-                0x0000599e                Accel_ReadResults
-                0x00000460                Leds_State
-                0x000057a6                SD_ClearCRC
-                0x00008406                main
-                0x00003858                f_sync
-                0x00005a9e                __vector_108
-                0x0000760a                Uploader_sendUser
-                0x00005df8                Sensors_ResetRespirationBuffers
-                0x000026a2                chk_mounted
-                0x00007960                SD_MakeFileName
-                0x00006d0a                getDeviceID
-                0x00004a94                f_mkfs
-                0x00002cc2                f_mount
-                0x00003dbc                f_opendir
+                0x00006048                Sensors_ResetEKGBuffers
+                0x00000512                Time_Init
+                0x00006fb4                SD_BackroundWriter_Init
+                0x000048bc                f_chmod
+                0x0000597e                SD_Write16
+                0x0000723a                SD_WriteString
+                0x0000586c                SD_Inserted
+                0x00007ab6                Uploader_sendAuthType
+                0x000077a6                Debug_SendString
+                0x00000686                Time_UTCSecsToTime
+                0x0000780e                Uploader_connectToComputer
+                0x00005a2c                __vector_47
+                0x00005b1c                Accel_WriteToAddress
+                0x000012d6                get_fattime
+                0x00005bd6                Accel_ReadResults
+                0x000004c4                Leds_State
+                0x000059a6                SD_ClearCRC
+                0x0000885e                main
+                0x000039ac                f_sync
+                0x00005cd6                __vector_108
+                0x000079b8                Uploader_sendUser
+                0x00006030                Sensors_ResetRespirationBuffers
+                0x000027ec                chk_mounted
+                0x00007d8c                SD_MakeFileName
+                0x00007062                getDeviceID
+                0x00004c2e                f_mkfs
+                0x00002e0c                f_mount
+                0x00003f2e                f_opendir
                 0x000002b2                Debug_ClearBuffer
-                0x00001660                put_fat
-                0x00003960                f_lseek
+                0x000017aa                put_fat
+                0x00003ad2                f_lseek
                 0x000003de                Debug_GetByte
-                0x0000587c                Button_Init
-                0x00005794                SD_Write8
-                0x000075c4                Uploader_sendNickname
-                0x0000043c                Leds_Init
-                0x00003f18                f_stat
-                0x00005e40                __vector_83
-                0x0000589a                Button_Pressed
-                0x00001b14                clust2sect
-                0x000047ac                f_utime
-                0x000033d0                f_write
-                0x00002d04                f_open
-                0x00000db4                disk_write
-                0x000005d2                Time_Get32BitTimer
-                0x000070b6                SD_WriteEKGBuffer
-                0x00006278                Uploader_getTime
-                0x000068ee                Charger_Init
-                0x00004430                f_mkdir
-                0x00000cf4                disk_read
-                0x00007b4e                __vector_53
-                0x00005bc2                Sensors_Init
-                0x00003f96                f_getfree
-                0x00000482                Leds_Clear
-                0x000005a8                Time_Get
-                0x0000719c                SD_WriteRespirationBuffer
-                0x00007538                Uploader_sendPort
-                0x00007368                SD_WriteTemperatureBuffer
-                0x000079ea                SD_StartLogFile
- .text          0x0000883c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_mulsi3.o)
- .text          0x0000883c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_divmodhi4.o)
- .text          0x0000883c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_udivmodsi4.o)
- .text          0x0000883c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_exit.o)
- .text          0x0000883c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_clear_bss.o)
- .text          0x0000883c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_udivmodhi4.o)
- .text          0x0000883c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
- .text          0x0000883c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(memmove.o)
- .text          0x0000883c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcasecmp.o)
- .text          0x0000883c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcasestr.o)
- .text          0x0000883c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcat.o)
- .text          0x0000883c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcmp.o)
- .text          0x0000883c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcpy.o)
- .text          0x0000883c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strstr.o)
- .text          0x0000883c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok_r.o)
- .text          0x0000883c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strupr.o)
- .text          0x0000883c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(itoa.o)
- .text          0x0000883c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(ltoa.o)
- .text          0x0000883c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(memcpy.o)
- .text          0x0000883c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strrev.o)
-                0x0000883c                . = ALIGN (0x2)
+                0x00005a7c                Button_Init
+                0x00005994                SD_Write8
+                0x00007960                Uploader_sendNickname
+                0x000004a0                Leds_Init
+                0x0000408a                f_stat
+                0x00006078                __vector_83
+                0x00005ad2                Button_Pressed
+                0x00001c5e                clust2sect
+                0x00004946                f_utime
+                0x00003524                f_write
+                0x00002e4e                f_open
+                0x00000e18                disk_write
+                0x00000636                Time_Get32BitTimer
+                0x0000740e                SD_WriteEKGBuffer
+                0x000064d8                Uploader_getTime
+                0x00006cc8                Charger_Init
+                0x000045a2                f_mkdir
+                0x00000d58                disk_read
+                0x00007f84                __vector_53
+                0x00005dfa                Sensors_Init
+                0x00004108                f_getfree
+                0x000004e6                Leds_Clear
+                0x0000060c                Time_Get
+                0x000074f4                SD_WriteRespirationBuffer
+                0x000078b0                Uploader_sendPort
+                0x000076c0                SD_WriteTemperatureBuffer
+                0x00007e16                SD_StartLogFile
+ .text          0x00008c94        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_mulsi3.o)
+ .text          0x00008c94        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_divmodhi4.o)
+ .text          0x00008c94        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_udivmodsi4.o)
+ .text          0x00008c94        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_exit.o)
+ .text          0x00008c94        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_clear_bss.o)
+ .text          0x00008c94        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_udivmodhi4.o)
+ .text          0x00008c94        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
+ .text          0x00008c94        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(memmove.o)
+ .text          0x00008c94        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcasecmp.o)
+ .text          0x00008c94        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcasestr.o)
+ .text          0x00008c94        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcat.o)
+ .text          0x00008c94        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcmp.o)
+ .text          0x00008c94        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcpy.o)
+ .text          0x00008c94        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strstr.o)
+ .text          0x00008c94        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok_r.o)
+ .text          0x00008c94        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strupr.o)
+ .text          0x00008c94        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(itoa.o)
+ .text          0x00008c94        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(ltoa.o)
+ .text          0x00008c94        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(memcpy.o)
+ .text          0x00008c94        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strrev.o)
+                0x00008c94                . = ALIGN (0x2)
  *(.text.*)
- .text.libgcc   0x0000883c       0x3e /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_mulsi3.o)
-                0x0000883c                __mulsi3
- .text.libgcc   0x0000887a       0x26 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_divmodhi4.o)
-                0x0000887a                __divmodhi4
-                0x0000887a                _div
- .text.libgcc   0x000088a0       0x44 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_udivmodsi4.o)
-                0x000088a0                __udivmodsi4
- .text.libgcc   0x000088e4        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_exit.o)
- .text.libgcc   0x000088e4        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_clear_bss.o)
- .text.libgcc   0x000088e4       0x28 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_udivmodhi4.o)
-                0x000088e4                __udivmodhi4
+ .text.libgcc   0x00008c94       0x3e /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_mulsi3.o)
+                0x00008c94                __mulsi3
+ .text.libgcc   0x00008cd2       0x26 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_divmodhi4.o)
+                0x00008cd2                __divmodhi4
+                0x00008cd2                _div
+ .text.libgcc   0x00008cf8       0x44 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_udivmodsi4.o)
+                0x00008cf8                __udivmodsi4
+ .text.libgcc   0x00008d3c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_exit.o)
+ .text.libgcc   0x00008d3c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_clear_bss.o)
+ .text.libgcc   0x00008d3c       0x28 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_udivmodhi4.o)
+                0x00008d3c                __udivmodhi4
  .text.avr-libc
-                0x0000890c        0xa /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
-                0x0000890c                strtok
+                0x00008d64        0xa /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
+                0x00008d64                strtok
  .text.avr-libc
-                0x00008916       0x24 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(memmove.o)
-                0x00008916                memmove
+                0x00008d6e       0x24 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(memmove.o)
+                0x00008d6e                memmove
  .text.avr-libc
-                0x0000893a       0x26 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcasecmp.o)
-                0x0000893a                strcasecmp
+                0x00008d92       0x26 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcasecmp.o)
+                0x00008d92                strcasecmp
  .text.avr-libc
-                0x00008960       0x4a /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcasestr.o)
-                0x00008960                strcasestr
+                0x00008db8       0x4a /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcasestr.o)
+                0x00008db8                strcasestr
  .text.avr-libc
-                0x000089aa       0x16 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcat.o)
-                0x000089aa                strcat
+                0x00008e02       0x16 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcat.o)
+                0x00008e02                strcat
  .text.avr-libc
-                0x000089c0       0x12 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcmp.o)
-                0x000089c0                strcmp
+                0x00008e18       0x12 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcmp.o)
+                0x00008e18                strcmp
  .text.avr-libc
-                0x000089d2        0xe /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcpy.o)
-                0x000089d2                strcpy
+                0x00008e2a        0xe /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcpy.o)
+                0x00008e2a                strcpy
  .text.avr-libc
-                0x000089e0       0x34 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strstr.o)
-                0x000089e0                strstr
+                0x00008e38       0x34 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strstr.o)
+                0x00008e38                strstr
  .text.avr-libc
-                0x00008a14       0x4e /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok_r.o)
-                0x00008a14                strtok_r
+                0x00008e6c       0x4e /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok_r.o)
+                0x00008e6c                strtok_r
  .text.avr-libc
-                0x00008a62       0x14 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strupr.o)
-                0x00008a62                strupr
+                0x00008eba       0x14 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strupr.o)
+                0x00008eba                strupr
  .text.avr-libc
-                0x00008a76       0x42 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(itoa.o)
-                0x00008a76                itoa
+                0x00008ece       0x42 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(itoa.o)
+                0x00008ece                itoa
  .text.avr-libc
-                0x00008ab8       0x68 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(ltoa.o)
-                0x00008ab8                ltoa
+                0x00008f10       0x68 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(ltoa.o)
+                0x00008f10                ltoa
  .text.avr-libc
-                0x00008b20       0x12 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(memcpy.o)
-                0x00008b20                memcpy
+                0x00008f78       0x12 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(memcpy.o)
+                0x00008f78                memcpy
  .text.avr-libc
-                0x00008b32       0x20 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strrev.o)
-                0x00008b32                strrev
-                0x00008b52                . = ALIGN (0x2)
+                0x00008f8a       0x20 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strrev.o)
+                0x00008f8a                strrev
+                0x00008faa                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00008b52        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_exit.o)
-                0x00008b52                exit
-                0x00008b52                _exit
+ .fini9         0x00008faa        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_exit.o)
+                0x00008faa                exit
+                0x00008faa                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -598,220 +598,223 @@ LOAD /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00008b52        0x4 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_exit.o)
+ .fini0         0x00008faa        0x4 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_exit.o)
  *(.fini0)
-                0x00008b56                _etext = .
+                0x00008fae                _etext = .
 
-.data           0x00802000      0x768 load address 0x00008b56
+.data           0x00802000      0x76a load address 0x00008fae
                 0x00802000                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00802000        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/crtx256a3b.o
- .data          0x00802000      0x768 mainChestStrap.o
-                0x008022c8                Drives
-                0x008022c6                wantToRecordEKG
-                0x008022c5                wantToRecordHumidity
-                0x008022fe                zone
-                0x00802712                accelBufferToWriteTo
-                0x00802718                batteryVoltageOk
-                0x00802714                temperatureBufferToWriteTo
-                0x00802312                crc_table
-                0x008022cc                serverOpenCommand
-                0x00802717                commandCounter
-                0x00802716                humidityBufferToWriteTo
-                0x008022c7                wantToRecordRespiration
-                0x00802713                respirationBufferToWriteTo
-                0x00802308                am
-                0x008022c4                wantToRecordTemperature
-                0x00802715                EKGBufferToWriteTo
-                0x0080230d                pm
- .data          0x00802768        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_mulsi3.o)
- .data          0x00802768        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_divmodhi4.o)
- .data          0x00802768        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_udivmodsi4.o)
- .data          0x00802768        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_exit.o)
- .data          0x00802768        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_clear_bss.o)
- .data          0x00802768        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_udivmodhi4.o)
- .data          0x00802768        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
- .data          0x00802768        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(memmove.o)
- .data          0x00802768        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcasecmp.o)
- .data          0x00802768        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcasestr.o)
- .data          0x00802768        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcat.o)
- .data          0x00802768        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcmp.o)
- .data          0x00802768        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcpy.o)
- .data          0x00802768        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strstr.o)
- .data          0x00802768        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok_r.o)
- .data          0x00802768        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strupr.o)
- .data          0x00802768        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(itoa.o)
- .data          0x00802768        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(ltoa.o)
- .data          0x00802768        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(memcpy.o)
- .data          0x00802768        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strrev.o)
+ .data          0x00802000      0x769 mainChestStrap.o
+                0x008022c9                Drives
+                0x008022c7                wantToRecordEKG
+                0x008022c6                wantToRecordHumidity
+                0x008022ff                zone
+                0x00802713                accelBufferToWriteTo
+                0x00802719                batteryVoltageOk
+                0x00802715                temperatureBufferToWriteTo
+                0x00802313                crc_table
+                0x008022cd                serverOpenCommand
+                0x00802718                commandCounter
+                0x00802717                humidityBufferToWriteTo
+                0x008022c8                wantToRecordRespiration
+                0x00802714                respirationBufferToWriteTo
+                0x00802309                am
+                0x008022c5                wantToRecordTemperature
+                0x00802716                EKGBufferToWriteTo
+                0x0080230e                pm
+ .data          0x00802769        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_mulsi3.o)
+ .data          0x00802769        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_divmodhi4.o)
+ .data          0x00802769        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_udivmodsi4.o)
+ .data          0x00802769        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_exit.o)
+ .data          0x00802769        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_clear_bss.o)
+ .data          0x00802769        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_udivmodhi4.o)
+ .data          0x00802769        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
+ .data          0x00802769        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(memmove.o)
+ .data          0x00802769        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcasecmp.o)
+ .data          0x00802769        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcasestr.o)
+ .data          0x00802769        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcat.o)
+ .data          0x00802769        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcmp.o)
+ .data          0x00802769        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcpy.o)
+ .data          0x00802769        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strstr.o)
+ .data          0x00802769        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok_r.o)
+ .data          0x00802769        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strupr.o)
+ .data          0x00802769        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(itoa.o)
+ .data          0x00802769        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(ltoa.o)
+ .data          0x00802769        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(memcpy.o)
+ .data          0x00802769        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strrev.o)
  *(.data*)
  *(.rodata)
  *(.rodata*)
  *(.gnu.linkonce.d*)
-                0x00802768                . = ALIGN (0x2)
-                0x00802768                _edata = .
-                0x00802768                PROVIDE (__data_end, .)
+                0x0080276a                . = ALIGN (0x2)
+ *fill*         0x00802769        0x1 00
+                0x0080276a                _edata = .
+                0x0080276a                PROVIDE (__data_end, .)
 
-.bss            0x00802768     0x2048
-                0x00802768                PROVIDE (__bss_start, .)
+.bss            0x0080276a     0x24fc
+                0x0080276a                PROVIDE (__bss_start, .)
  *(.bss)
- .bss           0x00802768        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/crtx256a3b.o
- .bss           0x00802768      0x4f4 mainChestStrap.o
-                0x008027ae                okToSendTemperatureBuffer1
-                0x008027ac                respirationBufferCounter
-                0x008027b6                okToSendHumidityBuffer1
-                0x008027e3                timeToStopRecording
-                0x008027a0                timeZoneShift
-                0x008027a3                keyRead
-                0x008027b3                okToSendEKGBuffer2
-                0x008027d9                okToFillUploadFileBuffer
-                0x008027f5                debounceTimer
-                0x008027eb                totalDiskSpace
-                0x00802786                humiditySampleStartTime2
-                0x00802782                humiditySampleStartTime1
-                0x0080276a                temperatureSampleStartTime1
-                0x008027a7                okToSendAccelBuffer2
-                0x00802792                timeRecordingStarted
-                0x008027cd                leftOverBytesToUpload
-                0x008027f6                debounceEnabled
-                0x008027c9                numberOfPacketsToUpload
-                0x0080279a                Debug_writeLocation
-                0x008027d2                uploading
-                0x008027ef                percentDiskUsed
-                0x008027a2                phraseRead
-                0x008027b8                humidityBufferCounter
-                0x008027af                okToSendTemperatureBuffer2
-                0x008027b0                temperatureBufferCounter
-                0x008027d7                okToOpenFileToUpload
-                0x008027d4                okToGrabNextFileName
-                0x0080278e                accelSampleStartTime2
-                0x008027f3                syncCounter
-                0x008027c8                uploadPercentBS
-                0x008027e7                spaceRemainingOnDisk
-                0x008027ba                okToSendRTCBlock
-                0x008027a1                authRead
-                0x008027d1                connected
-                0x008027d8                uploadFileOpened
-                0x00802796                demoMode
-                0x008027b2                okToSendEKGBuffer1
-                0x0080279c                UNIX_Time
-                0x008027db                okToCloseUploadFile
-                0x00802776                respirationSampleStartTime2
-                0x008027dc                okToEraseFile
-                0x00802772                respirationSampleStartTime1
-                0x008027a6                okToSendAccelBuffer1
-                0x00802798                Debug_readLocation
-                0x008027d5                okToUpload
-                0x008027d6                doneUploading
-                0x008027c4                uploadFileSize
-                0x008027aa                okToSendRespirationBuffer1
-                0x008027da                uploadFileBufferFull
-                0x00802769                recording
-                0x008027dd                fileExists
-                0x008027a8                accelBufferCounter
-                0x008027de                timeIsValid
-                0x008027d3                okToOpenDirectory
-                0x008027df                okToOpenLogFile
-                0x008027e1                okToCloseLogFile
-                0x008027be                tempTime
-                0x008027bc                HZ_RefeshCounter
-                0x008027c2                timeOutCounter
-                0x008027b4                EKGBufferCounter
-                0x00802797                useWifiForUploading
-                0x008027bb                rtcBlockCounter
-                0x0080277e                EKGSampleStartTime2
-                0x008027a4                ssidRead
-                0x008027b7                okToSendHumidityBuffer2
-                0x0080278a                accelSampleStartTime1
-                0x008027e2                restartingFile
-                0x008027ab                okToSendRespirationBuffer2
-                0x008027e0                okToWriteToLogFile
-                0x008027a5                zoneChanged
-                0x0080276e                temperatureSampleStartTime2
-                0x0080277a                EKGSampleStartTime1
-                0x00802768                wantToRecordFast
- .bss           0x00802c5c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_mulsi3.o)
- .bss           0x00802c5c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_divmodhi4.o)
- .bss           0x00802c5c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_udivmodsi4.o)
- .bss           0x00802c5c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_exit.o)
- .bss           0x00802c5c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_clear_bss.o)
- .bss           0x00802c5c        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_udivmodhi4.o)
- .bss           0x00802c5c        0x2 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
- .bss           0x00802c5e        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(memmove.o)
- .bss           0x00802c5e        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcasecmp.o)
- .bss           0x00802c5e        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcasestr.o)
- .bss           0x00802c5e        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcat.o)
- .bss           0x00802c5e        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcmp.o)
- .bss           0x00802c5e        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcpy.o)
- .bss           0x00802c5e        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strstr.o)
- .bss           0x00802c5e        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok_r.o)
- .bss           0x00802c5e        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strupr.o)
- .bss           0x00802c5e        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(itoa.o)
- .bss           0x00802c5e        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(ltoa.o)
- .bss           0x00802c5e        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(memcpy.o)
- .bss           0x00802c5e        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strrev.o)
+ .bss           0x0080276a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/crtx256a3b.o
+ .bss           0x0080276a      0x4f8 mainChestStrap.o
+                0x008027b4                okToSendTemperatureBuffer1
+                0x008027b2                respirationBufferCounter
+                0x008027bc                okToSendHumidityBuffer1
+                0x008027a6                timeZoneShift
+                0x008027a9                keyRead
+                0x008027b9                okToSendEKGBuffer2
+                0x008027c4                ekgCounter
+                0x008027e1                okToFillUploadFileBuffer
+                0x008027fb                debounceTimer
+                0x008027f1                totalDiskSpace
+                0x00802788                humiditySampleStartTime2
+                0x00802784                humiditySampleStartTime1
+                0x0080276c                temperatureSampleStartTime1
+                0x008027ad                okToSendAccelBuffer2
+                0x00802794                timeRecordingStarted
+                0x008027d5                leftOverBytesToUpload
+                0x008027fc                debounceEnabled
+                0x008027d1                numberOfPacketsToUpload
+                0x0080279c                Debug_writeLocation
+                0x008027da                uploading
+                0x008027f5                percentDiskUsed
+                0x008027a8                phraseRead
+                0x008027be                humidityBufferCounter
+                0x008027b5                okToSendTemperatureBuffer2
+                0x008027b6                temperatureBufferCounter
+                0x008027df                okToOpenFileToUpload
+                0x008027dc                okToGrabNextFileName
+                0x00802790                accelSampleStartTime2
+                0x008027f9                syncCounter
+                0x008027d0                uploadPercentBS
+                0x008027ed                spaceRemainingOnDisk
+                0x008027c0                okToSendRTCBlock
+                0x008027a7                authRead
+                0x008027d9                connected
+                0x008027e0                uploadFileOpened
+                0x00802798                demoMode
+                0x008027b8                okToSendEKGBuffer1
+                0x008027a2                UNIX_Time
+                0x008027e3                okToCloseUploadFile
+                0x00802778                respirationSampleStartTime2
+                0x008027e4                okToEraseFile
+                0x00802774                respirationSampleStartTime1
+                0x008027ac                okToSendAccelBuffer1
+                0x0080279a                Debug_readLocation
+                0x008027dd                okToUpload
+                0x008027de                doneUploading
+                0x008027cc                uploadFileSize
+                0x008027b0                okToSendRespirationBuffer1
+                0x008027e2                uploadFileBufferFull
+                0x0080276b                recording
+                0x008027e5                fileExists
+                0x008027ae                accelBufferCounter
+                0x008027e6                timeIsValid
+                0x008027db                okToOpenDirectory
+                0x008027e7                okToOpenLogFile
+                0x008027eb                lengthOfCurrentFile
+                0x008027e9                okToCloseLogFile
+                0x008027c6                tempTime
+                0x008027c2                HZ_RefeshCounter
+                0x008027ca                timeOutCounter
+                0x008027ba                EKGBufferCounter
+                0x0080279e                Debug_timeOutCounter
+                0x00802799                useWifiForUploading
+                0x008027c1                rtcBlockCounter
+                0x00802780                EKGSampleStartTime2
+                0x008027aa                ssidRead
+                0x008027bd                okToSendHumidityBuffer2
+                0x0080278c                accelSampleStartTime1
+                0x008027ea                restartingFile
+                0x008027b1                okToSendRespirationBuffer2
+                0x008027e8                okToWriteToLogFile
+                0x008027ab                zoneChanged
+                0x00802770                temperatureSampleStartTime2
+                0x0080277c                EKGSampleStartTime1
+                0x0080276a                wantToRecordFast
+ .bss           0x00802c62        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_mulsi3.o)
+ .bss           0x00802c62        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_divmodhi4.o)
+ .bss           0x00802c62        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_udivmodsi4.o)
+ .bss           0x00802c62        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_exit.o)
+ .bss           0x00802c62        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_clear_bss.o)
+ .bss           0x00802c62        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_udivmodhi4.o)
+ .bss           0x00802c62        0x2 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
+ .bss           0x00802c64        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(memmove.o)
+ .bss           0x00802c64        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcasecmp.o)
+ .bss           0x00802c64        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcasestr.o)
+ .bss           0x00802c64        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcat.o)
+ .bss           0x00802c64        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcmp.o)
+ .bss           0x00802c64        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcpy.o)
+ .bss           0x00802c64        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strstr.o)
+ .bss           0x00802c64        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok_r.o)
+ .bss           0x00802c64        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strupr.o)
+ .bss           0x00802c64        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(itoa.o)
+ .bss           0x00802c64        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(ltoa.o)
+ .bss           0x00802c64        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(memcpy.o)
+ .bss           0x00802c64        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strrev.o)
  *(.bss*)
  *(COMMON)
- COMMON         0x00802c5e     0x1b52 mainChestStrap.o
-                0x00802c5e                ssid
-                0x00802c90                zeroOffsetB
-                0x00802c92                uploadFileBuffer
-                0x0080307a                fileToUpload
-                0x00803089                respirationBuffer1
-                0x00803219                currentLogFile
-                0x00803228                EKGBuffer2
-                0x008033b8                fno
-                0x008033ce                fs
-                0x008033d0                fileName
-                0x008033e4                auth
-                0x00803416                tmp32
-                0x0080341a                command
-                0x0080344c                temperatureBuffer1
-                0x00803460                temp
-                0x00803492                user
-                0x0080349c                accelBuffer2
-                0x0080394c                ledState
-                0x0080394e                demoModeString
-                0x00803958                server
-                0x0080398a                deviceID
-                0x008039bc                temperatureBuffer2
-                0x008039d0                fno2
-                0x008039e6                daylightTime
-                0x008039f0                uploadCRC
-                0x008039f4                humidityBuffer1
-                0x00803a08                tmp8
-                0x00803a09                okToGetRemainingSpace
-                0x00803a0a                eraseFileReturn
-                0x00803a0b                ledCounter
-                0x00803a0d                phrase
-                0x00803a3f                DebugBuffer
-                0x00803aa3                time
-                0x00803aab                key
-                0x00803add                Log_File
-                0x00803cfd                dir
-                0x00803d13                Upload_File
-                0x00803f33                fileToErase
-                0x00803f47                humidityBuffer2
-                0x00803f5b                zeroOffsetA
-                0x00803f5d                accelBuffer1
-                0x0080440d                EKGBuffer1
-                0x0080459d                CRC
-                0x008045a1                availableFileName
-                0x008045b0                port
-                0x008045e2                nickname
-                0x00804614                fastString
-                0x0080461e                tmp16
-                0x00804620                respirationBuffer2
-                0x008047b0                PROVIDE (__bss_end, .)
-                0x00008b56                __data_load_start = LOADADDR (.data)
-                0x000092be                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x00802c64     0x2002 mainChestStrap.o
+                0x00802c64                ssid
+                0x00802c96                zeroOffsetB
+                0x00802c98                uploadFileBuffer
+                0x00803080                fileToUpload
+                0x0080308f                respirationBuffer1
+                0x008032e7                currentLogFile
+                0x008032f6                EKGBuffer2
+                0x008033be                fno
+                0x008033d4                fs
+                0x008033d6                fileName
+                0x008033ea                auth
+                0x0080341c                tmp32
+                0x00803420                command
+                0x00803452                temperatureBuffer1
+                0x0080345c                temp
+                0x0080348e                user
+                0x00803498                accelBuffer2
+                0x00803ba0                ledState
+                0x00803ba2                demoModeString
+                0x00803bac                server
+                0x00803bde                deviceID
+                0x00803c10                temperatureBuffer2
+                0x00803c1a                fno2
+                0x00803c30                daylightTime
+                0x00803c3a                uploadCRC
+                0x00803c3e                humidityBuffer1
+                0x00803c5c                tmp8
+                0x00803c5d                okToGetRemainingSpace
+                0x00803c5e                eraseFileReturn
+                0x00803c5f                ledCounter
+                0x00803c61                phrase
+                0x00803c93                DebugBuffer
+                0x00803cf7                time
+                0x00803cff                key
+                0x00803d31                Log_File
+                0x00803f51                dir
+                0x00803f67                Upload_File
+                0x00804187                fileToErase
+                0x0080419b                humidityBuffer2
+                0x008041b9                zeroOffsetA
+                0x008041bb                accelBuffer1
+                0x008048c3                EKGBuffer1
+                0x0080498b                CRC
+                0x0080498f                availableFileName
+                0x0080499e                port
+                0x008049d0                nickname
+                0x00804a02                fastString
+                0x00804a0c                tmp16
+                0x00804a0e                respirationBuffer2
+                0x00804c66                PROVIDE (__bss_end, .)
+                0x00008fae                __data_load_start = LOADADDR (.data)
+                0x00009718                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x008047b0        0x0
-                0x008047b0                PROVIDE (__noinit_start, .)
+.noinit         0x00804c66        0x0
+                0x00804c66                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x008047b0                PROVIDE (__noinit_end, .)
-                0x008047b0                _end = .
-                0x008047b0                PROVIDE (__heap_start, .)
+                0x00804c66                PROVIDE (__noinit_end, .)
+                0x00804c66                _end = .
+                0x00804c66                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -898,54 +901,54 @@ LOAD /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a
                 0x00000020       0x20 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
 
 .debug_pubnames
-                0x00000000     0x1368
+                0x00000000     0x13a1
  *(.debug_pubnames)
  .debug_pubnames
-                0x00000000     0x134b mainChestStrap.o
+                0x00000000     0x1384 mainChestStrap.o
  .debug_pubnames
-                0x0000134b       0x1d /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
+                0x00001384       0x1d /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
 
-.debug_info     0x00000000     0x7696
+.debug_info     0x00000000     0x77ff
  *(.debug_info)
- .debug_info    0x00000000     0x7605 mainChestStrap.o
- .debug_info    0x00007605       0x91 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
+ .debug_info    0x00000000     0x776e mainChestStrap.o
+ .debug_info    0x0000776e       0x91 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev   0x00000000      0x6ca
+.debug_abbrev   0x00000000      0x6ce
  *(.debug_abbrev)
- .debug_abbrev  0x00000000      0x653 mainChestStrap.o
- .debug_abbrev  0x00000653       0x77 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
+ .debug_abbrev  0x00000000      0x657 mainChestStrap.o
+ .debug_abbrev  0x00000657       0x77 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
 
-.debug_line     0x00000000     0x58fa
+.debug_line     0x00000000     0x5a96
  *(.debug_line)
- .debug_line    0x00000000     0x5879 mainChestStrap.o
- .debug_line    0x00005879       0x81 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
+ .debug_line    0x00000000     0x5a15 mainChestStrap.o
+ .debug_line    0x00005a15       0x81 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
 
-.debug_frame    0x00000000      0x8e0
+.debug_frame    0x00000000      0x8f0
  *(.debug_frame)
- .debug_frame   0x00000000      0x8c0 mainChestStrap.o
- .debug_frame   0x000008c0       0x20 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
+ .debug_frame   0x00000000      0x8d0 mainChestStrap.o
+ .debug_frame   0x000008d0       0x20 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
 
-.debug_str      0x00000000     0x41a4
+.debug_str      0x00000000     0x41f6
  *(.debug_str)
- .debug_str     0x00000000     0x4112 mainChestStrap.o
-                               0x420d (size before relaxing)
- .debug_str     0x00004112       0x92 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
+ .debug_str     0x00000000     0x4164 mainChestStrap.o
+                               0x426e (size before relaxing)
+ .debug_str     0x00004164       0x92 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
                                  0xb0 (size before relaxing)
 
-.debug_loc      0x00000000     0x57e7
+.debug_loc      0x00000000     0x589d
  *(.debug_loc)
- .debug_loc     0x00000000     0x57b7 mainChestStrap.o
- .debug_loc     0x000057b7       0x30 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
+ .debug_loc     0x00000000     0x586d mainChestStrap.o
+ .debug_loc     0x0000586d       0x30 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
 
 .debug_macinfo
  *(.debug_macinfo)
 OUTPUT(mainChestStrap.elf elf32-avr)
 LOAD linker stubs
 
-.debug_ranges   0x00000000      0x2d0
- .debug_ranges  0x00000000      0x2b8 mainChestStrap.o
- .debug_ranges  0x000002b8       0x18 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
+.debug_ranges   0x00000000      0x2e8
+ .debug_ranges  0x00000000      0x2d0 mainChestStrap.o
+ .debug_ranges  0x000002d0       0x18 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
 
 Cross Reference Table
 
@@ -971,6 +974,7 @@ Debug_Init                                        mainChestStrap.o
 Debug_SendByte                                    mainChestStrap.o
 Debug_SendString                                  mainChestStrap.o
 Debug_readLocation                                mainChestStrap.o
+Debug_timeOutCounter                              mainChestStrap.o
 Debug_writeLocation                               mainChestStrap.o
 Disable_JTAG                                      mainChestStrap.o
 Drives                                            mainChestStrap.o
@@ -1076,7 +1080,8 @@ __vector_100                                      /usr/local/CrossPack-AVR-20100
 __vector_101                                      /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/crtx256a3b.o
 __vector_102                                      /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/crtx256a3b.o
 __vector_103                                      /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/crtx256a3b.o
-__vector_104                                      /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/crtx256a3b.o
+__vector_104                                      mainChestStrap.o
+                                                  /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/crtx256a3b.o
 __vector_105                                      /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/crtx256a3b.o
 __vector_106                                      /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/crtx256a3b.o
 __vector_107                                      /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/crtx256a3b.o
@@ -1232,6 +1237,7 @@ disk_status                                       mainChestStrap.o
 disk_timerproc                                    mainChestStrap.o
 disk_write                                        mainChestStrap.o
 doneUploading                                     mainChestStrap.o
+ekgCounter                                        mainChestStrap.o
 eraseFileReturn                                   mainChestStrap.o
 exit                                              /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_exit.o)
                                                   /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/crtx256a3b.o
@@ -1281,6 +1287,7 @@ keyRead                                           mainChestStrap.o
 ledCounter                                        mainChestStrap.o
 ledState                                          mainChestStrap.o
 leftOverBytesToUpload                             mainChestStrap.o
+lengthOfCurrentFile                               mainChestStrap.o
 ltoa                                              /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(ltoa.o)
                                                   mainChestStrap.o
 main                                              mainChestStrap.o
@@ -1367,7 +1374,6 @@ time                                              mainChestStrap.o
 timeIsValid                                       mainChestStrap.o
 timeOutCounter                                    mainChestStrap.o
 timeRecordingStarted                              mainChestStrap.o
-timeToStopRecording                               mainChestStrap.o
 timeZoneShift                                     mainChestStrap.o
 tmp16                                             mainChestStrap.o
 tmp32                                             mainChestStrap.o

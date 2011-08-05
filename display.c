@@ -29,6 +29,8 @@
 #define DISPLAY_COLS		102
 #define DISPLAY_PAGES		(DISPLAY_ROWS/8)
 
+volatile bool backLightIsOn = false;
+
 void display_init() {
 	//Set SS to wired and pull up
 	Display_Port.Display_SS_CTRL = PORT_OPC_WIREDANDPULL_gc;
@@ -109,14 +111,20 @@ void display_showSplashScreen(bool showsd, bool showconnected, bool demo){
 void display_setBacklight(bool state){
 	if(state){
 		Backlight_Port.OUTSET = 1 << Backlight_Pin;
+		backLightIsOn = true;
 	} else {
 		Backlight_Port.OUTCLR = 1 << Backlight_Pin;
+		backLightIsOn = false;
 	}
 }
 
 void display_toggleBacklight(void){
 	Backlight_Port.OUTTGL = 1 << Backlight_Pin;
-	
+	if(backLightIsOn){
+		backLightIsOn = false;
+	} else {
+		backLightIsOn = true;
+	}
 }
 
 void display_sendCommand(uint8_t dataByte) {

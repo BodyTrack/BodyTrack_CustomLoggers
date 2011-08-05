@@ -122,27 +122,27 @@ void Sensors_Init(void){
 	// general sensors @ 1hz
 	// fclk = 14745600
 	// div  = 1024
-	// per  = 15625
+	// per  = 14400 (remember to subtract 1)
 	// => 14745600/14400/1024 => 1 samples per second
 	
 	// Set period/TOP value
-	Sensors_Timer_1HZ.PER = 14400;
+	Sensors_Timer_1HZ.PER = 14399;
 
 	// Select clock source
 	Sensors_Timer_1HZ.CTRLA = (Sensors_Timer_1HZ.CTRLA & ~TC0_CLKSEL_gm) | TC_CLKSEL_DIV1024_gc;
 	
 	// Enable CCA interrupt
-	Sensors_Timer_1HZ.INTCTRLA = (Sensors_Timer_1HZ.INTCTRLA & ~TC0_OVFINTLVL_gm) | TC_CCAINTLVL_HI_gc;
+	Sensors_Timer_1HZ.INTCTRLA = (Sensors_Timer_1HZ.INTCTRLA & ~TC0_OVFINTLVL_gm) | TC_CCAINTLVL_MED_gc;
 	
-	// microphone @ 8khz
+	// microphone @ 7.2khz
 	// fclk = 14745600
 	// div  = 8
-	// per  = 256
-	// => 14745600/8/256 => 8000 samples per second
+	// per  = 256 (remember to subtract 1)
+	// => 14745600/8/256 => 7200 samples per second
 
 	// Set period/TOP value
 
-	Sensors_Timer_7200HZ.PER = 256; 				// 7.2khz
+	Sensors_Timer_7200HZ.PER = 255; 				// 7.2khz
 
 	// Select clock source
 	Sensors_Timer_7200HZ.CTRLA = (Sensors_Timer_7200HZ.CTRLA & ~TC0_CLKSEL_gm) | TC_CLKSEL_DIV8_gc;

@@ -619,6 +619,17 @@ void disk_timerproc (void)
 
 DWORD get_fattime (void)
 {
-	return 0;
+	uint32_t temp;
+	time_t tempT;
+	
+	Time_UTCSecsToTime((UNIX_Time-14400),&tempT);
+		
+	temp =  ((uint32_t)(tempT.Year - 10) << 25); //set year (since 1980)
+	temp |= ((uint32_t)tempT.Month       << 21); 
+	temp |= ((uint32_t)tempT.Day         << 16);
+	temp |= ((uint32_t)tempT.Hour        << 11);
+	temp |= ((uint32_t)tempT.Minute      <<  5);
+	temp |= ((uint32_t)tempT.Second / 2); //seconds/2, ie 0..29 is the range
+	return (temp);
 }
 

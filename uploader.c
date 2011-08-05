@@ -60,17 +60,29 @@ bool Uploader_Update(void){
 				return false;
 			}
 		} else if(command[0] == 'S'){                          // request SSID
-			Uploader_sendSSID();
+			if(!Uploader_sendSSID()){
+				return false;
+			}
 		} else if(command[0] == 'A'){                          // request authorization type
-			Uploader_sendAuthType();
+			if(!Uploader_sendAuthType()){
+				return false;
+			}
 		} else if(command[0] == 'K'){                          // request authorisation key
-			Uploader_sendKey();
+			if(!Uploader_sendKey()){
+				return false;
+			}
 		} else if(command[0] == 'U'){                          // request user
-			Uploader_sendUser();
+			if(!Uploader_sendUser()){
+				return false;
+			}
 		} else if(command[0] == 'N'){                           // request nickname
-			Uploader_sendNickname();
+			if(!Uploader_sendNickname()){
+				return false;
+			}
 		} else if(command[0] == 'F'){                           // request filename
-			Uploader_sendFilename();
+			if(!Uploader_sendFilename()){
+				return false;
+			}
 		} else if(command[0] == 'D'){                           // request data from file
 			if(!Uploader_uploadFile()){
 				return false;
@@ -80,9 +92,13 @@ bool Uploader_Update(void){
 				return false;
 			}
 		} else if(command[0] == 'V'){                   // request server for post
-			Uploader_sendServer();
+			if(!Uploader_sendServer()){
+				return false;
+			}
 		} else if(command[0] == 'O'){                   // request port for post
-			Uploader_sendPort();
+			if(!Uploader_sendPort()){
+				return false;
+			}
 		}  else if(command[0] == 'R'){                   // reset
 			_delay_ms(5);
 			Debug_SendByte('R');
@@ -97,7 +113,7 @@ bool Uploader_Update(void){
 	return true;
 }
 
-void Uploader_connectToComputer(void){
+bool Uploader_connectToComputer(void){
 	uint16_t singCounter;
 	uint8_t  char1;
 	uint8_t  char2;
@@ -105,7 +121,9 @@ void Uploader_connectToComputer(void){
 	connected = false;
 	Debug_ClearBuffer();
 	while(!connected){
-		Debug_SendString("BS",false);
+		if(!Debug_SendString("BS",false)){
+			return false;
+		}
 		singCounter = 750;
 		while(singCounter > 0){
 			if(Debug_CharReadyToRead()){
@@ -114,8 +132,11 @@ void Uploader_connectToComputer(void){
 					_delay_ms(5);
 					char2 = Debug_GetByte(false);
 					if(char2 == 'T'){
+						if(!Debug_SendString("BT",false)){
+							return false;
+						}
+						
 						connected = true;
-						Debug_SendString("BT",false);
 						timeOutCounter = 0;
 						Debug_ClearBuffer();
 						break;
@@ -126,17 +147,22 @@ void Uploader_connectToComputer(void){
 			singCounter--;
 		}
 	}
+	return true;
 }
 
 bool Uploader_getTime(void){
     uint32_t tempTime = 0;
     uint8_t timeOutCounter = 0;
     uint8_t commandCounter = 0;
-    Debug_SendByte('T');
+    if(!Debug_SendByte('T')){
+		return false;
+	}
     while(true){
         if(Debug_CharReadyToRead()){
             command[commandCounter+1] = Debug_GetByte(false);
-            Debug_SendByte(command[commandCounter+1]);
+			if(!Debug_SendByte(command[commandCounter+1])){
+				return false;
+			}
             commandCounter++;
             if(commandCounter == 4){
                 tempTime = command[1];
@@ -157,81 +183,143 @@ bool Uploader_getTime(void){
             return false;
         }
     }
+	return true;
 }
 
 
-void Uploader_sendSSID(void){
+bool Uploader_sendSSID(void){
 	if(ssidRead){
 		if(ssid[strlen(ssid)-1] < 32){
 			ssid[strlen(ssid)-1] = 0;
 		}
-		Debug_SendByte('S');
-		Debug_SendByte(strlen(ssid)+2);
-		Debug_SendString(ssid,true);
+		if(!Debug_SendByte('S')){
+			return false;
+		}
+		if(!Debug_SendByte(strlen(ssid)+2)){
+			return false;
+		}
+		if(!Debug_SendString(ssid,true)){
+			return false;
+		}
 	} else {
-		Debug_SendByte('S');
-		Debug_SendByte(0);
-		Debug_SendString("",true);
+		if(!Debug_SendByte('S')){
+			return false;
+		}
+		if(!Debug_SendByte(0)){
+			return false;
+		}
+		if(!Debug_SendString("",true)){
+			return false;
+		}
 	}
+	return true;
 }
 
-void Uploader_sendAuthType(void){
+bool Uploader_sendAuthType(void){
 	if(authRead){
 		if(auth[strlen(auth)-1] < 32){
 			auth[strlen(auth)-1] = 0;
 		}
-		Debug_SendByte('A');
-		Debug_SendByte(strlen(auth)+2);
-		Debug_SendString(auth,true);
+		if(!Debug_SendByte('A')){
+			return false;
+		}		
+		if(!Debug_SendByte(strlen(auth)+2)){
+			return false;
+		}		
+		if(!Debug_SendString(auth,true)){
+			return false;
+		}
 	} else {
-		Debug_SendByte('A');
-		Debug_SendByte(0);
-		Debug_SendString("",true);
+		if(!Debug_SendByte('A')){
+			return false;
+		}		
+		if(!Debug_SendByte(0)){
+			return false;
+		}		
+		if(!Debug_SendString("",true)){
+			return false;
+		}
 	}
+	return true;
 }
 
-void Uploader_sendKey(void){
+bool Uploader_sendKey(void){
 	if(phraseRead){
 		if(phrase[strlen(phrase)-1] < 32){
 			phrase[strlen(phrase)-1] = 0;
 		}
-		Debug_SendByte('K');
-		Debug_SendByte(strlen(phrase)+2);
-		Debug_SendString(phrase,true);
+		if(!Debug_SendByte('K')){
+			return false;
+		}		
+		if(!Debug_SendByte(strlen(phrase)+2)){
+			return false;
+		}		
+		if(!Debug_SendString(phrase,true)){
+			return false;
+		}
 	} else if(keyRead){
 		if(key[strlen(key)-1] < 32){
 			key[strlen(key)-1] = 0;
 		}
-		Debug_SendByte('K');
-		Debug_SendByte(strlen(key)+2);
-		Debug_SendString(key,true);
+		if(!Debug_SendByte('K')){
+			return false;
+		}		
+		if(!Debug_SendByte(strlen(key)+2)){
+			return false;
+		}		
+		if(!Debug_SendString(key,true)){
+			return false;
+		}
 	} else {
-		Debug_SendByte('K');
-		Debug_SendByte(0);
-		Debug_SendString("",true);
+		if(!Debug_SendByte('K')){
+			return false;
+		}		
+		if(!Debug_SendByte(0)){
+			return false;
+		}		
+		if(!Debug_SendString("",true)){
+			return false;
+		}
 	}
+	return true;
 }
 
-void Uploader_sendUser(void){
-	Debug_SendByte('U');
+bool Uploader_sendUser(void){
+	if(!Debug_SendByte('U')){
+		return false;
+	}
 	if(user[strlen(user)-1] < 32){
         user[strlen(user)-1] = 0;
     }
-	Debug_SendByte(strlen(user)+2);
-	Debug_SendString(user,true);
+	if(!Debug_SendByte(strlen(user)+2)){
+		return false;
+	}
+	if(!Debug_SendString(user,true)){
+		return false;
+	}
+	return true;
 }
 
-void Uploader_sendNickname(void){
-	Debug_SendByte('N');
+bool Uploader_sendNickname(void){
+	if(!Debug_SendByte('N')){
+		return false;
+	}
 	if(nickname[strlen(nickname)-1] < 32){
 		nickname[strlen(nickname)-1] = 0;
     }
-	Debug_SendByte(strlen(nickname)+2);
-	Debug_SendString(nickname,true);
+	if(!Debug_SendByte(strlen(nickname)+2)){
+		return false;
+	}
+	if(!Debug_SendString(nickname,true)){
+		return false;
+	}
+	return true;
 }
 
-void Uploader_sendFilename(void){
-    Debug_SendByte('F');
+bool Uploader_sendFilename(void){
+    if(!Debug_SendByte('F')){
+		return false;
+	}
     okToOpenDirectory = true;
     while(okToOpenDirectory);
 	
@@ -239,16 +327,22 @@ void Uploader_sendFilename(void){
         okToGrabNextFileName = true;
         while(okToGrabNextFileName);
         if(availableFileName[0] == 0){
-            Debug_SendString("",true);
-            return;
+            if(!Debug_SendString("",true)){
+				return false;
+			}
+            return true;
         } else {
             if(recording){
 				if((strcasecmp(currentLogFile,fno.fname)) != 0){		// file is NOT the current file
 			    	if(strcasestr(fno.fname,".BT") != NULL){						// file has .bt extension
 				    	if(strcasestr(fno.fname,".BTU") == NULL){
 						    strcpy(availableFileName,fno.fname);
-						    Debug_SendString(availableFileName,false);
-						    Debug_SendByte(',');
+						    if(!Debug_SendString(availableFileName,false)){
+								return false;
+							}
+						    if(!Debug_SendByte(',')){
+								return false;
+							}
 						}
 					}
 				}
@@ -256,8 +350,12 @@ void Uploader_sendFilename(void){
 				if(strcasestr(fno.fname,".BT") != NULL){						// file has .bt extension
 					if(strcasestr(fno.fname,".BTU") == NULL){
 						strcpy(availableFileName,fno.fname);
-						Debug_SendString(availableFileName,false);
-						Debug_SendByte(',');
+						if(!Debug_SendString(availableFileName,false)){
+							return false;
+						}
+						if(!Debug_SendByte(',')){
+							return false;
+						}
 					}
 				}
 			}
@@ -279,17 +377,23 @@ bool Uploader_uploadFile(void){
     uploading = true;
     _delay_ms(100);
 	
-    Debug_SendByte('D');
+    if(!Debug_SendByte('D')){
+		return false;
+	}
 	
     while(!gotFileName){
         if(Debug_CharReadyToRead()){
             if(commandCounter == 0){
                 numBytesToRead = Debug_GetByte(false);
-                Debug_SendByte(numBytesToRead);
+                if(!Debug_SendByte(numBytesToRead)){
+					return false;
+				}
                 commandCounter++;
             } else {
                 fileToUpload[commandCounter-1] = Debug_GetByte(false);
-                Debug_SendByte(fileToUpload[commandCounter-1]);
+                if(!Debug_SendByte(fileToUpload[commandCounter-1])){
+					return false;
+				}
                 commandCounter++;
                 if(commandCounter == (numBytesToRead+1)){
                     fileToUpload[numBytesToRead+1] = 0;
@@ -309,10 +413,18 @@ bool Uploader_uploadFile(void){
 	_delay_ms(1000);
 	
 	if(!fileExists){
-        Debug_SendByte(0);
-        Debug_SendByte(0);
-        Debug_SendByte(0);
-        Debug_SendByte(0);
+        if(!Debug_SendByte(0)){
+			return false;
+		}
+        if(!Debug_SendByte(0)){
+			return false;
+		}
+        if(!Debug_SendByte(0)){
+			return false;
+		}
+        if(!Debug_SendByte(0)){
+			return false;
+		}
         okToCloseUploadFile = true;
         while(okToCloseUploadFile);
         uploading = false;
@@ -322,10 +434,18 @@ bool Uploader_uploadFile(void){
 	
     Uploader_ClearCRC();
     responseLength = uploadFileSize + 4;
-    Debug_SendByte((responseLength >> 24) & 0xFF);
-    Debug_SendByte((responseLength >> 16) & 0xFF);
-    Debug_SendByte((responseLength >>  8) & 0xFF);
-    Debug_SendByte((responseLength >>  0) & 0xFF);
+	if(!Debug_SendByte((responseLength >> 24) & 0xFF)){
+	   return false;
+	}
+	if(!Debug_SendByte((responseLength >> 16) & 0xFF)){
+		return false;
+	}
+	if(!Debug_SendByte((responseLength >>  8) & 0xFF)){
+		return false;
+	}
+	if(!Debug_SendByte((responseLength >>  0) & 0xFF)){
+	   return false;
+	}
 	
     numberOfPacketsToUpload = uploadFileSize /  1000;
     leftOverBytesToUpload   = uploadFileSize %  1000;
@@ -337,7 +457,9 @@ bool Uploader_uploadFile(void){
         uploadPercentBS = (z*100)/numberOfPacketsToUpload;
         while(!uploadFileBufferFull);
 		for(uint16_t j = 0; j <  uploadChunkSize; j++){
-			Debug_SendByte(uploadFileBuffer[j]);
+			if(!Debug_SendByte(uploadFileBuffer[j])){
+				return false;
+			}
 			Uploader_UpdateCRC(uploadFileBuffer[j]);
 			
 			
@@ -347,7 +469,9 @@ bool Uploader_uploadFile(void){
     okToFillUploadFileBuffer = true;
     while(!uploadFileBufferFull);
     for(uint16_t j = 0; j < leftOverBytesToUpload; j++){
-        Debug_SendByte(uploadFileBuffer[j]);
+        if(!Debug_SendByte(uploadFileBuffer[j])){
+			return false;
+		}
         Uploader_UpdateCRC(uploadFileBuffer[j]);
     }
 	
@@ -365,26 +489,36 @@ bool Uploader_eraseFile(void){
     uint8_t timeOutCounter = 0;
     uint8_t commandCounter = 0;
     uint8_t numBytesToRead = 0;
-    Debug_SendByte('E');
+    if(!Debug_SendByte('E')){
+		return false;
+	}
     while(true){
         if(Debug_CharReadyToRead()){
             if(commandCounter == 0){
                 numBytesToRead = Debug_GetByte(false);
-                Debug_SendByte(numBytesToRead);
+                if(!Debug_SendByte(numBytesToRead)){
+					return false;
+				}
                 commandCounter++;
             } else {
                 fileToErase[commandCounter-1] = Debug_GetByte(false);
-                Debug_SendByte(fileToErase[commandCounter-1]);
+                if(!Debug_SendByte(fileToErase[commandCounter-1])){
+					return false;
+				}
                 commandCounter++;
                 if(commandCounter == (numBytesToRead+1)){
                     fileToErase[numBytesToRead+1] = 0;
                     okToEraseFile = true;
                     while(okToEraseFile);
                     if(eraseFileReturn == FR_OK){
-                        Debug_SendByte('T');
+                        if(!Debug_SendByte('T')){
+							return false;
+						}
                         return true;
                     } else {
-                        Debug_SendByte('F');
+                        if(!Debug_SendByte('F')){
+							return false;
+						}
                         return true;
                     }
                 }
@@ -398,22 +532,36 @@ bool Uploader_eraseFile(void){
     }
 }
 
-void Uploader_sendServer(void){
-	Debug_SendByte('V');
+bool Uploader_sendServer(void){
+	if(!Debug_SendByte('V')){
+		return false;
+	}
 	if(server[strlen(server)-1] < 32){
         server[strlen(server)-1] = 0;
     }
-	Debug_SendByte(strlen(server)+2);
-	Debug_SendString(server,true);
+	if(!Debug_SendByte(strlen(server)+2)){
+		return false;
+	}
+	if(!Debug_SendString(server,true)){
+		return false;
+	}
+	return true;
 }
 
-void Uploader_sendPort(void){
-	Debug_SendByte('O');
+bool Uploader_sendPort(void){
+	if(!Debug_SendByte('O')){
+		return false;
+	}
 	if(port[strlen(port)-1] < 32){
         port[strlen(port)-1] = 0;
     }
-	Debug_SendByte(strlen(port)+2);
-	Debug_SendString(port,true);
+	   if(!Debug_SendByte(strlen(port)+2)){
+		return false;
+	}
+	if(!Debug_SendString(port,true)){
+		return false;
+	}
+	return true;
 }
 
 
@@ -421,12 +569,21 @@ void Uploader_ClearCRC(void){
     uploadCRC = 0xFFFFFFFF;
 }
 
-void Uploader_WriteCRC(void){
+bool Uploader_WriteCRC(void){
     uint32_t tmpCRC = uploadCRC^0xFFFFFFFF;
-    Debug_SendByte((tmpCRC >> 24) & 0xFF);
-    Debug_SendByte((tmpCRC >> 16) & 0xFF);
-    Debug_SendByte((tmpCRC >>  8) & 0xFF);
-    Debug_SendByte((tmpCRC >>  0) & 0xFF);
+    if(!Debug_SendByte((tmpCRC >> 24) & 0xFF)){
+		return false;
+	}
+    if(!Debug_SendByte((tmpCRC >> 16) & 0xFF)){
+		return false;
+	}
+    if(!Debug_SendByte((tmpCRC >>  8) & 0xFF)){
+		return false;
+	}
+    if(!Debug_SendByte((tmpCRC >>  0) & 0xFF)){
+		return false;
+	}
+	return true;
 }
 
 

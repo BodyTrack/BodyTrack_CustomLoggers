@@ -1,17 +1,6 @@
 
-#define FirmwareVersion "3.00"
-#define HardwareVersion "3"
-char deviceID   [20];
 
-
-#define fileLengthInSeconds				900
-
-#define temperatureNumberOfSamples   	10
-#define humidityNumberOfSamples   		10
-#define pressureNumberOfSamples   		10
-#define microphoneNumberOfSamples   	1800
-#define lightNumberOfSamples   			10
-#define lightNumberOfChannels			4
+char deviceID   [50];
 
 #define LOTNUM0_offset                  0x08
 #define LOTNUM1_offset                  0x09
@@ -65,8 +54,8 @@ uint8_t microphoneBuffer2 [microphoneNumberOfSamples];
 
 uint32_t lightSampleStartTime1 = 0;
 uint32_t lightSampleStartTime2 = 0;
-uint32_t lightBuffer1 [lightNumberOfSamples*lightNumberOfChannels];
-uint32_t lightBuffer2 [lightNumberOfSamples*lightNumberOfChannels];
+uint32_t lightBuffer1 [lightNumberOfSamples * lightNumberOfChannels];
+uint32_t lightBuffer2 [lightNumberOfSamples * lightNumberOfChannels];
 
 uint32_t airSampleTime = 0;
 

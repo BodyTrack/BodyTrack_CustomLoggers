@@ -15,7 +15,7 @@ volatile uint8_t    DebugBuffer[Debug_BufferSize];
 volatile uint16_t  	Debug_readLocation = 0;
 volatile uint16_t   Debug_writeLocation = 0;
 
-
+volatile uint32_t	Debug_timeOutCounter = 0;
 
 void Debug_Init(uint32_t baud){
 	
@@ -43,7 +43,7 @@ void Debug_Init(uint32_t baud){
 
     Debug_Flow_Port.DIRCLR = (1<<Debug_RTS_pin);
     Debug_Flow_Port.DIRSET = (1<<Debug_CTS_pin);
-	Debug_Flow_Port.OUTSET = (1<<Debug_CTS_pin);
+	Debug_Flow_Port.OUTCLR = (1<<Debug_CTS_pin);
 
 	Debug_Usart.CTRLC = USART_CHSIZE_8BIT_gc | USART_PMODE_DISABLED_gc | (false ? USART_SBMODE_bm : 0);	 	    				
 
@@ -108,19 +108,35 @@ uint8_t Debug_GetByte(bool blocking){
 }
 
 
-void Debug_SendByte(uint8_t data){
+bool Debug_SendByte(uint8_t data){
 	while(!(Debug_Usart.STATUS & USART_DREIF_bm));
-	while(((Debug_Flow_Port.IN)&(1<<Debug_RTS_pin)) > 0); // Wait for RTS to be low
+	while(((Debug_Flow_Port.IN)&(1<<Debug_RTS_pin)) > 0){	// Wait for RTS to be low
+		Debug_timeOutCounter++;
+		if(Debug_timeOutCounter > 10000){
+			Debug_timeOutCounter = 0;
+			return false;
+		} else {
+			_delay_ms(1);
+		}
+	}
 	Debug_Usart.DATA = data;
+	return true;
 }
 
-void Debug_SendString(char string [],bool CR){
+bool Debug_SendString(char string [],bool CR){
 	for(uint8_t i = 0; i < strlen(string); i++){
-		Debug_SendByte(string[i]);
+		if(!Debug_SendByte(string[i])){
+			return false;
+		}
 	}
 
-  if(CR){
-		Debug_SendByte(13);
-		Debug_SendByte(10);
+	if(CR){
+		if(!Debug_SendByte(13)){
+			return false;
+		}
+		if(!Debug_SendByte(10)){
+			return false;
+		}
 	}
+	return true;
 }

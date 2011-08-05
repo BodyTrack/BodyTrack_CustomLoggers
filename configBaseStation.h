@@ -7,6 +7,7 @@
  *
  */
 
+
 bool wantToRecordTemperature 	= true;
 bool wantToRecordPressure 		= true;
 bool wantToRecordHumidity 		= true;
@@ -14,10 +15,23 @@ bool wantToRecordLight		 	= true;
 bool wantToRecordAirQuality		= true;
 bool wantToRecordFast			= false;
 
+
+#define maxFileLength					9000
+
+#define temperatureNumberOfSamples   	10
+#define humidityNumberOfSamples   		10
+#define pressureNumberOfSamples   		10
+#define microphoneNumberOfSamples   	1800
+#define lightNumberOfSamples   			10
+#define lightNumberOfChannels			4
+
+
 // Button
 #define Button_Port				PORTF
 #define Button_Pin				1
 #define Switch_Pin				2
+#define Button_IntVector		PORTF_INT0_vect
+#define Switch_IntVector		PORTF_INT1_vect
 
 
 // Debug
@@ -70,8 +84,7 @@ bool wantToRecordFast			= false;
 #define SD_CD_Port				PORTD
 #define SD_CD					0 
 #define SD_CD_CNTL				PIN0CTRL
-#define DeviceClass				"BaseStation"
-#define StartFileLength			839
+#define StartFileLength			812
 
 
 

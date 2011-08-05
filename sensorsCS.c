@@ -36,6 +36,8 @@ uint16_t zeroOffsetA, zeroOffsetB;
 
 uint16_t HZ_RefeshCounter = 0;
 
+uint16_t ekgCounter = 0;
+
 
 void Sensors_Init(void){
 	
@@ -102,14 +104,14 @@ void Sensors_Init(void){
 	// ekg/respiration @ 300hz
 	// fclk = 14745600
 	// div  = 64
-	// per  = 768
+	// per  = 768 (remember to subtract 1)
 	// => 300 samples per second
 	
 	// Set period/TOP value
-	Sensors_Timer_300HZ.PER = 768;
+	Sensors_Timer_300HZ.PER = 767;
 	
 	// Select clock source
-	Sensors_Timer_300HZ.CTRLA = (TCD1.CTRLA & ~TC0_CLKSEL_gm) | TC_CLKSEL_DIV64_gc;
+	Sensors_Timer_300HZ.CTRLA = (TCD1.CTRLA & ~TC0_CLKSEL_gm) |  TC_CLKSEL_DIV64_gc;
 	
 	// Enable CCA interrupt
 	Sensors_Timer_300HZ.INTCTRLA = (TCD1.INTCTRLA & ~TC0_OVFINTLVL_gm) | TC_CCAINTLVL_HI_gc;
@@ -123,9 +125,13 @@ uint16_t Sensors_ReadTemperature(void){
 
 uint16_t Sensors_ReadRespiration(void){
 	return ADCB.respirationResult;
+	//return Time_TimerLowCNT;
+
 }
 
 uint16_t Sensors_ReadEKG(void){
+	//ekgCounter++;
+	//return ekgCounter;
 	return ADCA.EKGResult; 
 }
 
@@ -179,7 +185,7 @@ ISR(Sensors_Timer_300HZ_vect)
 {
 	if(recording){
 		if(wantToRecordRespiration){
-			if(respirationBufferToWriteTo == 1){
+			if((respirationBufferToWriteTo == 1) && !okToSendRespirationBuffer1){
 				if(respirationBufferCounter == 0){
 					respirationSampleStartTime1 = Time_Get32BitTimer();
 				}
@@ -190,7 +196,7 @@ ISR(Sensors_Timer_300HZ_vect)
 					respirationBufferToWriteTo = 2;
 					okToSendRespirationBuffer1 = true;
 				}
-			} else if (respirationBufferToWriteTo == 2){
+			} else if ((respirationBufferToWriteTo == 2) && !okToSendRespirationBuffer2){
 				if(respirationBufferCounter == 0){
 					respirationSampleStartTime2 = Time_Get32BitTimer();
 				}
@@ -205,7 +211,7 @@ ISR(Sensors_Timer_300HZ_vect)
 		}
 		
 		if(wantToRecordEKG){
-			if(EKGBufferToWriteTo == 1){
+			if((EKGBufferToWriteTo == 1) && !okToSendEKGBuffer1){
 				if(EKGBufferCounter == 0){
 					EKGSampleStartTime1 = Time_Get32BitTimer();
 				}
@@ -216,7 +222,7 @@ ISR(Sensors_Timer_300HZ_vect)
 					EKGBufferToWriteTo = 2;
 					okToSendEKGBuffer1 = true;
 				}
-			} else if (EKGBufferToWriteTo == 2){
+			} else if ((EKGBufferToWriteTo == 2) && !okToSendEKGBuffer1){
 				if(EKGBufferCounter == 0){
 					EKGSampleStartTime2 = Time_Get32BitTimer();
 				}

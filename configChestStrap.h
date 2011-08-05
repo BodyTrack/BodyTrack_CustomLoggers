@@ -14,6 +14,14 @@ bool wantToRecordRespiration	= true;
 bool wantToRecordFast			= false;
 
 
+#define maxFileLength					9000
+
+#define temperatureNumberOfSamples   	5
+#define respirationNumberOfSamples      300
+#define EKGNumberOfSamples              100
+#define humidityNumberOfSamples         15
+#define accelNumberOfSamples            300
+#define accelNumberOfChannels           3
 
 // Battery Charger				
 #define Charger_Port			PORTD
@@ -23,6 +31,7 @@ bool wantToRecordFast			= false;
 // Button
 #define Button_Port				PORTF
 #define Button_Pin				6
+#define Button_IntVector		PORTF_INT0_vect
 
 // Leds
 #define numberOfLeds			2
@@ -51,8 +60,7 @@ bool wantToRecordFast			= false;
 #define SD_CD_Port				PORTF
 #define SD_CD					4 
 #define SD_CD_CNTL				PIN4CTRL
-#define DeviceClass				"ChestStrap"
-#define StartFileLength			469
+#define StartFileLength			455
 
 // Accel
 
