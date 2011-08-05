@@ -1034,6 +1034,15 @@
 			03FF48A113EC4E6F00762D53 /* PBXTextBookmark */ = 03FF48A113EC4E6F00762D53 /* PBXTextBookmark */;
 			03FF48A213EC4E6F00762D53 /* PBXTextBookmark */ = 03FF48A213EC4E6F00762D53 /* PBXTextBookmark */;
 			03FF48A313EC4E6F00762D53 /* PBXTextBookmark */ = 03FF48A313EC4E6F00762D53 /* PBXTextBookmark */;
+			03FF48A413EC4EC000762D53 /* PBXTextBookmark */ = 03FF48A413EC4EC000762D53 /* PBXTextBookmark */;
+			03FF48A513EC4EC000762D53 /* PBXTextBookmark */ = 03FF48A513EC4EC000762D53 /* PBXTextBookmark */;
+			03FF48A613EC4EC000762D53 /* PBXTextBookmark */ = 03FF48A613EC4EC000762D53 /* PBXTextBookmark */;
+			03FF48A713EC4EF400762D53 /* PBXTextBookmark */ = 03FF48A713EC4EF400762D53 /* PBXTextBookmark */;
+			03FF48A813EC4EF400762D53 /* PBXTextBookmark */ = 03FF48A813EC4EF400762D53 /* PBXTextBookmark */;
+			03FF48A913EC4EF400762D53 /* PBXTextBookmark */ = 03FF48A913EC4EF400762D53 /* PBXTextBookmark */;
+			03FF48AA13EC4EF900762D53 /* PBXTextBookmark */ = 03FF48AA13EC4EF900762D53 /* PBXTextBookmark */;
+			03FF48AB13EC4EF900762D53 /* PBXTextBookmark */ = 03FF48AB13EC4EF900762D53 /* PBXTextBookmark */;
+			03FF48AC13EC4EF900762D53 /* PBXTextBookmark */ = 03FF48AC13EC4EF900762D53 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 0320130B13C5DF93006F6A2F /* Source Control */;
 		userBuildSettings = {
@@ -1238,9 +1247,9 @@
 	};
 	032014C013C62F7E006F6A2F /* mainBaseStation.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1076, 14690}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1076, 13273}}";
 			sepNavSelRange = "{12818, 0}";
-			sepNavVisRange = "{10501, 1857}";
+			sepNavVisRange = "{3294, 3465}";
 			sepNavWindowFrame = "{{14, 81}, {1033, 692}}";
 		};
 	};
@@ -8565,6 +8574,96 @@
 		vrLoc = 0;
 	};
 	03FF48A313EC4E6F00762D53 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0320137213C5E2B2006F6A2F /* iox256a3b.h */;
+		name = "iox256a3b.h: 2008";
+		rLen = 0;
+		rLoc = 84416;
+		rType = 0;
+		vrLen = 1718;
+		vrLoc = 84081;
+	};
+	03FF48A413EC4EC000762D53 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 032014C013C62F7E006F6A2F /* mainBaseStation.c */;
+		name = "mainBaseStation.c: 360";
+		rLen = 0;
+		rLoc = 12818;
+		rType = 0;
+		vrLen = 3465;
+		vrLoc = 3294;
+	};
+	03FF48A513EC4EC000762D53 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0301C9D613CB7CBE00B39AC5 /* sensorsCS.c */;
+		name = "sensorsCS.c: 30";
+		rLen = 0;
+		rLoc = 856;
+		rType = 0;
+		vrLen = 2209;
+		vrLoc = 0;
+	};
+	03FF48A613EC4EC000762D53 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0320137213C5E2B2006F6A2F /* iox256a3b.h */;
+		name = "iox256a3b.h: 2008";
+		rLen = 0;
+		rLoc = 84416;
+		rType = 0;
+		vrLen = 1718;
+		vrLoc = 84081;
+	};
+	03FF48A713EC4EF400762D53 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 032014C013C62F7E006F6A2F /* mainBaseStation.c */;
+		name = "mainBaseStation.c: 360";
+		rLen = 0;
+		rLoc = 12818;
+		rType = 0;
+		vrLen = 3465;
+		vrLoc = 3294;
+	};
+	03FF48A813EC4EF400762D53 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0301C9D613CB7CBE00B39AC5 /* sensorsCS.c */;
+		name = "sensorsCS.c: 30";
+		rLen = 0;
+		rLoc = 856;
+		rType = 0;
+		vrLen = 2209;
+		vrLoc = 0;
+	};
+	03FF48A913EC4EF400762D53 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0320137213C5E2B2006F6A2F /* iox256a3b.h */;
+		name = "iox256a3b.h: 2008";
+		rLen = 0;
+		rLoc = 84416;
+		rType = 0;
+		vrLen = 1718;
+		vrLoc = 84081;
+	};
+	03FF48AA13EC4EF900762D53 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 032014C013C62F7E006F6A2F /* mainBaseStation.c */;
+		name = "mainBaseStation.c: 360";
+		rLen = 0;
+		rLoc = 12818;
+		rType = 0;
+		vrLen = 3465;
+		vrLoc = 3294;
+	};
+	03FF48AB13EC4EF900762D53 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0301C9D613CB7CBE00B39AC5 /* sensorsCS.c */;
+		name = "sensorsCS.c: 30";
+		rLen = 0;
+		rLoc = 856;
+		rType = 0;
+		vrLen = 2209;
+		vrLoc = 0;
+	};
+	03FF48AC13EC4EF900762D53 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 0320137213C5E2B2006F6A2F /* iox256a3b.h */;
 		name = "iox256a3b.h: 2008";
