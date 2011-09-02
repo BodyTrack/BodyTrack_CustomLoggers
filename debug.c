@@ -24,7 +24,7 @@ void Debug_Init(uint32_t baud){
 	// Debug
 	DMA.Debug_DMA_Channel.ADDRCTRL |= DMA_CH_SRCRELOAD_NONE_gc | DMA_CH_SRCDIR_FIXED_gc	| DMA_CH_DESTRELOAD_BLOCK_gc | DMA_CH_DESTDIR_INC_gc;
 	DMA.Debug_DMA_Channel.TRIGSRC = DMA_CH_TRIGSRC_USARTC0_RXC_gc;
-	DMA.Debug_DMA_Channel.TRFCNT = Debug_BufferSize;	// 1024 bytes in block
+	DMA.Debug_DMA_Channel.TRFCNT = Debug_BufferSize;	
 	DMA.Debug_DMA_Channel.REPCNT  = 0;		// repeat forever
 	
 	DMA.Debug_DMA_Channel.SRCADDR0 = (((uint16_t)(&Debug_Usart.DATA) >> 0) & 0xFF);
@@ -66,6 +66,8 @@ void Debug_Init(uint32_t baud){
 
 	Debug_Usart.CTRLB |= USART_RXEN_bm;
 	Debug_Usart.CTRLB |= USART_TXEN_bm;
+	
+	//Debug_Usart.CTRLA |= USART_RXCINTLVL_MED_gc;
 	
 	Debug_ClearBuffer();
 	
@@ -140,3 +142,11 @@ bool Debug_SendString(char string [],bool CR){
 	}
 	return true;
 }
+
+/*ISR(Debug_INTVector){
+	DebugBuffer[Debug_writeLocation] = Debug_Usart.DATA;
+	Debug_writeLocation++;
+	if(Debug_writeLocation >= Debug_BufferSize){
+		Debug_writeLocation = 0;
+	}
+}*/

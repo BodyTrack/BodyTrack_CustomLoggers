@@ -32,32 +32,40 @@ typedef struct {
 volatile bool recording = false;
 
 
-uint32_t temperatureSampleStartTime1 = 0;
-uint32_t temperatureSampleStartTime2 = 0;
-uint16_t temperatureBuffer1 [temperatureNumberOfSamples];
-uint16_t temperatureBuffer2 [temperatureNumberOfSamples];
+uint32_t		temperatureSampleStartTime	[temperatureNumberOfBuffers];
+uint16_t		temperatureBuffer			[temperatureNumberOfBuffers][temperatureNumberOfSamples];
+volatile bool	okToSendTemperatureBuffer	[temperatureNumberOfBuffers];
+uint8_t			temperatureBufferToWriteTo	= 0;
+uint16_t		temperatureBufferCounter	= 0;
 
-uint32_t humiditySampleStartTime1 = 0;
-uint32_t humiditySampleStartTime2 = 0;
-uint16_t  humidityBuffer1 [humidityNumberOfSamples];
-uint16_t  humidityBuffer2 [humidityNumberOfSamples];
+uint32_t		humiditySampleStartTime		[humidityNumberOfBuffers];
+uint16_t		humidityBuffer				[humidityNumberOfBuffers][humidityNumberOfSamples];
+volatile bool	okToSendHumidityBuffer		[humidityNumberOfBuffers];
+uint8_t			humidityBufferToWriteTo		= 0;
+uint16_t		humidityBufferCounter		= 0;
 
-uint32_t pressureSampleStartTime1 = 0;
-uint32_t pressureSampleStartTime2 = 0;
-uint16_t  pressureBuffer1 [pressureNumberOfSamples];
-uint16_t  pressureBuffer2 [pressureNumberOfSamples];
+uint32_t		pressureSampleStartTime		[pressureNumberOfBuffers];
+uint16_t		pressureBuffer				[pressureNumberOfBuffers][pressureNumberOfSamples];
+volatile bool	okToSendPressureBuffer		[pressureNumberOfBuffers];
+uint8_t			pressureBufferToWriteTo		= 0;
+uint16_t		pressureBufferCounter		= 0;
 
-uint32_t microphoneSampleStartTime1 = 0;
-uint32_t microphoneSampleStartTime2 = 0;
-uint8_t microphoneBuffer1 [microphoneNumberOfSamples];
-uint8_t microphoneBuffer2 [microphoneNumberOfSamples];
+uint32_t		microphoneSampleStartTime	[microphoneNumberOfBuffers];
+uint8_t			microphoneBuffer			[microphoneNumberOfBuffers][microphoneNumberOfSamples];
+volatile bool	okToSendMicrophoneBuffer	[microphoneNumberOfBuffers];
+uint8_t			microphoneBufferToWriteTo	= 0;
+uint16_t		microphoneBufferCounter		= 0;
 
-uint32_t lightSampleStartTime1 = 0;
-uint32_t lightSampleStartTime2 = 0;
-uint32_t lightBuffer1 [lightNumberOfSamples * lightNumberOfChannels];
-uint32_t lightBuffer2 [lightNumberOfSamples * lightNumberOfChannels];
+uint32_t		lightSampleStartTime		[lightNumberOfBuffers];
+uint16_t		lightBuffer					[lightNumberOfBuffers][lightNumberOfSamples * lightNumberOfChannels];
+volatile bool	okToSendLightBuffer			[lightNumberOfBuffers];
+uint8_t			lightBufferToWriteTo		= 0;
+uint16_t		lightBufferCounter			= 0;
 
 uint32_t airSampleTime = 0;
+
+volatile bool	okToSendRTCBlock = false;
+uint8_t			rtcBlockCounter = 0;
 
 uint32_t timeRecordingStarted = 0;
 

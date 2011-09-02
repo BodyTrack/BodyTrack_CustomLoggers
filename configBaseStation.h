@@ -21,9 +21,29 @@ bool wantToRecordFast			= false;
 #define temperatureNumberOfSamples   	10
 #define humidityNumberOfSamples   		10
 #define pressureNumberOfSamples   		10
-#define microphoneNumberOfSamples   	1800
+#define microphoneNumberOfSamples   	2000
 #define lightNumberOfSamples   			10
 #define lightNumberOfChannels			4
+#define airNumberOfFastSamples			1
+#define airNumberOfFastChannels			6
+#define airNumberOfSlowSamples			1
+#define airNumberOfSlowChannels			2
+
+#define temperatureNumberOfBuffers		2
+#define pressureNumberOfBuffers			2
+#define humidityNumberOfBuffers			2
+#define lightNumberOfBuffers			2
+#define microphoneNumberOfBuffers		3
+
+
+#define temperatureTicksPerSample		1843200			// 1Hz
+#define pressureTicksPerSample			1843200			// 1Hz
+#define humidityTicksPerSample			1843200			// 1Hz
+#define lightTicksPerSample				1843200			// 1Hz
+#define microphoneTicksPerSample		256				// 7200Hz
+//#define microphoneTicksPerSample		6144			// 300Hz
+#define airTicksPerSampleFastHZ			1843200			// 1Hz	
+#define airTicksPerSampleSlowHZ			110592000		// 1/60Hz			
 
 
 // Button
@@ -42,8 +62,11 @@ bool wantToRecordFast			= false;
 #define Debug_Flow_Port         PORTC
 #define Debug_RTS_pin           0
 #define Debug_CTS_pin           1
-#define Debug_DMA_Channel		CH1
 #define Debug_BufferSize		100
+#define Debug_INTVector			USARTC0_RXC_vect
+#define Debug_DMA_Channel		CH0
+
+
 
 // Display
 #define Display_Port			PORTD 
@@ -71,7 +94,7 @@ bool wantToRecordFast			= false;
 #define Rs232_Usart				USARTD0
 #define Rs232_RX_pin_bm			PIN2_bm
 #define Rs232_TX_pin_bm			PIN3_bm
-#define Rs232_BufferSize		1024
+#define Rs232_BufferSize		100
 #define Rs232_RXC_vect			USARTD0_RXC_vect
 
 // SD

@@ -51,10 +51,10 @@ bool Uploader_Update(void){
 		timeOutCounter = 0;
 		command[0] = Debug_GetByte(false);
 		
-		if(command[0] == 'T'){                          // supply the time
+		if(command[0] == 'T'){									// supply the time
 			if(Uploader_getTime()){
-				timeIsValid = true;
 				UNIX_Time = Time_Get();
+				timeIsValid = true;				
 			} else {
 				timeIsValid = false;
 				return false;
@@ -87,19 +87,19 @@ bool Uploader_Update(void){
 			if(!Uploader_uploadFile()){
 				return false;
 			}
-		} else if(command[0] == 'E'){                   // erase file
+		} else if(command[0] == 'E'){							// erase file
 			if(!Uploader_eraseFile()){
 				return false;
 			}
-		} else if(command[0] == 'V'){                   // request server for post
+		} else if(command[0] == 'V'){							// request server for post
 			if(!Uploader_sendServer()){
 				return false;
 			}
-		} else if(command[0] == 'O'){                   // request port for post
+		} else if(command[0] == 'O'){							// request port for post
 			if(!Uploader_sendPort()){
 				return false;
 			}
-		}  else if(command[0] == 'R'){                   // reset
+		}  else if(command[0] == 'R'){							// reset
 			_delay_ms(5);
 			Debug_SendByte('R');
 			return false;
@@ -320,36 +320,22 @@ bool Uploader_sendFilename(void){
     if(!Debug_SendByte('F')){
 		return false;
 	}
+	
     okToOpenDirectory = true;
     while(okToOpenDirectory);
 	
     while(true){
         okToGrabNextFileName = true;
         while(okToGrabNextFileName);
-        if(availableFileName[0] == 0){
+		if(availableFileName[0] == 0){
             if(!Debug_SendString("",true)){
 				return false;
 			}
             return true;
         } else {
-            if(recording){
-				if((strcasecmp(currentLogFile,fno.fname)) != 0){		// file is NOT the current file
-			    	if(strcasestr(fno.fname,".BT") != NULL){						// file has .bt extension
-				    	if(strcasestr(fno.fname,".BTU") == NULL){
-						    strcpy(availableFileName,fno.fname);
-						    if(!Debug_SendString(availableFileName,false)){
-								return false;
-							}
-						    if(!Debug_SendByte(',')){
-								return false;
-							}
-						}
-					}
-				}
-			} else {
-				if(strcasestr(fno.fname,".BT") != NULL){						// file has .bt extension
-					if(strcasestr(fno.fname,".BTU") == NULL){
-						strcpy(availableFileName,fno.fname);
+			if(recording){
+				if((strcasecmp(currentLogFile,availableFileName)) != 0){		// file is NOT the current file
+			    	if(strcasestr(availableFileName,".BT") != NULL){						// file has .bt extension
 						if(!Debug_SendString(availableFileName,false)){
 							return false;
 						}
@@ -358,10 +344,22 @@ bool Uploader_sendFilename(void){
 						}
 					}
 				}
+			} else {
+				if(strcasestr(availableFileName,".BT") != NULL){						// file has .bt extension
+					if(!Debug_SendString(availableFileName,false)){
+						return false;
+					}
+					if(!Debug_SendByte(',')){
+						return false;
+					}
+				}
 			}
         }
     }
 }
+
+
+
 
 
 

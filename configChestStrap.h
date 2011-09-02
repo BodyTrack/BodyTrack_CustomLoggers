@@ -16,12 +16,25 @@ bool wantToRecordFast			= false;
 
 #define maxFileLength					9000
 
-#define temperatureNumberOfSamples   	5
-#define respirationNumberOfSamples      300
-#define EKGNumberOfSamples              100
-#define humidityNumberOfSamples         15
+#define temperatureNumberOfSamples   	10
+#define respirationNumberOfSamples      50
+#define EKGNumberOfSamples              300
+#define humidityNumberOfSamples         10
 #define accelNumberOfSamples            300
 #define accelNumberOfChannels           3
+
+#define temperatureNumberOfBuffers		2
+#define respirationNumberOfBuffers		3
+#define EKGNumberOfBuffers				3
+#define humidityNumberOfBuffers			2
+#define accelNumberOfBuffers			2
+
+
+#define temperatureTicksPerSample		1843200			// 1Hz
+#define respirationTicksPerSample		36864			// 50Hz
+#define EKGTicksPerSample				6144			// 300Hz
+#define humidityTicksPerSample			1843200			// 1Hz
+#define accelTicksPerSample				5760			// 320Hz
 
 // Battery Charger				
 #define Charger_Port			PORTD
@@ -47,8 +60,8 @@ bool wantToRecordFast			= false;
 #define Debug_Flow_Port         PORTC
 #define Debug_RTS_pin           0
 #define Debug_CTS_pin           1
-#define Debug_DMA_Channel		CH1
 #define Debug_BufferSize		100
+#define Debug_INTVector			USARTC0_RXC_vect
 
 // SD
 #define SD_PORT					PORTD 

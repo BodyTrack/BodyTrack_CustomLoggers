@@ -8,10 +8,7 @@
 #include "accel.h"
 
 
-volatile bool okToSendAccelBuffer1  = false;
-volatile bool okToSendAccelBuffer2  = false;
-uint8_t       accelBufferToWriteTo  = 1;
-uint16_t      accelBufferCounter    = 0;
+
 
 void Accel_Init(void){
 
@@ -43,6 +40,8 @@ void Accel_Init(void){
     	// Enable CCA interrupt
     Accel_Sample_Timer.INTCTRLA = (TCF0.INTCTRLA & ~TC0_OVFINTLVL_gm) | TC_CCAINTLVL_HI_gc;
 
+	
+	Sensors_ResetAccelBuffers();
 }
 
 
@@ -75,58 +74,50 @@ uint8_t Accel_ReadFromAddress(uint8_t addr){
     return tmp;
 }
 
-void Accel_ReadResults(uint16_t * buffLocation, uint16_t buffCounter){
+void Accel_ReadResults(uint16_t  ** buffLocation, uint8_t bufferNumber, uint16_t bufferCounter){
     // 0 = x, 1 = y, 2 = z
 
     Accel_selectChip();
     Accel_Write_Byte(0x32 | 0b11000000);
-    buffLocation[buffCounter] = Accel_Read_Byte();
-    buffLocation[buffCounter] += Accel_Read_Byte() * 256;
-    buffLocation[buffCounter] += 1024;
-    buffLocation[buffCounter+1] = Accel_Read_Byte();
-    buffLocation[buffCounter+1] += Accel_Read_Byte() * 256;
-    buffLocation[buffCounter+1] += 1024;
-    buffLocation[buffCounter+2] = Accel_Read_Byte();
-    buffLocation[buffCounter+2] += Accel_Read_Byte() * 256;
-    buffLocation[buffCounter+2] += 1024;
+    buffLocation[bufferNumber][bufferCounter] = Accel_Read_Byte();
+    buffLocation[bufferNumber][bufferCounter] += Accel_Read_Byte() * 256;
+    buffLocation[bufferNumber][bufferCounter] += 1024;
+    buffLocation[bufferNumber][bufferCounter+1] = Accel_Read_Byte();
+    buffLocation[bufferNumber][bufferCounter+1] += Accel_Read_Byte() * 256;
+    buffLocation[bufferNumber][bufferCounter+1] += 1024;
+    buffLocation[bufferNumber][bufferCounter+2] = Accel_Read_Byte();
+    buffLocation[bufferNumber][bufferCounter+2] += Accel_Read_Byte() * 256;
+    buffLocation[bufferNumber][bufferCounter+2] += 1024;
     Accel_deselectChip();
 }
 
 void Sensors_ResetAccelBuffers(void){
 	accelBufferCounter = 0;
-  	accelBufferToWriteTo = 1;
-	okToSendAccelBuffer1 = false;
-	okToSendAccelBuffer2 = false;
+  	accelBufferToWriteTo = 0;
+	for(uint8_t i = 0; i < accelNumberOfBuffers; i++){
+		okToSendAccelBuffer[i] = false;
+	}	
 }
 
 
 ISR(Accel_Sample_Timer_vect)
 {
-	if(recording && wantToRecordFast){
-		if(accelBufferToWriteTo == 1){
-			if(accelBufferCounter == 0){
-				accelSampleStartTime1 = Time_Get32BitTimer();
-			}
-			Accel_ReadResults(accelBuffer1,accelBufferCounter);
-
-			accelBufferCounter+=3;
-
-			if(accelBufferCounter == accelNumberOfSamples*accelNumberOfChannels){
-				accelBufferCounter=0;
-				accelBufferToWriteTo = 2;
-				okToSendAccelBuffer1 = true;
-			}
-		} else if (accelBufferToWriteTo == 2){
-			if(accelBufferCounter == 0){
-				accelSampleStartTime2 = Time_Get32BitTimer();
-			}
-			Accel_ReadResults(accelBuffer2,accelBufferCounter);
-
-			accelBufferCounter+=3;
-			if(accelBufferCounter == accelNumberOfSamples*accelNumberOfChannels){
-				accelBufferCounter=0;
-				accelBufferToWriteTo = 1;
-				okToSendAccelBuffer2 = true;
+	if(recording && wantToRecordFast && !okToSendAccelBuffer[accelBufferToWriteTo]){ 
+		if(accelBufferCounter == 0){
+			accelSampleStartTime[accelBufferToWriteTo] = Time_Get32BitTimer();
+		}
+		
+		
+		//Accel_ReadResults(accelBuffer,accelBufferToWriteTo,accelBufferCounter);
+		
+		accelBufferCounter+=3;
+		
+		if(accelBufferCounter == accelNumberOfSamples*accelNumberOfChannels){
+			accelBufferCounter=0;
+			okToSendAccelBuffer[accelBufferToWriteTo] = true;
+			accelBufferToWriteTo++;
+			if(accelBufferToWriteTo == accelNumberOfBuffers){
+				accelBufferToWriteTo = 0;
 			}
 		}
 	}

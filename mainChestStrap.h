@@ -32,30 +32,38 @@ typedef struct {
 
 volatile bool recording = false;
 
-uint32_t temperatureSampleStartTime1 = 0;
-uint32_t temperatureSampleStartTime2 = 0;
-uint16_t temperatureBuffer1 [temperatureNumberOfSamples];
-uint16_t temperatureBuffer2 [temperatureNumberOfSamples];
+uint32_t		temperatureSampleStartTime	[temperatureNumberOfSamples];
+uint16_t		temperatureBuffer			[temperatureNumberOfBuffers][temperatureNumberOfSamples];
+volatile bool	okToSendTemperatureBuffer	[temperatureNumberOfBuffers];
+uint8_t			temperatureBufferToWriteTo	= 0;
+uint16_t		temperatureBufferCounter	= 0;
 
-uint32_t respirationSampleStartTime1 = 0;
-uint32_t respirationSampleStartTime2 = 0;
-uint16_t respirationBuffer1 [respirationNumberOfSamples];
-uint16_t respirationBuffer2 [respirationNumberOfSamples];
+uint32_t		respirationSampleStartTime	[respirationNumberOfSamples];
+uint16_t		respirationBuffer			[respirationNumberOfBuffers][respirationNumberOfSamples];
+volatile bool	okToSendRespirationBuffer	[respirationNumberOfBuffers];
+uint8_t			respirationBufferToWriteTo	= 0;
+uint16_t		respirationBufferCounter	= 0;
 
-uint32_t EKGSampleStartTime1 = 0;
-uint32_t EKGSampleStartTime2 = 0;
-uint16_t EKGBuffer1 [EKGNumberOfSamples];
-uint16_t EKGBuffer2 [EKGNumberOfSamples];
+uint32_t		EKGSampleStartTime			[EKGNumberOfSamples];
+uint16_t		EKGBuffer					[EKGNumberOfBuffers][EKGNumberOfSamples];
+volatile bool	okToSendEKGBuffer			[EKGNumberOfBuffers];
+uint8_t			EKGBufferToWriteTo			= 0;
+uint16_t		EKGBufferCounter			= 0;
 
-uint32_t humiditySampleStartTime1 = 0;
-uint32_t humiditySampleStartTime2 = 0;
-uint16_t humidityBuffer1 [humidityNumberOfSamples];
-uint16_t humidityBuffer2 [humidityNumberOfSamples];
+uint32_t		humiditySampleStartTime		[humidityNumberOfSamples];
+uint16_t		humidityBuffer				[humidityNumberOfBuffers][humidityNumberOfSamples];
+volatile bool	okToSendHumidityBuffer		[humidityNumberOfBuffers];
+uint8_t			humidityBufferToWriteTo		= 0;
+uint16_t		humidityBufferCounter		= 0;
 
-uint32_t accelSampleStartTime1 = 0;
-uint32_t accelSampleStartTime2 = 0;
-uint16_t accelBuffer1 [accelNumberOfSamples*accelNumberOfChannels];
-uint16_t accelBuffer2 [accelNumberOfSamples*accelNumberOfChannels];
+uint32_t		accelSampleStartTime		[accelNumberOfSamples];
+uint16_t		accelBuffer					[accelNumberOfBuffers][accelNumberOfSamples*accelNumberOfChannels];
+volatile bool	okToSendAccelBuffer			[accelNumberOfBuffers];
+uint8_t			accelBufferToWriteTo		= 0;
+uint16_t		accelBufferCounter			= 0;
+
+volatile bool	okToSendRTCBlock = false;
+uint8_t			rtcBlockCounter = 0;
 
 uint32_t timeRecordingStarted = 0;
 

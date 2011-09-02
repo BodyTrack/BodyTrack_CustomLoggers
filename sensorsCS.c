@@ -9,34 +9,15 @@
 
 #include "sensorsCS.h"
 
-volatile bool	okToSendRespirationBuffer1 = false;
-volatile bool	okToSendRespirationBuffer2 = false;
-uint8_t			respirationBufferToWriteTo = 1;
-uint16_t		respirationBufferCounter = 0;
 
-volatile bool	okToSendTemperatureBuffer1 = false;
-volatile bool	okToSendTemperatureBuffer2 = false;
-uint8_t			temperatureBufferToWriteTo = 1;
-uint16_t		temperatureBufferCounter = 0;
 
-volatile bool	okToSendEKGBuffer1 = false;
-volatile bool	okToSendEKGBuffer2 = false;
-uint8_t			EKGBufferToWriteTo = 1;
-uint16_t		EKGBufferCounter = 0;
-
-volatile bool	okToSendHumidityBuffer1 = false;
-volatile bool	okToSendHumidityBuffer2 = false;
-uint8_t			humidityBufferToWriteTo = 1;
-uint16_t		humidityBufferCounter = 0;
-
-volatile bool	okToSendRTCBlock = false;
-uint8_t			rtcBlockCounter = 0;
 
 uint16_t zeroOffsetA, zeroOffsetB;
 
-uint16_t HZ_RefeshCounter = 0;
+volatile uint16_t HZ_RefeshCounter = 0;
+volatile uint16_t HZ_RefeshCounter2 = 0;
 
-uint16_t ekgCounter = 0;
+volatile uint16_t ekgCounter = 0;
 
 
 void Sensors_Init(void){
@@ -101,7 +82,7 @@ void Sensors_Init(void){
 	respirationPort.OUTSET = 1<<respirationDriver;
 	
 	
-	// ekg/respiration @ 300hz
+	// ekg @ 300hz
 	// fclk = 14745600
 	// div  = 64
 	// per  = 768 (remember to subtract 1)
@@ -109,6 +90,7 @@ void Sensors_Init(void){
 	
 	// Set period/TOP value
 	Sensors_Timer_300HZ.PER = 767;
+	//Sensors_Timer_300HZ.PER = 2303;		// 100 hz
 	
 	// Select clock source
 	Sensors_Timer_300HZ.CTRLA = (TCD1.CTRLA & ~TC0_CLKSEL_gm) |  TC_CLKSEL_DIV64_gc;
@@ -116,7 +98,10 @@ void Sensors_Init(void){
 	// Enable CCA interrupt
 	Sensors_Timer_300HZ.INTCTRLA = (TCD1.INTCTRLA & ~TC0_OVFINTLVL_gm) | TC_CCAINTLVL_HI_gc;
 	
-	
+	Sensors_ResetTemperatureBuffers();
+	Sensors_ResetRespirationBuffers();
+	Sensors_ResetEKGBuffers();
+	Sensors_ResetHumidityBuffers();
 }
 
 uint16_t Sensors_ReadTemperature(void){
@@ -125,13 +110,9 @@ uint16_t Sensors_ReadTemperature(void){
 
 uint16_t Sensors_ReadRespiration(void){
 	return ADCB.respirationResult;
-	//return Time_TimerLowCNT;
-
 }
 
 uint16_t Sensors_ReadEKG(void){
-	//ekgCounter++;
-	//return ekgCounter;
 	return ADCA.EKGResult; 
 }
 
@@ -150,30 +131,34 @@ uint16_t Sensors_ReadHumidity(void){
 
 void Sensors_ResetTemperatureBuffers(void){
 	temperatureBufferCounter = 0;
-  	temperatureBufferToWriteTo = 1;
-	okToSendTemperatureBuffer1 = false;
-	okToSendTemperatureBuffer2 = false;
+  	temperatureBufferToWriteTo = 0;
+	for(uint16_t i = 0; i < temperatureNumberOfBuffers; i++){
+		okToSendTemperatureBuffer[i] = false;
+	}	
 }
 
 void Sensors_ResetRespirationBuffers(void){
 	respirationBufferCounter = 0;
-  	respirationBufferToWriteTo = 1;
-	okToSendRespirationBuffer1 = false;
-	okToSendRespirationBuffer2 = false;
+  	respirationBufferToWriteTo = 0;
+	for(uint16_t i = 0; i < respirationNumberOfBuffers; i++){
+		okToSendRespirationBuffer[i] = false;
+	}	
 }
 
 void Sensors_ResetEKGBuffers(void){
 	EKGBufferCounter = 0;
-  	EKGBufferToWriteTo = 1;
-	okToSendEKGBuffer1 = false;
-	okToSendEKGBuffer2 = false;
+  	EKGBufferToWriteTo = 0;
+	for(uint16_t i = 0; i < EKGNumberOfBuffers; i++){
+		okToSendEKGBuffer[i] = false;
+	}	
 }
 
 void Sensors_ResetHumidityBuffers(void){
 	humidityBufferCounter = 0;
-  	humidityBufferToWriteTo = 1;
-	okToSendHumidityBuffer1 = false;
-	okToSendHumidityBuffer2 = false;
+  	humidityBufferToWriteTo = 0;
+	for(uint16_t i = 0; i < humidityNumberOfBuffers; i++){
+		okToSendHumidityBuffer[i] = false;
+	}	
 }
 
 
@@ -184,121 +169,90 @@ void Sensors_ResetHumidityBuffers(void){
 ISR(Sensors_Timer_300HZ_vect)
 {
 	if(recording){
-		if(wantToRecordRespiration){
-			if((respirationBufferToWriteTo == 1) && !okToSendRespirationBuffer1){
-				if(respirationBufferCounter == 0){
-					respirationSampleStartTime1 = Time_Get32BitTimer();
-				}
-				respirationBuffer1[respirationBufferCounter] = Sensors_ReadRespiration();
-				respirationBufferCounter++;
-				if(respirationBufferCounter == respirationNumberOfSamples){
-					respirationBufferCounter=0;
-					respirationBufferToWriteTo = 2;
-					okToSendRespirationBuffer1 = true;
-				}
-			} else if ((respirationBufferToWriteTo == 2) && !okToSendRespirationBuffer2){
-				if(respirationBufferCounter == 0){
-					respirationSampleStartTime2 = Time_Get32BitTimer();
-				}
-				respirationBuffer2[respirationBufferCounter] = Sensors_ReadRespiration();
-				respirationBufferCounter++;
-				if(respirationBufferCounter == respirationNumberOfSamples){
-					respirationBufferCounter=0;
-					respirationBufferToWriteTo = 1;
-					okToSendRespirationBuffer2 = true;
+		if(wantToRecordEKG && !okToSendEKGBuffer[EKGBufferToWriteTo]){ 
+			if(EKGBufferCounter == 0){
+				EKGSampleStartTime[EKGBufferToWriteTo] = Time_Get32BitTimer();
+			}
+			EKGBuffer[EKGBufferToWriteTo][EKGBufferCounter] = Sensors_ReadEKG();
+			EKGBufferCounter++;
+			if(EKGBufferCounter == EKGNumberOfSamples){
+				EKGBufferCounter=0;
+				okToSendEKGBuffer[EKGBufferToWriteTo] = true;
+				EKGBufferToWriteTo++;
+				if(EKGBufferToWriteTo == EKGNumberOfBuffers){
+					EKGBufferToWriteTo = 0;
 				}
 			}
 		}
 		
-		if(wantToRecordEKG){
-			if((EKGBufferToWriteTo == 1) && !okToSendEKGBuffer1){
-				if(EKGBufferCounter == 0){
-					EKGSampleStartTime1 = Time_Get32BitTimer();
+		HZ_RefeshCounter2++;
+		if(HZ_RefeshCounter2 == 6){
+			HZ_RefeshCounter2 = 0;
+			if(wantToRecordRespiration && !okToSendRespirationBuffer[respirationBufferToWriteTo]){ 
+				if(respirationBufferCounter == 0){
+					respirationSampleStartTime[respirationBufferToWriteTo] = Time_Get32BitTimer();
 				}
-				EKGBuffer1[EKGBufferCounter] = Sensors_ReadEKG();
-				EKGBufferCounter++;
-				if(EKGBufferCounter == EKGNumberOfSamples){
-					EKGBufferCounter=0;
-					EKGBufferToWriteTo = 2;
-					okToSendEKGBuffer1 = true;
-				}
-			} else if ((EKGBufferToWriteTo == 2) && !okToSendEKGBuffer1){
-				if(EKGBufferCounter == 0){
-					EKGSampleStartTime2 = Time_Get32BitTimer();
-				}
-				EKGBuffer2[EKGBufferCounter] = Sensors_ReadEKG();
-				EKGBufferCounter++;
-				if(EKGBufferCounter == EKGNumberOfSamples){
-					EKGBufferCounter=0;
-					EKGBufferToWriteTo = 1;
-					okToSendEKGBuffer2 = true;
+				respirationBuffer[respirationBufferToWriteTo][respirationBufferCounter] = Sensors_ReadRespiration();
+				respirationBufferCounter++;
+				if(respirationBufferCounter == respirationNumberOfSamples){
+					respirationBufferCounter=0;
+					okToSendRespirationBuffer[respirationBufferToWriteTo] = true;
+					respirationBufferToWriteTo++;
+					if(respirationBufferToWriteTo == respirationNumberOfBuffers){
+						respirationBufferToWriteTo = 0;
+					}
 				}
 			}
 		}
-		HZ_RefeshCounter++;
-		if(HZ_RefeshCounter == 300){
-			HZ_RefeshCounter = 0;
-			
-			UNIX_Time++;
-			
-			rtcBlockCounter++;
-			if(rtcBlockCounter == 0){
-				okToSendRTCBlock = true;
-			}
-			if(wantToRecordTemperature){
-				if(temperatureBufferToWriteTo == 1){
-					if(temperatureBufferCounter == 0){
-						temperatureSampleStartTime1 = Time_Get32BitTimer();
-					}
-					temperatureBuffer1[temperatureBufferCounter] = Sensors_ReadTemperature();
-					temperatureBufferCounter++;
-					if(temperatureBufferCounter == temperatureNumberOfSamples){
-						temperatureBufferCounter=0;
-						temperatureBufferToWriteTo = 2;
-						okToSendTemperatureBuffer1 = true;
-					}
-				} else if (temperatureBufferToWriteTo == 2){
-					if(temperatureBufferCounter == 0){
-						temperatureSampleStartTime2 = Time_Get32BitTimer();
-					}
-					temperatureBuffer2[temperatureBufferCounter] = Sensors_ReadTemperature();
-					temperatureBufferCounter++;
-					if(temperatureBufferCounter == temperatureNumberOfSamples){
-						temperatureBufferCounter=0;
-						temperatureBufferToWriteTo = 1;
-						okToSendTemperatureBuffer2 = true;
-					}
-				}
-			}
-			
-			if(wantToRecordHumidity){
-				if(humidityBufferToWriteTo == 1){
-					if(humidityBufferCounter == 0){
-						humiditySampleStartTime1 = Time_Get32BitTimer();
-					}
-					humidityBuffer1[humidityBufferCounter] = Sensors_ReadHumidity();
-					humidityBufferCounter++;
-					if(humidityBufferCounter == humidityNumberOfSamples){
-						humidityBufferCounter=0;
-						humidityBufferToWriteTo = 2;
-						okToSendHumidityBuffer1 = true;
-					}
-				} else if (humidityBufferToWriteTo == 2){
-					if(humidityBufferCounter == 0){
-						humiditySampleStartTime2 = Time_Get32BitTimer();
-					}
-					humidityBuffer2[humidityBufferCounter] = Sensors_ReadHumidity();
-					humidityBufferCounter++;
-					if(humidityBufferCounter == humidityNumberOfSamples){
-						humidityBufferCounter=0;
-						humidityBufferToWriteTo = 1;
-						okToSendHumidityBuffer2 = true;
-					}
-				}	  
-			}  
-		}
+		
 	}
 	
+	HZ_RefeshCounter++;
+	if(HZ_RefeshCounter == 300){
+		HZ_RefeshCounter = 0;
+		
+		UNIX_Time++;
+		
+		rtcBlockCounter++;
+		if(rtcBlockCounter == 0){
+			okToSendRTCBlock = true;
+		}
+		
+		if(recording){
+			if(wantToRecordTemperature && !okToSendTemperatureBuffer[temperatureBufferToWriteTo]){ 
+				if(temperatureBufferCounter == 0){
+					temperatureSampleStartTime[temperatureBufferToWriteTo] = Time_Get32BitTimer();
+				}
+				temperatureBuffer[temperatureBufferToWriteTo][temperatureBufferCounter] = Sensors_ReadTemperature();
+				temperatureBufferCounter++;
+				if(temperatureBufferCounter == temperatureNumberOfSamples){
+					temperatureBufferCounter=0;
+					okToSendTemperatureBuffer[temperatureBufferToWriteTo] = true;
+					temperatureBufferToWriteTo++;
+					if(temperatureBufferToWriteTo == temperatureNumberOfBuffers){
+						temperatureBufferToWriteTo = 0;
+					}
+				}
+			}
+			
+			
+			if(wantToRecordHumidity && !okToSendHumidityBuffer[humidityBufferToWriteTo]){ 
+				if(humidityBufferCounter == 0){
+					humiditySampleStartTime[humidityBufferToWriteTo] = Time_Get32BitTimer();
+				}
+				humidityBuffer[humidityBufferToWriteTo][humidityBufferCounter] = Sensors_ReadHumidity();
+				humidityBufferCounter++;
+				if(humidityBufferCounter == humidityNumberOfSamples){
+					humidityBufferCounter=0;
+					okToSendHumidityBuffer[humidityBufferToWriteTo] = true;
+					humidityBufferToWriteTo++;
+					if(humidityBufferToWriteTo == humidityNumberOfBuffers){
+						humidityBufferToWriteTo = 0;
+					}
+				}
+			}
+		}
+	}
 }
 
 uint8_t SP_ReadCalibrationByte( uint8_t index )

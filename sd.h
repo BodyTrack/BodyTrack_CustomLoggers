@@ -19,7 +19,7 @@ void SD_ClearCRC(void);
 void SD_WriteCRC(void);
 void SD_MakeFileName(uint32_t var);
 void SD_Read_config_file(void);
-
+void SD_GetSpaceRemaining(void);
 
 void SD_Timer_Init(void);
 void CCPWrite(volatile uint8_t* address, uint8_t value);

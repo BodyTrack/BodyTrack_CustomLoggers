@@ -25,11 +25,12 @@
 //								  - file length timer changed
 //								  - changing sensor buffer length in config file is supported
 //								  - button presses are moved to interrupts
+//              3.02 - 08/15/2011 - variable number of buffers per sensor supported
 //
 //___________________________________________
 
 #define DeviceClass			"ChestStrap"
-#define FirmwareVersion		"3.01"
+#define FirmwareVersion		"3.02"
 #define HardwareVersion		"3"
 
 
@@ -101,6 +102,7 @@ volatile bool		debounceEnabled = false;
 
 
 volatile bool		batteryVoltageOk = true;
+
 
 // ********************************** Main Program *********************************
 
@@ -341,59 +343,55 @@ void SD_BackroundWriter_Init(void){
 
 ISR(SD_Writer_Timer_vect)
 {	
+	if(recording){
+		for(uint8_t i = 0; i < accelNumberOfBuffers; i++){
+			if(okToSendAccelBuffer[i]){
+				SD_WriteAccelBuffer(i);
+				okToSendAccelBuffer[i] = false;
+			}
+		}
 	
-sdInterrupt:
-	
-	if(okToSendAccelBuffer1 && recording){
-		SD_WriteAccelBuffer(1);
-		okToSendAccelBuffer1 = false;
-	} else if (okToSendAccelBuffer2 && recording){
-		SD_WriteAccelBuffer(2);
-		okToSendAccelBuffer2 = false;
+		for(uint8_t i = 0; i < EKGNumberOfBuffers; i++){
+			if(okToSendEKGBuffer[i]){
+				SD_WriteEKGBuffer(i);
+				okToSendEKGBuffer[i] = false;
+			}
+		}
+		
+		for(uint8_t i = 0; i < respirationNumberOfBuffers; i++){
+			if(okToSendRespirationBuffer[i]){
+				SD_WriteRespirationBuffer(i);
+				okToSendRespirationBuffer[i] = false;
+			}
+		}
+		
+		for(uint8_t i = 0; i < temperatureNumberOfBuffers; i++){
+			if(okToSendTemperatureBuffer[i]){
+				SD_WriteTemperatureBuffer(i);
+				okToSendTemperatureBuffer[i] = false;
+			}
+		}
+		
+		for(uint8_t i = 0; i < humidityNumberOfBuffers; i++){
+			if(okToSendHumidityBuffer[i]){
+				SD_WriteHumidityBuffer(i);
+				okToSendHumidityBuffer[i] = false;
+			}
+		}
+		
+		
+		if(okToSendRTCBlock){
+			UNIX_Time = Time_Get();
+			SD_WriteRTCBlock(Time_Get32BitTimer(),UNIX_Time);
+			okToSendRTCBlock = false;
+		}
+
 	}
 	
-	if(okToSendRespirationBuffer1 && recording){
-		SD_WriteRespirationBuffer(1);
-		okToSendRespirationBuffer1 = false;
-	} else if (okToSendRespirationBuffer2 && recording){
-		SD_WriteRespirationBuffer(2);
-		okToSendRespirationBuffer2 = false;
-	}
 	
-	if(okToSendEKGBuffer1 && recording){
-		SD_WriteEKGBuffer(1);
-		okToSendEKGBuffer1 = false;
-	} else if (okToSendEKGBuffer2 && recording){
-		SD_WriteEKGBuffer(2);
-		okToSendEKGBuffer2 = false;
-	}
 	
-	if(okToSendTemperatureBuffer1 && recording){
-		SD_WriteTemperatureBuffer(1);
-		okToSendTemperatureBuffer1 = false;
-		goto sdInterrupt;
-	} else if (okToSendTemperatureBuffer2 && recording){
-		SD_WriteTemperatureBuffer(2);
-		okToSendTemperatureBuffer2 = false;
-		goto sdInterrupt;
-	}
 	
-	if(okToSendHumidityBuffer1 && recording){
-		SD_WriteHumidityBuffer(1);
-		okToSendHumidityBuffer1 = false;
-		goto sdInterrupt;
-	} else if (okToSendHumidityBuffer2 && recording){
-		SD_WriteHumidityBuffer(2);
-		okToSendHumidityBuffer2 = false;
-		goto sdInterrupt;
-	}
-	
-	if(okToSendRTCBlock && recording){
-		UNIX_Time = Time_Get();
-		SD_WriteRTCBlock(Time_Get32BitTimer(),UNIX_Time);
-		okToSendRTCBlock = false;
-		goto sdInterrupt;
-	}
+
 	
 	if(okToOpenLogFile && (percentDiskUsed < 950)){
 		if(SD_StartLogFile(UNIX_Time) == FR_OK){  // open file
@@ -414,7 +412,6 @@ sdInterrupt:
 	if(okToCloseLogFile){
 		SD_Close();
 		okToCloseLogFile = false;
-		goto sdInterrupt;
 	}
 	
 	if(okToOpenDirectory){
@@ -447,7 +444,6 @@ sdInterrupt:
 		f_lseek(&Upload_File, 0);
 		uploadFileOpened = true;
 		okToOpenFileToUpload = false;
-		goto sdInterrupt;
 	}
 	
     if(okToFillUploadFileBuffer){
@@ -455,7 +451,6 @@ sdInterrupt:
         f_read(&Upload_File,&uploadFileBuffer,uploadChunkSize,&tmp);
         okToFillUploadFileBuffer = false;
         uploadFileBufferFull = true;
-        goto sdInterrupt;
     }
 	
 	
@@ -464,7 +459,6 @@ sdInterrupt:
 	    f_close(&Upload_File);
 	    strcpy(fileToUpload,"");
 		okToCloseUploadFile = false;
-		goto sdInterrupt;
 	}
 	
 	if(okToGetRemainingSpace){
@@ -478,14 +472,12 @@ sdInterrupt:
 	    percentDiskUsed /= totalDiskSpace;
 		
 	    okToGetRemainingSpace = false;
-	    goto sdInterrupt;
 	}
 	
 	if(okToEraseFile){
         eraseFileReturn = f_unlink(fileToErase);
         strcpy(fileToUpload,"");
         okToEraseFile = false;
-	    goto sdInterrupt;
 	}
 }
 
@@ -493,7 +485,7 @@ uint8_t SD_StartLogFile(uint32_t time){
 	uint8_t resp;
 	uint16_t length;
 	
-	length = StartFileLength;				// recalculate
+	length = StartFileLength;			
 	length += strlen(DeviceClass);
 	length += strlen(deviceID);
 	length += strlen(FirmwareVersion);
@@ -578,18 +570,15 @@ void SD_WriteTemperatureBuffer(uint8_t bufferNumber){
 	length += 42;
 	
 	SD_ClearCRC();
-	SD_Write32(MAGIC_NUMBER);							// magic number 
-	SD_Write32(length);									// record size  
-	SD_Write16(3);										// record type
+	SD_Write32(MAGIC_NUMBER);									// magic number 
+	SD_Write32(length);											// record size  
+	SD_Write16(3);												// record type
 	
 								// ***** payload *****
-	if(bufferNumber == 1){								// time
-		SD_Write32(temperatureSampleStartTime1);		
-	} else {
-		SD_Write32(temperatureSampleStartTime2);		
-	}
-	SD_Write32(1843200);								// sample period (1hz)
-	SD_Write32(temperatureNumberOfSamples);				// number of samples
+	
+	SD_Write32(temperatureSampleStartTime[bufferNumber]);		// time	
+	SD_Write32(temperatureTicksPerSample);						// sample period 
+	SD_Write32(temperatureNumberOfSamples);						// number of samples
 	
 	SD_WriteString("Temperature");
 	SD_Write8(0x09);
@@ -597,15 +586,10 @@ void SD_WriteTemperatureBuffer(uint8_t bufferNumber){
 	SD_Write8(0x0A);
 	SD_Write8(0x00);	
 	
-	if(bufferNumber == 1){
-		for(uint8_t i = 0; i < temperatureNumberOfSamples; i++){
-			SD_Write16(temperatureBuffer1[i]);
-		}
-	} else {
-		for(uint8_t i = 0; i < temperatureNumberOfSamples; i++){
-			SD_Write16(temperatureBuffer2[i]);
-		}
+	for(uint8_t i = 0; i < temperatureNumberOfSamples; i++){
+		SD_Write16(temperatureBuffer[bufferNumber][i]);
 	}
+	
 	SD_WriteCRC();					
 	f_sync(&Log_File);
 }
@@ -616,18 +600,15 @@ void SD_WriteHumidityBuffer(uint8_t bufferNumber){
 	length += 39;
 	
 	SD_ClearCRC();
-	SD_Write32(MAGIC_NUMBER);							// magic number
-	SD_Write32(length);									// record size
-	SD_Write16(3);										// record type
+	SD_Write32(MAGIC_NUMBER);									// magic number
+	SD_Write32(length);											// record size
+	SD_Write16(3);												// record type
 	
 						// ***** payload *****
-	if(bufferNumber == 1){
-		SD_Write32(humiditySampleStartTime1);			// time
-	} else {
-		SD_Write32(humiditySampleStartTime2);			// time
-	}
-	SD_Write32(1843200);								// sample period (1hz)
-	SD_Write32(humidityNumberOfSamples);				// number of samples
+	
+	SD_Write32(humiditySampleStartTime[bufferNumber]);			// time
+	SD_Write32(humidityTicksPerSample);							// sample period 
+	SD_Write32(humidityNumberOfSamples);						// number of samples
 	
 	SD_WriteString("Humidity");
 	SD_Write8(0x09);
@@ -635,15 +616,11 @@ void SD_WriteHumidityBuffer(uint8_t bufferNumber){
 	SD_Write8(0x0A);
 	SD_Write8(0x00);
 	
-	if(bufferNumber == 1){
-		for(uint8_t i = 0; i < humidityNumberOfSamples; i++){
-			SD_Write16(humidityBuffer1[i]);
-		}
-	} else {
-		for(uint8_t i = 0; i < humidityNumberOfSamples; i++){
-			SD_Write16(humidityBuffer2[i]);
-		}
+
+	for(uint8_t i = 0; i < humidityNumberOfSamples; i++){
+		SD_Write16(humidityBuffer[bufferNumber][i]);
 	}
+
 	SD_WriteCRC();			// CRC
 	f_sync(&Log_File);
 }
@@ -654,18 +631,15 @@ void SD_WriteRespirationBuffer(uint8_t bufferNumber){
 	length += 42;
 	
 	SD_ClearCRC();
-	SD_Write32(MAGIC_NUMBER);						// magic number
-	SD_Write32(length);								// record size
-	SD_Write16(3);									// record type
+	SD_Write32(MAGIC_NUMBER);								// magic number
+	SD_Write32(length);										// record size
+	SD_Write16(3);											// record type
 	
 							// ***** payload *****
-	if(bufferNumber == 1){
-		SD_Write32(respirationSampleStartTime1);	// time
-	} else {
-		SD_Write32(respirationSampleStartTime2);	// time
-	}
-	SD_Write32(6144);								// sample period (300hz)
-	SD_Write32(respirationNumberOfSamples);			// number of samples
+
+	SD_Write32(respirationSampleStartTime[bufferNumber]);	// time
+	SD_Write32(respirationTicksPerSample);					// sample period (50hz)
+	SD_Write32(respirationNumberOfSamples);					// number of samples
 	
 	SD_WriteString("Respiration");
 	SD_Write8(0x09);
@@ -673,15 +647,10 @@ void SD_WriteRespirationBuffer(uint8_t bufferNumber){
 	SD_Write8(0x0A);
 	SD_Write8(0x00);
 	
-	if(bufferNumber == 1){
-		for(uint16_t i = 0; i < respirationNumberOfSamples; i++){
-			SD_Write16(respirationBuffer1[i]);
-		}
-	} else {
-		for(uint16_t i = 0; i < respirationNumberOfSamples; i++){
-			SD_Write16(respirationBuffer2[i]);
-		}
+	for(uint16_t i = 0; i < respirationNumberOfSamples; i++){
+		SD_Write16(respirationBuffer[bufferNumber][i]);
 	}
+	
 	SD_WriteCRC();			// CRC
 	f_sync(&Log_File);
 }
@@ -694,18 +663,15 @@ void SD_WriteEKGBuffer(uint8_t bufferNumber){
 	length += 34;
 	
 	SD_ClearCRC();
-	SD_Write32(MAGIC_NUMBER);						// magic number
-	SD_Write32(length);								// record size
-	SD_Write16(3);									// record type
+	SD_Write32(MAGIC_NUMBER);								// magic number
+	SD_Write32(length);										// record size
+	SD_Write16(3);											// record type
 	
 							// ***** payload *****
-	if(bufferNumber == 1){
-		SD_Write32(EKGSampleStartTime1);			// time
-	} else {
-		SD_Write32(EKGSampleStartTime2);			// time
-	}
-	SD_Write32(6144);								// sample period (300hz)
-	SD_Write32(EKGNumberOfSamples);					// number of samples
+	
+	SD_Write32(EKGSampleStartTime[bufferNumber]);			// time
+	SD_Write32(EKGTicksPerSample);							// sample period
+	SD_Write32(EKGNumberOfSamples);							// number of samples
 	
 	SD_WriteString("EKG");
 	SD_Write8(0x09);
@@ -713,15 +679,10 @@ void SD_WriteEKGBuffer(uint8_t bufferNumber){
 	SD_Write8(0x0A);
 	SD_Write8(0x00);
 	
-	if(bufferNumber == 1){
-		for(uint16_t i = 0; i < EKGNumberOfSamples; i++){
-			SD_Write16(EKGBuffer1[i]);
-		}
-	} else {
-		for(uint16_t i = 0; i < EKGNumberOfSamples; i++){
-			SD_Write16(EKGBuffer2[i]);
-		}
+	for(uint16_t i = 0; i < EKGNumberOfSamples; i++){
+		SD_Write16(EKGBuffer[bufferNumber][i]);
 	}
+	
 	SD_WriteCRC();			// CRC
 	f_sync(&Log_File);
 }
@@ -733,18 +694,15 @@ void SD_WriteAccelBuffer(uint8_t bufferNumber){
 	length += 60;
 	
 	SD_ClearCRC();
-	SD_Write32(MAGIC_NUMBER);						// magic number
-	SD_Write32(length);								// record size
-	SD_Write16(3);									// record type
+	SD_Write32(MAGIC_NUMBER);								// magic number
+	SD_Write32(length);										// record size
+	SD_Write16(3);											// record type
 	
 								// ***** payload *****
-	if(bufferNumber == 1){
-		SD_Write32(accelSampleStartTime1);			// time
-	} else {
-		SD_Write32(accelSampleStartTime2);			// time
-	}
-	SD_Write32(5760);								// sample period (320hz)
-	SD_Write32(accelNumberOfSamples);				// number of samples
+										  
+	SD_Write32(accelSampleStartTime[bufferNumber]);			// time
+	SD_Write32(accelTicksPerSample);						// sample period 
+	SD_Write32(accelNumberOfSamples);						// number of samples
 	
 	SD_WriteString("Accel_X");
 	SD_Write8(0x09);
@@ -760,15 +718,10 @@ void SD_WriteAccelBuffer(uint8_t bufferNumber){
 	SD_Write8(0x0A);
 	SD_Write8(0x00);
 	
-	if(bufferNumber == 1){
-		for(uint16_t i = 0; i < accelNumberOfSamples*accelNumberOfChannels; i++){
-			SD_Write16(accelBuffer1[i]);
-		}
-	} else {
-		for(uint16_t i = 0; i < accelNumberOfSamples*accelNumberOfChannels; i++){
-			SD_Write16(accelBuffer2[i]);
-		}
+	for(uint16_t i = 0; i < accelNumberOfSamples*accelNumberOfChannels; i++){
+		SD_Write16(accelBuffer[bufferNumber][i]);
 	}
+	
 	SD_WriteCRC();			
 	f_sync(&Log_File);
 }

@@ -23,6 +23,7 @@ DIR					dir;
 FIL					Log_File, Upload_File;
 
 char				fileName [20];
+char				tmpString[10];
 
 uint8_t				tmp8[1];
 uint8_t				tmp16[2];
@@ -56,6 +57,10 @@ bool phraseRead = false;
 bool keyRead = false;
 bool ssidRead = false;
 bool zoneChanged = false;
+
+volatile bool sdValid = false;
+
+uint32_t percentDiskUsed = 0;
 
 
 const uint32_t crc_table[256] = {
@@ -102,6 +107,13 @@ uint8_t SD_Init(void){
 	tmp = disk_initialize(0);
 	f_mount(0, &fso0);
 	f_mount(1, &fso1);
+	if(tmp == FR_OK){
+		sdValid = true;
+		SD_GetSpaceRemaining();
+	} else {
+		sdValid = false;
+	}
+	Button_Port.PIN4CTRL =  PORT_OPC_WIREDORPULL_gc;
 	return tmp;
 }
 
@@ -122,11 +134,7 @@ void SD_Close(void){
 }
 
 bool SD_Inserted(void){
-	if((SD_CD_Port.IN & (1<<SD_CD)) > 0 ){
-		return false;
-	} else {
-		return true;
-	}
+	return sdValid;
 }
 
 void SD_Write8(uint8_t var){
@@ -283,6 +291,22 @@ void SD_Read_config_file(void){
 }
 
 
+void SD_GetSpaceRemaining(void){
+	uint32_t totalDiskSpace;
+	uint32_t freeSpace;
+	uint32_t percentUsed;
+	
+	f_getfree("0:",&freeSpace,&fs);
+	totalDiskSpace = fs->max_clust;
+	
+	percentUsed = totalDiskSpace - freeSpace;
+	percentUsed *= 1000;
+	percentUsed /= totalDiskSpace;
+	percentDiskUsed = percentUsed;
+}
+
+
+
 
 void SD_Timer_Init(void)			// Initialize 100 Hz timer needed for SD access 
 {
@@ -307,6 +331,11 @@ void SD_Timer_Init(void)			// Initialize 100 Hz timer needed for SD access
 ISR(SD_Timer_vect)
 {
 	disk_timerproc();
+	if(!sdValid){
+		if((SD_CD_Port.IN & (1<<SD_CD)) == 0 ){
+			SD_Init();
+		}
+	}
 }
 
 
