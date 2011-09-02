@@ -175,8 +175,8 @@ uint16_t Sensors_ReadHumidity(void){
 }
 
 uint8_t Sensors_ReadMicrophone(void){
-	return micCounter++;
-	//return ADCB.microphoneResult/16;
+	//return micCounter++;
+	return ADCB.microphoneResult/16;
 }
 
 uint16_t Sensors_ReadPressure(void){

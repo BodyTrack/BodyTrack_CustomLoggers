@@ -83,12 +83,14 @@
 //              3.02 - 08/15/2011 - variable number of buffers per sensor supported
 //								  - changed the way the sd card is detected
 //								  - reworked the function to get the space remaining on disk
+//              3.03 - 09/02/2011 - microphone input fixed
+//								  - air quality on sensor screen shows while recording and not
 //
 //___________________________________________
 
 
 #define DeviceClass			"BaseStation"
-#define FirmwareVersion		"3.02"
+#define FirmwareVersion		"3.03"
 #define HardwareVersion		"3"
 
 #include "avr_compiler.h"
@@ -554,50 +556,52 @@ ISR(SD_Writer_Timer_vect)
 		}
 		
 		
-		
-		if(okToSendAirQuality && !restartingFile){
-			uint8_t numberOfBins = 1;
-			uint8_t counter = 0;
-			while(Rs232_CharReadyToRead()){
-				airQualityString[counter] = Rs232_GetByte(false);
-				if(airQualityString[counter] == ','){
-					numberOfBins++;
-				}
-				counter++;
-			}
-			if(strstr(airQualityString,"Dylos") == NULL){
-				airSampleTime = Time_Get32BitTimer();
-				airCount[0] = atol(strtok(airQualityString,","));
-				for(uint8_t i = 0; i < numberOfBins; i++){
-					airCount[i+1] = atol(strtok(NULL,","));
-				}
-				if(numberOfBins == 2){
-					
-					quickSmall = airCount[0];
-					quickLarge = airCount[1];
-					if(recording){
-						SD_WriteAirSampleMinute();
-					}
-					okToSendAirQuality = false;
-				} else {
-					quickSmall = airCount[0] + airCount[1];
-					quickLarge = airCount[2] + airCount[3] + airCount[4] + airCount[5];
-					
-					if(recording){
-						SD_WriteAirSampleSecond();
-						
-					}
-					okToSendAirQuality = false;
-				}
-			} 
-		}
-		
 		if(okToSendRTCBlock){
 			UNIX_Time = Time_Get();
 			SD_WriteRTCBlock(Time_Get32BitTimer(),UNIX_Time);
 			okToSendRTCBlock = false;
 		}
 	}
+	
+	
+	if(okToSendAirQuality && !restartingFile){
+		uint8_t numberOfBins = 1;
+		uint8_t counter = 0;
+		while(Rs232_CharReadyToRead()){
+			airQualityString[counter] = Rs232_GetByte(false);
+			if(airQualityString[counter] == ','){
+				numberOfBins++;
+			}
+			counter++;
+		}
+		if(strstr(airQualityString,"Dylos") == NULL){
+			airSampleTime = Time_Get32BitTimer();
+			airCount[0] = atol(strtok(airQualityString,","));
+			for(uint8_t i = 0; i < numberOfBins; i++){
+				airCount[i+1] = atol(strtok(NULL,","));
+			}
+			if(numberOfBins == 2){
+				
+				quickSmall = airCount[0];
+				quickLarge = airCount[1];
+				if(recording){
+					SD_WriteAirSampleMinute();
+				}
+				okToSendAirQuality = false;
+			} else {
+				quickSmall = airCount[0] + airCount[1];
+				quickLarge = airCount[2] + airCount[3] + airCount[4] + airCount[5];
+				
+				if(recording){
+					SD_WriteAirSampleSecond();
+				}
+				okToSendAirQuality = false;
+			}
+		} 
+	}
+	
+	
+	
 
 	if(okToOpenLogFile){
 		if(SD_StartLogFile(UNIX_Time) == FR_OK){  // open file
