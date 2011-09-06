@@ -98,6 +98,8 @@ void Sensors_Init(void){
 	_delay_ms(10);
 	zeroOffsetB = ADCB.groundResult;
 	
+	
+	
 	// general sensors @ 1hz
 	// fclk = 14745600
 	// div  = 1024

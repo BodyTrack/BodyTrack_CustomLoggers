@@ -15,6 +15,7 @@ uint8_t		commandCode;
 uint16_t	colors[4];
 uint8_t		colors8[8];
 
+uint8_t timeOut;
 
 void Light_Init(uint8_t address){
 	deviceAddress = address;
@@ -37,7 +38,7 @@ void Light_Init(uint8_t address){
 
 uint8_t Light_readByte(uint8_t location){
 	uint8_t tmp;
-
+	
 
 	//Send start condition, and device address + write
 	writeAddress = deviceAddress & ~0x01;
@@ -45,22 +46,37 @@ uint8_t Light_readByte(uint8_t location){
 
 
 	LightPort.MASTER.ADDR = writeAddress;
-
+	timeOut = 0;
 	while (!(LightPort.MASTER.STATUS & TWI_MASTER_WIF_bm)) {
 				//Wait for write flag to turn on
+		_delay_ms(1);
+		timeOut++;
+		if(timeOut == 0){
+			return 0;
+		}
 	}
 
 	LightPort.MASTER.DATA = commandCode;
-
+	timeOut = 0;
 	while (!(LightPort.MASTER.STATUS & TWI_MASTER_WIF_bm)) {
 				//Wait for write flag to turn on
+		_delay_ms(1);
+		timeOut++;
+		if(timeOut == 0){
+			return 0;
+		}
 	}
 
 	writeAddress = deviceAddress | 0x01;	// start with address & read
 	LightPort.MASTER.ADDR = writeAddress;
-
+	timeOut = 0;
 	while (!(LightPort.MASTER.STATUS & TWI_MASTER_RIF_bm)) {
-				//Wait for Read flag to come on
+		//Wait for Read flag to come on		
+		_delay_ms(1);
+		timeOut++;
+		if(timeOut == 0){
+			return 0;
+		}
 	}
 
 	tmp = LightPort.MASTER.DATA;
@@ -79,15 +95,25 @@ void Light_readColors(void){
 	commandCode = 0b10000000 | 0x10;
 
 	LightPort.MASTER.ADDR = writeAddress;
-
+	timeOut = 0;
 	while (!(LightPort.MASTER.STATUS & TWI_MASTER_WIF_bm)) {
 					//Wait for write flag to turn on
+		_delay_ms(1);
+		timeOut++;
+		if(timeOut == 0){
+			return;
+		}
 	}
 
 	LightPort.MASTER.DATA = commandCode;
-
+	timeOut = 0;
 	while (!(LightPort.MASTER.STATUS & TWI_MASTER_WIF_bm)) {
 					//Wait for write flag to turn on
+		_delay_ms(1);
+		timeOut++;
+		if(timeOut == 0){
+			return;
+		}
 	}
 
 	writeAddress = deviceAddress | 0x01;	// start with address & read
@@ -95,8 +121,14 @@ void Light_readColors(void){
 
 
 	for(uint8_t i = 0; i < 8; i++){
+		timeOut = 0;
 		while (!(LightPort.MASTER.STATUS & TWI_MASTER_RIF_bm)) {
 				//Wait for Read flag to come on
+			_delay_ms(1);
+			timeOut++;
+			if(timeOut == 0){
+				return;
+			}
 		}
 
 		colors8[i] = LightPort.MASTER.DATA;
@@ -124,21 +156,36 @@ void Light_writeByte(uint8_t location, uint8_t toSend){
 	commandCode = 0b10000000 | location;
 
 	LightPort.MASTER.ADDR = writeAddress;
-
+	timeOut = 0;
 	while (!(LightPort.MASTER.STATUS & TWI_MASTER_WIF_bm)) {
 				//Wait for write flag to turn on
+		_delay_ms(1);
+		timeOut++;
+		if(timeOut == 0){
+			return;
+		}
 	}
 
 	LightPort.MASTER.DATA = commandCode;
-
+	timeOut = 0;
 	while (!(LightPort.MASTER.STATUS & TWI_MASTER_WIF_bm)) {
 				//Wait for write flag to turn on
+		_delay_ms(1);
+		timeOut++;
+		if(timeOut == 0){
+			return;
+		}
 	}
 
 	LightPort.MASTER.DATA = toSend;
-
+	timeOut = 0;
 	while (!(LightPort.MASTER.STATUS & TWI_MASTER_WIF_bm)) {
 				//Wait for write flag to turn on
+		_delay_ms(1);
+		timeOut++;
+		if(timeOut == 0){
+			return;
+		}
 	}
 
 	LightPort.MASTER.CTRLC = TWI_MASTER_ACKACT_bm | TWI_MASTER_CMD_STOP_gc;	// stop

@@ -85,12 +85,13 @@
 //								  - reworked the function to get the space remaining on disk
 //              3.03 - 09/02/2011 - microphone input fixed
 //								  - air quality on sensor screen shows while recording and not
+//              3.04 - 09/06/2011 - timeout implemented in light sensor
 //
 //___________________________________________
 
 
 #define DeviceClass			"BaseStation"
-#define FirmwareVersion		"3.03"
+#define FirmwareVersion		"3.04"
 #define HardwareVersion		"3"
 
 #include "avr_compiler.h"
@@ -205,19 +206,23 @@ int main(void){
 	}
 	
 	display_showSplashScreen(false,false,false);
-	_delay_ms(500);
+	_delay_ms(1000);
 	
 	while(!SD_Inserted()){
 		SD_Init();
 		display_showSplashScreen(true,false,false);			// waiting for SD card
 		_delay_ms(250);
 	}
-	_delay_ms(1000);
+	
+	_delay_ms(500);
+	
 	SD_Read_config_file();
+	
+	
 
     if(demoMode){
 		display_showSplashScreen(false,false,true);
-		_delay_ms(1000);
+		_delay_ms(500);
 		display_clearScreen();
 		while(true);
 	}
