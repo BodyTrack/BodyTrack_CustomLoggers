@@ -27,7 +27,7 @@ volatile uint8_t lastBufferIWroteTo = 0;
 
 
 
-//char				tempDebug [50];      
+char				tempDebug [50];      
 
 
 void Sensors_Init(void){
@@ -122,7 +122,8 @@ void Sensors_Init(void){
 	// => 14745600/8/256 => 7200 samples per second
 
 	// Set period/TOP value
-
+	
+	//Sensors_Timer_7200HZ.PER = 6143; 				// 0.3khz
 	Sensors_Timer_7200HZ.PER = 255; 				// 7.2khz
 
 	// Select clock source
@@ -380,19 +381,9 @@ ISR(Sensors_Timer_1HZ_vect)
 
 ISR(Sensors_Timer_7200HZ_vect)
 {
-	
-	/*if(okToSendMicrophoneBuffer[microphoneBufferToWriteTo]){
-		Debug_SendByte(microphoneBufferToWriteTo + '0');
-	}*/
-	
-	
 	if(recording && wantToRecordFast && !okToSendMicrophoneBuffer[microphoneBufferToWriteTo]){
 		if(microphoneBufferCounter == 0){
 			microphoneSampleStartTime[microphoneBufferToWriteTo] = Time_Get32BitTimer();
-			/*if(lastBufferIWroteTo == microphoneBufferToWriteTo){
-				sprintf(tempDebug, "Possible Corruption At: %lu", UNIX_Time);		
-				Debug_SendString(tempDebug, true);
-			}*/
 			lastBufferIWroteTo = microphoneBufferToWriteTo;
 			
 		}

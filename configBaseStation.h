@@ -8,11 +8,11 @@
  */
 
 
-bool wantToRecordTemperature 	= true;
-bool wantToRecordPressure 		= true;
-bool wantToRecordHumidity 		= true;
-bool wantToRecordLight		 	= true;
-bool wantToRecordAirQuality		= true;
+bool wantToRecordTemperature 	= false;
+bool wantToRecordPressure 		= false;
+bool wantToRecordHumidity 		= false;
+bool wantToRecordLight		 	= false;
+bool wantToRecordAirQuality		= false;
 bool wantToRecordFast			= false;
 
 
@@ -41,7 +41,6 @@ bool wantToRecordFast			= false;
 #define humidityTicksPerSample			1843200			// 1Hz
 #define lightTicksPerSample				1843200			// 1Hz
 #define microphoneTicksPerSample		256				// 7200Hz
-//#define microphoneTicksPerSample		6144			// 300Hz
 #define airTicksPerSampleFastHZ			1843200			// 1Hz	
 #define airTicksPerSampleSlowHZ			110592000		// 1/60Hz			
 

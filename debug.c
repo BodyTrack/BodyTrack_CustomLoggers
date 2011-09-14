@@ -114,6 +114,7 @@ bool Debug_SendByte(uint8_t data){
 	while(!(Debug_Usart.STATUS & USART_DREIF_bm));
 	while(((Debug_Flow_Port.IN)&(1<<Debug_RTS_pin)) > 0){	// Wait for RTS to be low
 		Debug_timeOutCounter++;
+		
 		if(Debug_timeOutCounter > 10000){
 			Debug_timeOutCounter = 0;
 			return false;

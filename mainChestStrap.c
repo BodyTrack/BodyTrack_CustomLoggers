@@ -26,11 +26,12 @@
 //								  - changing sensor buffer length in config file is supported
 //								  - button presses are moved to interrupts
 //              3.02 - 08/15/2011 - variable number of buffers per sensor supported
+//              3.05 - 09/14/2011 - Gap issue addressed. Buffers cannot overwrite before they are written. Buffers must be sent in the correct order.
 //
 //___________________________________________
 
 #define DeviceClass			"ChestStrap"
-#define FirmwareVersion		"3.02"
+#define FirmwareVersion		"3.05"
 #define HardwareVersion		"3"
 
 
@@ -80,26 +81,20 @@ void	SD_WriteRTCBlock(uint32_t ticker, uint32_t time);
 
 char				temp [50];         // use in main loop
 
-volatile bool		okToOpenLogFile = false;
-volatile bool		okToWriteToLogFile = false;
-volatile bool		okToCloseLogFile = false;
-
-volatile bool		restartingFile     = false;
+volatile bool		okToOpenLogFile			= false;
+volatile bool		okToWriteToLogFile		= false;
+volatile bool		okToCloseLogFile		= false;
+volatile bool		okToGetRemainingSpace	= false;
+volatile bool		restartingFile			= false;
 
 volatile uint16_t	lengthOfCurrentFile = 0;
-
-
-uint32_t			spaceRemainingOnDisk = 0;
-uint32_t			totalDiskSpace = 0;
-uint32_t			percentDiskUsed = 0;
-
-volatile bool		okToGetRemainingSpace;
 
 
 volatile uint16_t	syncCounter = 0;
 volatile uint8_t	debounceTimer = 0;
 volatile bool		debounceEnabled = false;
 
+volatile uint8_t	spaceRemainingCounter = 0;
 
 volatile bool		batteryVoltageOk = true;
 
@@ -134,16 +129,22 @@ int main(void){
 		RTC32.INTCTRL = 0;
 	}
 	
-	while(!SD_Inserted());
-	_delay_ms(1000);
+	while(!SD_Inserted()){
+		SD_Init();
+		_delay_ms(250);
+	}
+	_delay_ms(500);
 	
 	SD_Read_config_file();
 	
 Reset:
-	
 	_delay_ms(500);
+	
+	okToGetRemainingSpace = true;
+	while(okToGetRemainingSpace);
+		
 	connected = false;
-	while(!Uploader_connectToComputer());	
+	while(!Uploader_connectToComputer());
 	connected = true;
 	
     while(true){
@@ -180,12 +181,12 @@ void Interrupt_Init(void)
 }
 
 ISR(Button_IntVector){
-	if(!recording && timeIsValid && SD_Inserted() && !debounceEnabled){			// start recording
+	if(!okToOpenLogFile && !recording && timeIsValid && SD_Inserted() && !debounceEnabled){			// start recording
 		if(percentDiskUsed < 950){
 			debounceEnabled = true;
 			okToOpenLogFile = true;	
 		}
-	} else if(recording && !debounceEnabled){		// stop recording
+	} else if(recording && !debounceEnabled){									// stop recording
 		recording = false;
 		Sensors_ResetHumidityBuffers();
 		Sensors_ResetTemperatureBuffers();
@@ -259,6 +260,13 @@ ISR(GUI_Timer_vect)                          // 10HZ
 		}
 	}
 	
+	spaceRemainingCounter++;														// every 25 seconds, refresh space remaining on disk
+	if(spaceRemainingCounter == 0){
+		okToGetRemainingSpace = true;
+		while(okToGetRemainingSpace);
+	}
+	
+	
 	if(debounceEnabled){
 		debounceTimer++;
 		if(debounceTimer > 10){
@@ -266,23 +274,10 @@ ISR(GUI_Timer_vect)                          // 10HZ
 			debounceEnabled = false;
 		}
 	}
-		
-	
-	if(!SD_Inserted() && recording){		// stop recording
-		recording = false;
-		
-		Sensors_ResetHumidityBuffers();
-		Sensors_ResetTemperatureBuffers();
-		Sensors_ResetRespirationBuffers();
-		Sensors_ResetEKGBuffers();
-		Sensors_ResetAccelBuffers();
-		okToCloseLogFile = true;
-		debounceEnabled = true;		
-	} 	
-	
 	
 	if(!SD_Inserted()){
 		Leds_State(Red,on);
+		recording = false;
 	} else if(!timeIsValid){
 		Leds_State(Red,slow);
 	} else if(!batteryVoltageOk){
@@ -345,36 +340,41 @@ ISR(SD_Writer_Timer_vect)
 {	
 	if(recording){
 		for(uint8_t i = 0; i < accelNumberOfBuffers; i++){
-			if(okToSendAccelBuffer[i]){
+			if(okToSendAccelBuffer[i] && (lastAccelerometerBufferSent != i)){
 				SD_WriteAccelBuffer(i);
+				lastAccelerometerBufferSent = i;
 				okToSendAccelBuffer[i] = false;
 			}
 		}
 	
 		for(uint8_t i = 0; i < EKGNumberOfBuffers; i++){
-			if(okToSendEKGBuffer[i]){
+			if(okToSendEKGBuffer[i] && (lastEKGBufferSent != i)){
 				SD_WriteEKGBuffer(i);
+				lastEKGBufferSent = i;
 				okToSendEKGBuffer[i] = false;
 			}
 		}
 		
 		for(uint8_t i = 0; i < respirationNumberOfBuffers; i++){
-			if(okToSendRespirationBuffer[i]){
+			if(okToSendRespirationBuffer[i] && (lastRespirationBufferSent != i)){
 				SD_WriteRespirationBuffer(i);
+				lastRespirationBufferSent = i;
 				okToSendRespirationBuffer[i] = false;
 			}
 		}
 		
 		for(uint8_t i = 0; i < temperatureNumberOfBuffers; i++){
-			if(okToSendTemperatureBuffer[i]){
+			if(okToSendTemperatureBuffer[i] && (lastTemperatureBufferSent != i)){
 				SD_WriteTemperatureBuffer(i);
+				lastTemperatureBufferSent = i;
 				okToSendTemperatureBuffer[i] = false;
 			}
 		}
 		
 		for(uint8_t i = 0; i < humidityNumberOfBuffers; i++){
-			if(okToSendHumidityBuffer[i]){
+			if(okToSendHumidityBuffer[i] && (lastHumidityBufferSent != i)){
 				SD_WriteHumidityBuffer(i);
+				lastHumidityBufferSent = i;
 				okToSendHumidityBuffer[i] = false;
 			}
 		}
@@ -391,22 +391,20 @@ ISR(SD_Writer_Timer_vect)
 	
 	
 	
-
 	
-	if(okToOpenLogFile && (percentDiskUsed < 950)){
+	if(okToOpenLogFile){
 		if(SD_StartLogFile(UNIX_Time) == FR_OK){  // open file
 			_delay_ms(100);
-			
 			lengthOfCurrentFile = 0;	
 			
 		    timeRecordingStarted = UNIX_Time;
 		    SD_WriteRTCBlock(Time_Get32BitTimer(),UNIX_Time);
 			
 		    recording = true;
-		    okToOpenLogFile = false;
 		} else {
-		    SD_Init();
+		    sdValid = false;
 		}
+		okToOpenLogFile = false;
 	}
 	
 	if(okToCloseLogFile){
@@ -415,7 +413,9 @@ ISR(SD_Writer_Timer_vect)
 	}
 	
 	if(okToOpenDirectory){
-        f_opendir(&dir, "/");
+        if(f_opendir(&dir, "/") != FR_OK){
+			sdValid = false;
+		}
         okToOpenDirectory = false;
 	}
 	
@@ -427,7 +427,7 @@ ISR(SD_Writer_Timer_vect)
 	        }
 	        okToGrabNextFileName = false;
         } else if(SD_Inserted()){
-            SD_Init();
+            SD_Init();			
             f_opendir(&dir, "/");
         }
 	}
@@ -448,37 +448,37 @@ ISR(SD_Writer_Timer_vect)
 	
     if(okToFillUploadFileBuffer){
         uint16_t tmp;
-        f_read(&Upload_File,&uploadFileBuffer,uploadChunkSize,&tmp);
+        if(f_read(&Upload_File,&uploadFileBuffer,uploadChunkSize,&tmp) != FR_OK){
+			sdValid = false;
+		}
         okToFillUploadFileBuffer = false;
         uploadFileBufferFull = true;
     }
 	
 	
 	if(okToCloseUploadFile){
-	    f_sync(&Upload_File);
+	    if(f_sync(&Upload_File) != FR_OK){
+			sdValid = false;
+		}
 	    f_close(&Upload_File);
 	    strcpy(fileToUpload,"");
 		okToCloseUploadFile = false;
 	}
 	
 	if(okToGetRemainingSpace){
-	    if(f_getfree("0:",&spaceRemainingOnDisk,&fs) != FR_OK){
-			spaceRemainingOnDisk = 0;
-	    }
-	    totalDiskSpace = fs->max_clust;
-		
-        percentDiskUsed = totalDiskSpace - spaceRemainingOnDisk;
-	    percentDiskUsed *= 1000;
-	    percentDiskUsed /= totalDiskSpace;
-		
-	    okToGetRemainingSpace = false;
+		SD_GetSpaceRemaining();
+		okToGetRemainingSpace = false;
 	}
 	
 	if(okToEraseFile){
         eraseFileReturn = f_unlink(fileToErase);
+		if(eraseFileReturn != FR_OK){
+			sdValid = false;
+		}
         strcpy(fileToUpload,"");
         okToEraseFile = false;
 	}
+	
 }
 
 uint8_t SD_StartLogFile(uint32_t time){
@@ -494,6 +494,7 @@ uint8_t SD_StartLogFile(uint32_t time){
 	SD_MakeFileName(time);
 	resp = SD_Open(fileName);
 	if(resp != FR_OK){
+		sdValid = false;
 	    return resp;
 	}
 	SD_ClearCRC();
@@ -540,10 +541,11 @@ uint8_t SD_StartLogFile(uint32_t time){
 	SD_Write8(0x0A);
 	SD_Write8(0x00);
 	
-	SD_WriteCRC();						
+	SD_WriteCRC();																		
 	
-	f_sync(&Log_File);
-	
+	if(f_sync(&Log_File) != FR_OK){
+		sdValid = false;
+	}
 	return resp;
 }
 
@@ -559,7 +561,9 @@ void SD_WriteRTCBlock(uint32_t ticker, uint32_t time){
 	SD_Write8(0);
 	SD_Write32(0);								// unix time nanoseconds
 	SD_WriteCRC();								// CRC			
-	f_sync(&Log_File);
+	if(f_sync(&Log_File) != FR_OK){
+		sdValid = false;
+	}
 	
 }
 
@@ -591,7 +595,9 @@ void SD_WriteTemperatureBuffer(uint8_t bufferNumber){
 	}
 	
 	SD_WriteCRC();					
-	f_sync(&Log_File);
+	if(f_sync(&Log_File) != FR_OK){
+		sdValid = false;
+	}
 }
 
 void SD_WriteHumidityBuffer(uint8_t bufferNumber){
@@ -622,7 +628,9 @@ void SD_WriteHumidityBuffer(uint8_t bufferNumber){
 	}
 
 	SD_WriteCRC();			// CRC
-	f_sync(&Log_File);
+	if(f_sync(&Log_File) != FR_OK){
+		sdValid = false;
+	}
 }
 
 void SD_WriteRespirationBuffer(uint8_t bufferNumber){
@@ -652,7 +660,9 @@ void SD_WriteRespirationBuffer(uint8_t bufferNumber){
 	}
 	
 	SD_WriteCRC();			// CRC
-	f_sync(&Log_File);
+	if(f_sync(&Log_File) != FR_OK){
+		sdValid = false;
+	}
 }
 
 
@@ -684,7 +694,9 @@ void SD_WriteEKGBuffer(uint8_t bufferNumber){
 	}
 	
 	SD_WriteCRC();			// CRC
-	f_sync(&Log_File);
+	if(f_sync(&Log_File) != FR_OK){
+		sdValid = false;
+	}
 }
 
 void SD_WriteAccelBuffer(uint8_t bufferNumber){
@@ -723,7 +735,9 @@ void SD_WriteAccelBuffer(uint8_t bufferNumber){
 	}
 	
 	SD_WriteCRC();			
-	f_sync(&Log_File);
+	if(f_sync(&Log_File) != FR_OK){
+		sdValid = false;
+	}
 }
 
 void getDeviceID(void){

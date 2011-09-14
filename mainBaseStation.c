@@ -86,12 +86,13 @@
 //              3.03 - 09/02/2011 - microphone input fixed
 //								  - air quality on sensor screen shows while recording and not
 //              3.04 - 09/06/2011 - timeout implemented in light sensor
+//              3.05 - 09/14/2011 - Gap issue addressed. Buffers cannot overwrite before they are written. Buffers must be sent in the correct order.
 //
 //___________________________________________
 
 
 #define DeviceClass			"BaseStation"
-#define FirmwareVersion		"3.04"
+#define FirmwareVersion		"3.05"
 #define HardwareVersion		"3"
 
 #include "avr_compiler.h"
@@ -143,33 +144,24 @@ void	SD_WriteRTCBlock(uint32_t ticker, uint32_t time);
 char				temp [50];         // use in main loop
 char				tempDisplay [50];        // use in display interrupt
 
-uint8_t				clockHour = 0;
-
 volatile uint8_t	currentMode      = 0;
 
-volatile bool		okToOpenLogFile = false;
-volatile bool		okToWriteToLogFile = false;
-volatile bool		okToCloseLogFile = false;
-volatile bool		okToDisplayGUI = false;
-volatile bool		justSwitchedStated = false;
+volatile bool		okToOpenLogFile			= false;
+volatile bool		okToWriteToLogFile		= false;
+volatile bool		okToCloseLogFile		= false;
+volatile bool		okToDisplayGUI			= false;
+volatile bool		okToGetRemainingSpace	= false;
+volatile bool		justSwitchedStated		= false;
+volatile bool		restartingFile			= false;
 
-volatile bool		restartingFile     = false;
+uint8_t				clockHour = 0;
 volatile bool		displayAM = false;
 volatile bool		displayPM = false;
 
-
 volatile uint16_t	lengthOfCurrentFile = 0;
-
-volatile bool		okToGetRemainingSpace;
 volatile uint8_t	spaceRemainingCounter = 0;
-
 volatile uint8_t	backlight_Timer = 0;
-
 volatile uint16_t	syncCounter = 0;
-
-
-
-
 
 
 // ********************************** Main Program *********************************
@@ -213,12 +205,9 @@ int main(void){
 		display_showSplashScreen(true,false,false);			// waiting for SD card
 		_delay_ms(250);
 	}
-	
 	_delay_ms(500);
 	
 	SD_Read_config_file();
-	
-	
 
     if(demoMode){
 		display_showSplashScreen(false,false,true);
@@ -246,7 +235,7 @@ Reset:
 	while(!Uploader_connectToComputer());
 	connected = true;
     
-	 while(true){
+	while(true){
 		if(!Uploader_Update()){
 			goto Reset;
 		}
@@ -314,7 +303,6 @@ ISR(Switch_IntVector){
 		}
 	} else if((!Button_Pressed(Switch_Pin) || !SD_Inserted()) && recording && !okToCloseLogFile){			// close file
 		recording = false;
-		
 		Sensors_ResetTemperatureBuffers();
 		Sensors_ResetHumidityBuffers();
 		Sensors_ResetPressureBuffers();
@@ -526,36 +514,41 @@ ISR(SD_Writer_Timer_vect)
 	if(recording){
 		
 		for(uint8_t i = 0; i < microphoneNumberOfBuffers; i++){
-			if(okToSendMicrophoneBuffer[i]){
+			if(okToSendMicrophoneBuffer[i] && (lastMicrophoneBufferSent != i)){
 				SD_WriteMicrophoneBuffer(i);
+				lastMicrophoneBufferSent = i;
 				okToSendMicrophoneBuffer[i] = false;
 			}
 		}
 		
 		for(uint8_t i = 0; i < temperatureNumberOfBuffers; i++){
-			if(okToSendTemperatureBuffer[i]){
+			if(okToSendTemperatureBuffer[i] && (lastTemperatureBufferSent != i)){
 				SD_WriteTemperatureBuffer(i);
+				lastTemperatureBufferSent = i;
 				okToSendTemperatureBuffer[i] = false;
 			}
 		}
 		
 		for(uint8_t i = 0; i < humidityNumberOfBuffers; i++){
-			if(okToSendHumidityBuffer[i]){
+			if(okToSendHumidityBuffer[i] && (lastHumidityBufferSent != i)){
 				SD_WriteHumidityBuffer(i);
+				lastHumidityBufferSent = i;
 				okToSendHumidityBuffer[i] = false;
 			}
 		}
 		
 		for(uint8_t i = 0; i < pressureNumberOfBuffers; i++){
-			if(okToSendPressureBuffer[i]){
+			if(okToSendPressureBuffer[i] && (lastPressureBufferSent != i)){
 				SD_WritePressureBuffer(i);
+				lastPressureBufferSent = i;
 				okToSendPressureBuffer[i] = false;
 			}
 		}
 		
 		for(uint8_t i = 0; i < lightNumberOfBuffers; i++){
-			if(okToSendLightBuffer[i]){
+			if(okToSendLightBuffer[i] && (lastLightBufferSent != i)){
 				SD_WriteLightBuffer(i);
+				lastLightBufferSent = i;
 				okToSendLightBuffer[i] = false;
 			}
 		}

@@ -62,6 +62,7 @@ bool wantToRecordFast			= false;
 #define Debug_CTS_pin           1
 #define Debug_BufferSize		100
 #define Debug_INTVector			USARTC0_RXC_vect
+#define Debug_DMA_Channel		CH0
 
 // SD
 #define SD_PORT					PORTD 

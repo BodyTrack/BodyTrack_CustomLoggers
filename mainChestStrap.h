@@ -32,35 +32,40 @@ typedef struct {
 
 volatile bool recording = false;
 
-uint32_t		temperatureSampleStartTime	[temperatureNumberOfSamples];
-uint16_t		temperatureBuffer			[temperatureNumberOfBuffers][temperatureNumberOfSamples];
-volatile bool	okToSendTemperatureBuffer	[temperatureNumberOfBuffers];
-uint8_t			temperatureBufferToWriteTo	= 0;
-uint16_t		temperatureBufferCounter	= 0;
+uint32_t			temperatureSampleStartTime	[temperatureNumberOfSamples];
+uint16_t			temperatureBuffer			[temperatureNumberOfBuffers][temperatureNumberOfSamples];
+volatile bool		okToSendTemperatureBuffer	[temperatureNumberOfBuffers];
+uint8_t				temperatureBufferToWriteTo	= 0;
+uint16_t			temperatureBufferCounter	= 0;
+volatile uint8_t	lastTemperatureBufferSent	= 100;
 
-uint32_t		respirationSampleStartTime	[respirationNumberOfSamples];
-uint16_t		respirationBuffer			[respirationNumberOfBuffers][respirationNumberOfSamples];
-volatile bool	okToSendRespirationBuffer	[respirationNumberOfBuffers];
-uint8_t			respirationBufferToWriteTo	= 0;
-uint16_t		respirationBufferCounter	= 0;
+uint32_t			respirationSampleStartTime	[respirationNumberOfSamples];
+uint16_t			respirationBuffer			[respirationNumberOfBuffers][respirationNumberOfSamples];
+volatile bool		okToSendRespirationBuffer	[respirationNumberOfBuffers];
+uint8_t				respirationBufferToWriteTo	= 0;
+uint16_t			respirationBufferCounter	= 0;
+volatile uint8_t	lastRespirationBufferSent	= 100;
 
-uint32_t		EKGSampleStartTime			[EKGNumberOfSamples];
-uint16_t		EKGBuffer					[EKGNumberOfBuffers][EKGNumberOfSamples];
-volatile bool	okToSendEKGBuffer			[EKGNumberOfBuffers];
-uint8_t			EKGBufferToWriteTo			= 0;
-uint16_t		EKGBufferCounter			= 0;
+uint32_t			EKGSampleStartTime			[EKGNumberOfSamples];
+uint16_t			EKGBuffer					[EKGNumberOfBuffers][EKGNumberOfSamples];
+volatile bool		okToSendEKGBuffer			[EKGNumberOfBuffers];
+uint8_t				EKGBufferToWriteTo			= 0;
+uint16_t			EKGBufferCounter			= 0;
+volatile uint8_t	lastEKGBufferSent	= 100;
 
-uint32_t		humiditySampleStartTime		[humidityNumberOfSamples];
-uint16_t		humidityBuffer				[humidityNumberOfBuffers][humidityNumberOfSamples];
-volatile bool	okToSendHumidityBuffer		[humidityNumberOfBuffers];
-uint8_t			humidityBufferToWriteTo		= 0;
-uint16_t		humidityBufferCounter		= 0;
+uint32_t			humiditySampleStartTime		[humidityNumberOfSamples];
+uint16_t			humidityBuffer				[humidityNumberOfBuffers][humidityNumberOfSamples];
+volatile bool		okToSendHumidityBuffer		[humidityNumberOfBuffers];
+uint8_t				humidityBufferToWriteTo		= 0;
+uint16_t			humidityBufferCounter		= 0;
+volatile uint8_t	lastHumidityBufferSent	= 100;
 
-uint32_t		accelSampleStartTime		[accelNumberOfSamples];
-uint16_t		accelBuffer					[accelNumberOfBuffers][accelNumberOfSamples*accelNumberOfChannels];
-volatile bool	okToSendAccelBuffer			[accelNumberOfBuffers];
-uint8_t			accelBufferToWriteTo		= 0;
-uint16_t		accelBufferCounter			= 0;
+uint32_t			accelSampleStartTime		[accelNumberOfSamples];
+uint16_t			accelBuffer					[accelNumberOfBuffers][accelNumberOfSamples*accelNumberOfChannels];
+volatile bool		okToSendAccelBuffer			[accelNumberOfBuffers];
+uint8_t				accelBufferToWriteTo		= 0;
+uint16_t			accelBufferCounter			= 0;
+volatile uint8_t	lastAccelerometerBufferSent	= 100;
 
 volatile bool	okToSendRTCBlock = false;
 uint8_t			rtcBlockCounter = 0;

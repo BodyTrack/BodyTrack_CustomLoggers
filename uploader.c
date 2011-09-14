@@ -151,15 +151,15 @@ bool Uploader_connectToComputer(void){
 }
 
 bool Uploader_getTime(void){
-    uint32_t tempTime = 0;
-    uint8_t timeOutCounter = 0;
-    uint8_t commandCounter = 0;
-    if(!Debug_SendByte('T')){
+    volatile uint32_t tempTime = 0;
+    volatile uint8_t timeOutCounter = 0;
+    volatile uint8_t commandCounter = 0;
+	if(!Debug_SendByte('T')){
 		return false;
 	}
     while(true){
         if(Debug_CharReadyToRead()){
-            command[commandCounter+1] = Debug_GetByte(false);
+	        command[commandCounter+1] = Debug_GetByte(false);
 			if(!Debug_SendByte(command[commandCounter+1])){
 				return false;
 			}
@@ -174,9 +174,10 @@ bool Uploader_getTime(void){
                 tempTime += command[4];
 				
                 Time_Set(tempTime);
-                return true;
+				return true;
             }
         }
+		
         _delay_ms(1);
         timeOutCounter++;
         if(timeOutCounter > 100){
