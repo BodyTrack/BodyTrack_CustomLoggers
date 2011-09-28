@@ -82,8 +82,9 @@ void Time_Set(uint32_t time){
 	RTC32.COMP = 0;
 	RTC32.CNT = time;
 	
+	_delay_ms(10);
 	/* Re-enable the RTC32 module, synchronize before returning. */
-	RTC32.CTRL |= RTC32_ENABLE_bm;
+	RTC32.CTRL = RTC32_ENABLE_bm;
 	while (RTC32.SYNCCTRL & RTC32_SYNCBUSY_bm);
 	
 	RTC32.INTCTRL = ( RTC32.INTCTRL & ~RTC32_COMPINTLVL_gm ) | RTC32_COMPINTLVL_LO_gc;

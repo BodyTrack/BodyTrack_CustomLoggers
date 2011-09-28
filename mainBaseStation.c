@@ -87,12 +87,13 @@
 //								  - air quality on sensor screen shows while recording and not
 //              3.04 - 09/06/2011 - timeout implemented in light sensor
 //              3.05 - 09/14/2011 - Gap issue addressed. Buffers cannot overwrite before they are written. Buffers must be sent in the correct order.
+//              3.06 - 09/28/2011 - logging 1hz sensors disabled in v3.05, now enabled.
 //
 //___________________________________________
 
 
 #define DeviceClass			"BaseStation"
-#define FirmwareVersion		"3.05"
+#define FirmwareVersion		"3.06"
 #define HardwareVersion		"3"
 
 #include "avr_compiler.h"
@@ -333,7 +334,6 @@ ISR(Display_Writer_Timer_vect){
 		display_setBacklight(false);
 	}
 	backlight_Timer++;
-	
 
 	if(backLightIsOn && okToDisplayGUI && Button_Pressed(Button_Pin)){
 		backlight_Timer = 0;

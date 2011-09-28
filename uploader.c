@@ -51,10 +51,10 @@ bool Uploader_Update(void){
 		timeOutCounter = 0;
 		command[0] = Debug_GetByte(false);
 		
-		if(command[0] == 'T'){									// supply the time
+		if(command[0] == 'T'){	// supply the time
 			if(Uploader_getTime()){
 				UNIX_Time = Time_Get();
-				timeIsValid = true;				
+				timeIsValid = true;
 			} else {
 				timeIsValid = false;
 				return false;

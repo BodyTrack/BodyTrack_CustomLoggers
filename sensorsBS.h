@@ -7,7 +7,7 @@
 
 
 // Common
-#define groundMUXPos                ADC_CH_MUXPOS_PIN1_gc
+#define groundMUXPos                ADC_CH_MUXPOS_PIN2_gc
 #define groundChannel	            CH0
 #define	groundResult	            CH0RES
 

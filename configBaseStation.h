@@ -8,11 +8,11 @@
  */
 
 
-bool wantToRecordTemperature 	= false;
-bool wantToRecordPressure 		= false;
-bool wantToRecordHumidity 		= false;
-bool wantToRecordLight		 	= false;
-bool wantToRecordAirQuality		= false;
+bool wantToRecordTemperature 	= true;
+bool wantToRecordPressure 		= true;
+bool wantToRecordHumidity 		= true;
+bool wantToRecordLight		 	= true;
+bool wantToRecordAirQuality		= true;
 bool wantToRecordFast			= false;
 
 
