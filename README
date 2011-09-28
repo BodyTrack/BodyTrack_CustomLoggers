@@ -70,5 +70,27 @@ using the logger gateway, the time can be synced to your device. The gateway wil
 
 Once files are successfully transfered to the computer, it will be uploaded to the server specified in your configuration file. Only then will it erase your files from the uSD card.
 
+************************************* 
+SETUP YOUR MAC TO PROGRAM DEVICE
+
+> Setup paths:
+
+In the new Terminal window, type in "echo $SHELL" and press return
+If the output is /bin/bash then type the following command:  echo 'PATH=$PATH:/usr/local/bin' >> ~/.bash_profile  all on one line. Press return.
+If the output is /bin/csh or /bin/tcsh then type the following command:  echo 'set path = ($path /usr/local/bin)' >> ~/.cshrc all on one line. Press return.
+Close any Terminal windows and open up a new one. This makes sure the .bash_profile or .cshrc is reloaded. Now type in echo $PATH (for bash) or echo $path (for t/csh) you should get something like the following:
+The important thing is that at the end of the line is /usr/local/bin
+
+> install CrossPack
+
+http://www.obdev.at/products/crosspack/index.html
+
+> download source code:
+
+https://github.com/BodyTrack/BodyTrack_CustomLoggers
+
+> program device:
+
+$ make bsp
 
 
