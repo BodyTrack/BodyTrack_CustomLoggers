@@ -30,10 +30,6 @@
 //
 //___________________________________________
 
-#define DeviceClass			"ChestStrap"
-#define FirmwareVersion		"3.05"
-#define HardwareVersion		"3"
-
 
 #include "avr_compiler.h"
 #include <stdio.h>

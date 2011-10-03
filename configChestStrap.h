@@ -7,6 +7,12 @@
  *
  */
 
+
+#define DeviceClass			"ChestStrap"
+#define FirmwareVersion		"3.05"
+#define HardwareVersion		"3"
+
+
 bool wantToRecordTemperature 	= true;
 bool wantToRecordHumidity 		= true;
 bool wantToRecordEKG		 	= true;

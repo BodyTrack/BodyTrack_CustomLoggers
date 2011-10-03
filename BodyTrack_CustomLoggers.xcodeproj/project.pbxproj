@@ -46,12 +46,21 @@
 		0320152413C63657006F6A2F /* configBaseStation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = configBaseStation.h; sourceTree = "<group>"; };
 		032016AE13C73CBE006F6A2F /* uploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = uploader.h; sourceTree = "<group>"; };
 		032016AF13C73CBE006F6A2F /* uploader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = uploader.c; sourceTree = "<group>"; };
+		03B360251439EDE600CC5097 /* mainBaseStationBootloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mainBaseStationBootloader.h; sourceTree = "<group>"; };
+		03B360261439EDE600CC5097 /* mainBaseStationBootloader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mainBaseStationBootloader.c; sourceTree = "<group>"; };
+		03B360731439F8EA00CC5097 /* eeprom_driver.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = eeprom_driver.c; sourceTree = "<group>"; };
+		03B360741439F8EA00CC5097 /* eeprom_driver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = eeprom_driver.h; sourceTree = "<group>"; };
+		03B360751439F90300CC5097 /* sp_driver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sp_driver.h; sourceTree = "<group>"; };
+		03B360761439F90300CC5097 /* sp_driver.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = sp_driver.S; sourceTree = "<group>"; };
+		03B36103143A0DC800CC5097 /* sp_driver.s90 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sp_driver.s90; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		0320130513C5DF93006F6A2F = {
 			isa = PBXGroup;
 			children = (
+				03B360251439EDE600CC5097 /* mainBaseStationBootloader.h */,
+				03B360261439EDE600CC5097 /* mainBaseStationBootloader.c */,
 				0301CA0913CB83DB00B39AC5 /* leds.h */,
 				0301CA0A13CB83DB00B39AC5 /* leds.c */,
 				0320137213C5E2B2006F6A2F /* iox256a3b.h */,
@@ -83,12 +92,17 @@
 				0320133213C5E02B006F6A2F /* rs232.h */,
 				0320133513C5E034006F6A2F /* sd.c */,
 				0320133613C5E034006F6A2F /* sd.h */,
+				03B360731439F8EA00CC5097 /* eeprom_driver.c */,
+				03B360741439F8EA00CC5097 /* eeprom_driver.h */,
+				03B360751439F90300CC5097 /* sp_driver.h */,
+				03B360761439F90300CC5097 /* sp_driver.S */,
 				0320133713C5E034006F6A2F /* sensorsBS.c */,
 				0320133813C5E034006F6A2F /* sensorsBS.h */,
 				0301C9D613CB7CBE00B39AC5 /* sensorsCS.c */,
 				0301C9D513CB7CBE00B39AC5 /* sensorsCS.h */,
 				0320133913C5E03C006F6A2F /* time.c */,
 				0320133A13C5E03C006F6A2F /* time.h */,
+				03B36103143A0DC800CC5097 /* sp_driver.s90 */,
 				032016AF13C73CBE006F6A2F /* uploader.c */,
 				032016AE13C73CBE006F6A2F /* uploader.h */,
 			);

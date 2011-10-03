@@ -1,4 +1,4 @@
-all: basestation cheststrap
+all: basestation cheststrap basestationbootloader
 
 bs basestation:
 	make -f Makefile.basestation
@@ -11,4 +11,12 @@ cs cheststrap:
 
 csp cheststrap-program:
 	make -f Makefile.cheststrap program
+	
+bsbl basestationbootloader:
+	make -f Makefile.basestationbootloader
+
+bsblp basestationbootloader-program:
+	make -f Makefile.basestationbootloader program
+	
+	
 

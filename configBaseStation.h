@@ -8,6 +8,12 @@
  */
 
 
+
+#define DeviceClass			"BaseStation"
+#define FirmwareVersion		"3.07"
+#define HardwareVersion		"3"
+
+
 bool wantToRecordTemperature 	= true;
 bool wantToRecordPressure 		= true;
 bool wantToRecordHumidity 		= true;

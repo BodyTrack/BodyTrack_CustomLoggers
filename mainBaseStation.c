@@ -3,7 +3,7 @@
 //					mainBaseStation.c
 //			  created: 08/27/2010
 //
-//	Firmware:   1.00 - 08/27/2010 - Initial testing
+//	Firmware:   1.00 - 08/27/2010 - 08/27/2010 - Initial testing
 //				1.01 - time per tick changed for 32-bit counter
 //				2.00 - 01/17/2011 - Changes made to support new new hardware
 //								  - RTC sync supported
@@ -88,13 +88,11 @@
 //              3.04 - 09/06/2011 - timeout implemented in light sensor
 //              3.05 - 09/14/2011 - Gap issue addressed. Buffers cannot overwrite before they are written. Buffers must be sent in the correct order.
 //              3.06 - 09/28/2011 - logging 1hz sensors disabled in v3.05, now enabled.
+//              3.07 - 10/03/2011 - changed mic buffer writing to speed it up
+//                                - delay in record switch to avoid bouncing
+//                                - update to light sensor display code. shows 32-bit value.
 //
 //___________________________________________
-
-
-#define DeviceClass			"BaseStation"
-#define FirmwareVersion		"3.06"
-#define HardwareVersion		"3"
 
 #include "avr_compiler.h"
 #include <stdio.h>
@@ -175,7 +173,9 @@ int main(void){
 	display_init();
 	Time_Init();
 	Sensors_Init();
+	
 	Debug_Init(460800);
+	
 	Button_Init(Button_Pin,true,falling,0,high);
 	Button_Init(Switch_Pin,true,both,1,high);
 	Rs232_Init();
@@ -298,11 +298,12 @@ ISR(Button_IntVector){
 }
 
 ISR(Switch_IntVector){
+	_delay_ms(50);
 	if(Button_Pressed(Switch_Pin) && !okToOpenLogFile && !recording && timeIsValid && SD_Inserted()){		// start recording
 		if(percentDiskUsed < 950){
 			okToOpenLogFile = true;
 		}
-	} else if((!Button_Pressed(Switch_Pin) || !SD_Inserted()) && recording && !okToCloseLogFile){			// close file
+	} else if(!Button_Pressed(Switch_Pin) && recording && !okToCloseLogFile){			// close file
 		recording = false;
 		Sensors_ResetTemperatureBuffers();
 		Sensors_ResetHumidityBuffers();
@@ -467,7 +468,7 @@ ISR(Display_Writer_Timer_vect){
 			display_putString(tempDisplay,3,0,System5x7);
 			sprintf(tempDisplay,"Pressure:  %3ukPa", quickPressure);
 			display_putString(tempDisplay,4,0,System5x7);
-			sprintf(tempDisplay,"Light:      %5u", quickLight);
+			sprintf(tempDisplay,"Light: %10lu", quickLight);
 			display_putString(tempDisplay,5,0,System5x7);
 
 			sprintf(tempDisplay,"Air: %5lu, %5lu", quickSmall, quickLarge);
@@ -561,7 +562,6 @@ ISR(SD_Writer_Timer_vect)
 		}
 	}
 	
-	
 	if(okToSendAirQuality && !restartingFile){
 		uint8_t numberOfBins = 1;
 		uint8_t counter = 0;
@@ -597,9 +597,6 @@ ISR(SD_Writer_Timer_vect)
 			}
 		} 
 	}
-	
-	
-	
 
 	if(okToOpenLogFile){
 		if(SD_StartLogFile(UNIX_Time) == FR_OK){  // open file
@@ -664,7 +661,7 @@ ISR(SD_Writer_Timer_vect)
         okToFillUploadFileBuffer = false;
         uploadFileBufferFull = true;
     }
-
+	
 
 	if(okToCloseUploadFile){
 	    if(f_sync(&Upload_File) != FR_OK){
@@ -688,9 +685,6 @@ ISR(SD_Writer_Timer_vect)
         strcpy(fileToUpload,"");
         okToEraseFile = false;
 	}
-	
-	
-	
 }
 
 uint8_t SD_StartLogFile(uint32_t time){
@@ -890,6 +884,7 @@ void SD_WritePressureBuffer(uint8_t bufferNumber){
 
 void SD_WriteMicrophoneBuffer(uint8_t bufferNumber){
 	uint16_t length;
+	uint8_t tmpBuffer[microphoneNumberOfSamples];
 	length = 40+microphoneNumberOfSamples;
 	
 
@@ -910,10 +905,14 @@ void SD_WriteMicrophoneBuffer(uint8_t bufferNumber){
 	SD_Write8(0x0A);
 	SD_Write8(0x00);
 
-	for(uint16_t i = 0; i < microphoneNumberOfSamples; i++){
+	memcpy(&tmpBuffer, &microphoneBuffer[bufferNumber][0],microphoneNumberOfSamples);
+	SD_WriteBuffer(tmpBuffer, microphoneNumberOfSamples);
+		   
+		   
+	/*for(uint16_t i = 0; i < microphoneNumberOfSamples; i++){
 		SD_Write8(microphoneBuffer[bufferNumber][i]);
 	}
-	
+	*/
 	SD_WriteCRC();									
 	if(f_sync(&Log_File) != FR_OK){
 		sdValid = false;

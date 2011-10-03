@@ -11,7 +11,7 @@
 volatile uint8_t	quickTemperature = 0;
 volatile uint8_t	quickHumidity = 0;
 volatile uint8_t	quickPressure = 0;
-volatile uint16_t	quickLight = 0;
+volatile uint32_t	quickLight = 0;
 volatile uint8_t	quickMic = 0;
 volatile uint32_t	quickLarge = 0;
 volatile uint32_t	quickSmall = 0;
@@ -326,7 +326,6 @@ ISR(Sensors_Timer_1HZ_vect)
 			Light_readColors();
 			Light_readColors();
 
-			quickLight = Light_returnColor(clear);
 
 			for(uint8_t j = 0; j < 4; j++){
 				tempLightResult[j] = 0;
@@ -334,6 +333,9 @@ ISR(Sensors_Timer_1HZ_vect)
 					tempLightResult[j] += Light_returnColor(j);
 				}
 			}
+			
+			quickLight = tempLightResult[clear];
+			
 			if(lightBufferCounter == 0){
 				lightSampleStartTime[lightBufferToWriteTo] = Time_Get32BitTimer();
 			}
@@ -361,17 +363,54 @@ ISR(Sensors_Timer_1HZ_vect)
 			}
 
 		} else {
+			
 			Light_readColors();
-			quickLight = Light_returnColor(clear);
+			Light_readColors();
+			Light_readColors();
+			
+			tempLightResult[clear] = 0;
+			for(uint32_t i = 0; i < 76800; i+=resultMultiplier[gainSelector]){
+				tempLightResult[clear] += Light_returnColor(clear);
+			}
+			
+			quickLight = tempLightResult[clear];
+			
+			if((Light_returnColor(clear) > 49000) && (gainSelector!= 0)){			// saturated -> decrease gain
+				gainSelector--;
+				Light_setGain();
+			} else if ((Light_returnColor(clear) < 16000) && (gainSelector!= 8)){			// too low  -> increase gain
+				gainSelector++;
+				Light_setGain();
+			}
+			
+			
 		}
 
 	} else {
 		quickTemperature = Sensors_ReadTemperature()/10;
 		quickHumidity = Sensors_ReadHumidity()/10;
 		quickPressure = Sensors_ReadPressure()/10;
+		
+		
+		
 		Light_readColors();
-		quickLight = Light_returnColor(clear);
-
+		Light_readColors();
+		Light_readColors();
+		
+		tempLightResult[clear] = 0;
+		for(uint32_t i = 0; i < 76800; i+=resultMultiplier[gainSelector]){
+			tempLightResult[clear] += Light_returnColor(clear);
+		}
+		
+		quickLight = tempLightResult[clear];
+		
+		if((Light_returnColor(clear) > 49000) && (gainSelector!= 0)){			// saturated -> decrease gain
+			gainSelector--;
+			Light_setGain();
+		} else if ((Light_returnColor(clear) < 16000) && (gainSelector!= 8)){			// too low  -> increase gain
+			gainSelector++;
+			Light_setGain();
+		}
 	}
 
 
