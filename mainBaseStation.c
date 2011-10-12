@@ -91,6 +91,7 @@
 //              3.07 - 10/03/2011 - changed mic buffer writing to speed it up
 //                                - delay in record switch to avoid bouncing
 //                                - update to light sensor display code. shows 32-bit value.
+//              3.08 - 10/12/2011 - fix to speed mic buffer writing.
 //
 //___________________________________________
 
@@ -173,9 +174,7 @@ int main(void){
 	display_init();
 	Time_Init();
 	Sensors_Init();
-	
 	Debug_Init(460800);
-	
 	Button_Init(Button_Pin,true,falling,0,high);
 	Button_Init(Switch_Pin,true,both,1,high);
 	Rs232_Init();
@@ -185,19 +184,19 @@ int main(void){
     SD_Init();
 	Interrupt_Init();
 	
-	
 	if(Time_CheckVBatSystem() && (Time_Get() > 1000000)){				// grab time from rtc32 if enabled and valid
 		timeIsValid = true;
 		RTC32.INTCTRL = ( RTC32.INTCTRL & ~RTC32_COMPINTLVL_gm ) | RTC32_COMPINTLVL_LO_gc;
 		UNIX_Time = Time_Get();
 	} else {
+		
 		VBAT.CTRL = VBAT_ACCEN_bm;
 		CCPWrite(&VBAT.CTRL, VBAT_RESET_bm);		// Reset battery backup
 		RTC32.CTRL = 0;								// disable RTC32
 		RTC32.INTCTRL = 0;
 	
 	}
-	
+
 	display_showSplashScreen(false,false,false);
 	_delay_ms(1000);
 	
@@ -206,10 +205,10 @@ int main(void){
 		display_showSplashScreen(true,false,false);			// waiting for SD card
 		_delay_ms(250);
 	}
-	_delay_ms(500);
 	
+	_delay_ms(500);
 	SD_Read_config_file();
-
+	
     if(demoMode){
 		display_showSplashScreen(false,false,true);
 		_delay_ms(500);
@@ -235,7 +234,6 @@ Reset:
 	connected = false;
 	while(!Uploader_connectToComputer());
 	connected = true;
-    
 	while(true){
 		if(!Uploader_Update()){
 			goto Reset;
@@ -330,7 +328,6 @@ void Display_BackgroundWriter_Init(void){
 }
 
 ISR(Display_Writer_Timer_vect){
-	
 	if(backlight_Timer > 20){
 		display_setBacklight(false);
 	}
@@ -511,7 +508,6 @@ void SD_BackroundWriter_Init(void){
 
 ISR(SD_Writer_Timer_vect)
 {
-	
 	if(recording){
 		
 		for(uint8_t i = 0; i < microphoneNumberOfBuffers; i++){
@@ -884,9 +880,7 @@ void SD_WritePressureBuffer(uint8_t bufferNumber){
 
 void SD_WriteMicrophoneBuffer(uint8_t bufferNumber){
 	uint16_t length;
-	uint8_t tmpBuffer[microphoneNumberOfSamples];
 	length = 40+microphoneNumberOfSamples;
-	
 
 	SD_ClearCRC();
 	SD_Write32(MAGIC_NUMBER);									// magic number
@@ -905,14 +899,8 @@ void SD_WriteMicrophoneBuffer(uint8_t bufferNumber){
 	SD_Write8(0x0A);
 	SD_Write8(0x00);
 
-	memcpy(&tmpBuffer, &microphoneBuffer[bufferNumber][0],microphoneNumberOfSamples);
-	SD_WriteBuffer(tmpBuffer, microphoneNumberOfSamples);
-		   
-		   
-	/*for(uint16_t i = 0; i < microphoneNumberOfSamples; i++){
-		SD_Write8(microphoneBuffer[bufferNumber][i]);
-	}
-	*/
+	SD_WriteBuffer(&microphoneBuffer[bufferNumber][0], microphoneNumberOfSamples);
+	
 	SD_WriteCRC();									
 	if(f_sync(&Log_File) != FR_OK){
 		sdValid = false;

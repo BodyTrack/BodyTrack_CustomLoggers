@@ -253,7 +253,6 @@ uint8_t SP_ReadCalibrationByte( uint8_t index )
 ISR(Sensors_Timer_1HZ_vect)
 {
 	UNIX_Time++;
-	
 	if(recording){
 		rtcBlockCounter++;
 		if(rtcBlockCounter == 0){
@@ -420,6 +419,8 @@ ISR(Sensors_Timer_1HZ_vect)
 
 ISR(Sensors_Timer_7200HZ_vect)
 {
+	
+	
 	if(recording && wantToRecordFast && !okToSendMicrophoneBuffer[microphoneBufferToWriteTo]){
 		if(microphoneBufferCounter == 0){
 			microphoneSampleStartTime[microphoneBufferToWriteTo] = Time_Get32BitTimer();
@@ -445,7 +446,7 @@ ISR(Sensors_Timer_7200HZ_vect)
 				microphoneBufferToWriteTo = 0;
 			}
 		}
-
+		
 	} else {
 		if(micSampleCounter == 0){
 			quickMic = Sensors_ReadMicrophone();

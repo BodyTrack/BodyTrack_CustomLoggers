@@ -10,7 +10,7 @@
 
 
 #define DeviceClass			"BaseStation"
-#define FirmwareVersion		"3.07"
+#define FirmwareVersion		"3.08"
 #define HardwareVersion		"3"
 
 

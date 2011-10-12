@@ -170,11 +170,11 @@ void Light_writeByte(uint8_t location, uint8_t toSend){
 	timeOut = 0;
 	while (!(LightPort.MASTER.STATUS & TWI_MASTER_WIF_bm)) {
 				//Wait for write flag to turn on
-		_delay_ms(1);
+		/*_delay_ms(1);
 		timeOut++;
 		if(timeOut == 0){
 			return;
-		}
+		}*/
 	}
 
 	LightPort.MASTER.DATA = toSend;

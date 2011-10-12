@@ -279,7 +279,7 @@ void SD_Read_config_file(void){
 	strcat(serverOpenCommand," ");
 	strcat(serverOpenCommand,port);
 	
-    if((strstr(daylightTime,"true") != 0) && (zoneChanged)){
+    if((strstr(daylightTime,"true") != 0)){
         timeZoneShift--;
     }
     if((strstr(demoModeString,"true") != 0)){
@@ -330,7 +330,7 @@ void SD_Timer_Init(void)			// Initialize 100 Hz timer needed for SD access
 // Called every 10 ms (100 Hz)
 ISR(SD_Timer_vect)
 {
-	disk_timerproc();
+	disk_timerproc();	
 	if(!sdValid){
 		if((SD_CD_Port.IN & (1<<SD_CD)) == 0 ){
 			SD_Init();

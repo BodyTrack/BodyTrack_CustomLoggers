@@ -52,15 +52,16 @@
 		03B360741439F8EA00CC5097 /* eeprom_driver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = eeprom_driver.h; sourceTree = "<group>"; };
 		03B360751439F90300CC5097 /* sp_driver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sp_driver.h; sourceTree = "<group>"; };
 		03B360761439F90300CC5097 /* sp_driver.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = sp_driver.S; sourceTree = "<group>"; };
-		03B36103143A0DC800CC5097 /* sp_driver.s90 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sp_driver.s90; sourceTree = "<group>"; };
+		03BEEBDF1444801200E215D3 /* pdiskio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pdiskio.c; sourceTree = "<group>"; };
+		03BEEBE01444801200E215D3 /* pff.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pff.c; sourceTree = "<group>"; };
+		03BEEBE11444801200E215D3 /* pff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pff.h; sourceTree = "<group>"; };
+		03BEEBE21444801E00E215D3 /* pdiskio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pdiskio.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		0320130513C5DF93006F6A2F = {
 			isa = PBXGroup;
 			children = (
-				03B360251439EDE600CC5097 /* mainBaseStationBootloader.h */,
-				03B360261439EDE600CC5097 /* mainBaseStationBootloader.c */,
 				0301CA0913CB83DB00B39AC5 /* leds.h */,
 				0301CA0A13CB83DB00B39AC5 /* leds.c */,
 				0320137213C5E2B2006F6A2F /* iox256a3b.h */,
@@ -102,9 +103,14 @@
 				0301C9D513CB7CBE00B39AC5 /* sensorsCS.h */,
 				0320133913C5E03C006F6A2F /* time.c */,
 				0320133A13C5E03C006F6A2F /* time.h */,
-				03B36103143A0DC800CC5097 /* sp_driver.s90 */,
 				032016AF13C73CBE006F6A2F /* uploader.c */,
 				032016AE13C73CBE006F6A2F /* uploader.h */,
+				03B360251439EDE600CC5097 /* mainBaseStationBootloader.h */,
+				03B360261439EDE600CC5097 /* mainBaseStationBootloader.c */,
+				03BEEBE01444801200E215D3 /* pff.c */,
+				03BEEBE11444801200E215D3 /* pff.h */,
+				03BEEBDF1444801200E215D3 /* pdiskio.c */,
+				03BEEBE21444801E00E215D3 /* pdiskio.h */,
 			);
 			sourceTree = "<group>";
 		};
