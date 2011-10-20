@@ -160,9 +160,9 @@ bool Uploader_getTime(void){
     while(true){
         if(Debug_CharReadyToRead()){
 	        command[commandCounter+1] = Debug_GetByte(false);
-			if(!Debug_SendByte(command[commandCounter+1])){
-				return false;
-			}
+			//if(!Debug_SendByte(command[commandCounter+1])){
+			//	return false;
+			//}
             commandCounter++;
             if(commandCounter == 4){
                 tempTime = command[1];
@@ -173,8 +173,22 @@ bool Uploader_getTime(void){
                 tempTime <<= 8;
                 tempTime += command[4];
 				
-                Time_Set(tempTime);
-				return true;
+				if(tempTime < 1260000000){					// time is invalid
+					for(uint8_t i = 0; i < 4; i++){
+						if(!Debug_SendByte('0')){
+							return false;
+						}
+					}
+					return false;
+				} else {
+					for(uint8_t i = 0; i < 4; i++){
+						if(!Debug_SendByte(command[i+1])){
+							return false;
+						}
+					}
+					Time_Set(tempTime);
+					return true;
+				}
             }
         }
 		

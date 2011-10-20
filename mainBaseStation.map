@@ -118,7 +118,7 @@ fileToErase         0x14              mainBaseStation.o
 zeroOffsetA         0x2               mainBaseStation.o
 commandCode         0x1               mainBaseStation.o
 pressureBuffer      0x28              mainBaseStation.o
-lightBuffer         0xa0              mainBaseStation.o
+lightBuffer         0x140             mainBaseStation.o
 pressureSampleStartTime
                     0x8               mainBaseStation.o
 okToSendTemperatureBuffer
@@ -245,7 +245,7 @@ LOAD /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0xad82
+.text           0x00000000     0xadf6
  *(.vectors)
  .vectors       0x00000000      0x1e8 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/crtx256a3b.o
                 0x00000000                __vectors
@@ -415,65 +415,65 @@ LOAD /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a
                 0x0000022a                __vector_87
                 0x0000022a                __vector_65
                 0x0000022a                __vector_120
- .text          0x0000022e     0xa22c mainBaseStation.o
+ .text          0x0000022e     0xa2a0 mainBaseStation.o
                 0x00005d06                display_clearScreen
-                0x000078a2                __vector_104
-                0x0000725a                Uploader_eraseFile
+                0x00007916                __vector_104
+                0x000072ce                Uploader_eraseFile
                 0x000065f2                Sensors_ResetTemperatureBuffers
                 0x00005804                f_gets
-                0x0000732a                Uploader_WriteCRC
+                0x0000739e                Uploader_WriteCRC
                 0x000016a8                get_fat
                 0x00000258                Debug_CharReadyToRead
-                0x0000a1a8                f_printf
-                0x00007a76                Display_BackgroundWriter_Init
-                0x00007310                Uploader_ClearCRC
-                0x0000824c                SD_WriteMicrophoneBuffer
-                0x000091e0                Uploader_Update
-                0x00007392                Uploader_uploadFile
-                0x00007864                Disable_JTAG
+                0x0000a21c                f_printf
+                0x00007aea                Display_BackgroundWriter_Init
+                0x00007384                Uploader_ClearCRC
+                0x000082c0                SD_WriteMicrophoneBuffer
+                0x00009254                Uploader_Update
+                0x00007406                Uploader_uploadFile
+                0x000078d8                Disable_JTAG
                 0x0000664e                Sensors_ResetLightBuffers
-                0x00006f82                __vector_77
+                0x00006fc4                __vector_77
                 0x00000540                Rs232_ClearBuffer
                 0x00006608                Sensors_ResetPressureBuffers
-                0x000083f6                SD_WriteHumidityBuffer
+                0x0000846a                SD_WriteHumidityBuffer
                 0x00005bfc                display_setBacklight
-                0x0000898c                Uploader_sendSSID
+                0x00008a00                Uploader_sendSSID
                 0x000062d0                Light_returnColor
                 0x00000c50                disk_initialize
                 0x00004ab2                f_rename
                 0x00005c68                display_setCursor
-                0x0000778e                Uploader_UpdateCRC
+                0x00007802                Uploader_UpdateCRC
                 0x00006436                Sensors_ReadPower
                 0x00000e1c                disk_status
                 0x00004426                f_truncate
                 0x00005b2c                SD_Timer_Init
-                0x00007894                Interrupt_Init
+                0x00007908                Interrupt_Init
                 0x00005a88                SD_WriteCRC
                 0x00000fda                disk_ioctl
                 0x0000022e                CCPWrite
-                0x0000780a                Clock_Init
+                0x0000787e                Clock_Init
                 0x0000635e                Light_setGain
-                0x00007992                __vector_105
+                0x00007a06                __vector_105
                 0x00000552                Rs232_SendByte
-                0x00008764                Uploader_sendServer
-                0x00009148                Uploader_sendFilename
+                0x000087d8                Uploader_sendServer
+                0x000091bc                Uploader_sendFilename
                 0x00004540                f_unlink
                 0x00000308                Debug_Init
                 0x00005f36                display_putString
                 0x0000681e                SP_ReadCalibrationByte
                 0x000058a0                f_putc
                 0x00005944                SD_WriteBuffer
-                0x0000886c                Uploader_sendKey
-                0x00009326                SD_Open
+                0x000088e0                Uploader_sendKey
+                0x0000939a                SD_Open
                 0x000058ec                f_puts
-                0x00007ab2                SD_WriteRTCBlock
+                0x00007b26                SD_WriteRTCBlock
                 0x00005c38                display_sendCommand
                 0x00000602                Time_Set
                 0x000006ae                Time_CheckVBatSystem
-                0x000085ae                Rs232_SendString
+                0x00008622                Rs232_SendString
                 0x00006442                Sensors_ReadTemperature
                 0x000064bc                Sensors_ReadHumidity
-                0x00009b30                SD_Read_config_file
+                0x00009ba4                SD_Read_config_file
                 0x00005a12                SD_Write32
                 0x000062e2                Light_writeByte
                 0x00005934                SD_Close
@@ -486,34 +486,34 @@ LOAD /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a
                 0x00005b4a                SD_Init
                 0x000004ce                Rs232_CharReadyToRead
                 0x00000424                Debug_SendByte
-                0x00007d22                display_showSplashScreen
+                0x00007d96                display_showSplashScreen
                 0x000005e0                Time_Init
-                0x00007a94                SD_BackroundWriter_Init
+                0x00007b08                SD_BackroundWriter_Init
                 0x0000498e                f_chmod
-                0x00007e98                SD_WriteAirSampleMinute
+                0x00007f0c                SD_WriteAirSampleMinute
                 0x00005a46                SD_Write16
-                0x00007de2                SD_WriteString
+                0x00007e56                SD_WriteString
                 0x0000593e                SD_Inserted
-                0x00008912                Uploader_sendAuthType
+                0x00008986                Uploader_sendAuthType
                 0x00006398                Light_Init
                 0x000004a0                Rs232_Init
-                0x00008602                Debug_SendString
+                0x00008676                Debug_SendString
                 0x00000758                Time_UTCSecsToTime
-                0x0000866a                Uploader_connectToComputer
+                0x000086de                Uploader_connectToComputer
                 0x00005b98                __vector_47
                 0x00005c50                display_sendData
                 0x000013a8                get_fattime
                 0x00005aa6                SD_GetSpaceRemaining
                 0x0000657a                Sensors_ReadPressure
-                0x00008118                SD_WriteLightBuffer
+                0x0000818c                SD_WriteLightBuffer
                 0x00005a6e                SD_ClearCRC
-                0x00009f60                main
+                0x00009fd4                main
                 0x00003a7e                f_sync
-                0x00008a06                __vector_108
-                0x00008814                Uploader_sendUser
+                0x00008a7a                __vector_108
+                0x00008888                Uploader_sendUser
                 0x000028be                chk_mounted
-                0x000092fa                SD_MakeFileName
-                0x00007b4a                getDeviceID
+                0x0000936e                SD_MakeFileName
+                0x00007bbe                getDeviceID
                 0x00004d00                f_mkfs
                 0x00002ede                f_mount
                 0x000061b2                Light_readColors
@@ -528,10 +528,10 @@ LOAD /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a
                 0x00005cb8                display_clearPage
                 0x00006634                Sensors_ResetMicrophoneBuffers
                 0x00005a5c                SD_Write8
-                0x000087bc                Uploader_sendNickname
+                0x00008830                Uploader_sendNickname
                 0x0000610e                Light_readByte
                 0x0000415c                f_stat
-                0x0000831a                SD_WritePressureBuffer
+                0x0000838e                SD_WritePressureBuffer
                 0x00005d5e                display_init
                 0x00006832                __vector_83
                 0x00006410                Button_Pressed
@@ -542,129 +542,129 @@ LOAD /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a
                 0x00002f20                f_open
                 0x00000eea                disk_write
                 0x00000708                Time_Get32BitTimer
-                0x00007104                Uploader_getTime
+                0x00007146                Uploader_getTime
                 0x00004674                f_mkdir
                 0x00000e2a                disk_read
-                0x00009542                __vector_53
+                0x000095b6                __vector_53
                 0x00006664                Sensors_Init
                 0x000041da                f_getfree
                 0x000006de                Time_Get
-                0x0000870c                Uploader_sendPort
-                0x000084d2                SD_WriteTemperatureBuffer
-                0x00007f78                SD_WriteAirSampleSecond
-                0x00009384                SD_StartLogFile
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_mulsi3.o)
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_udivmodhi4.o)
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_divmodhi4.o)
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_udivmodsi4.o)
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_exit.o)
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_clear_bss.o)
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(atol.o)
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(memmove.o)
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcasecmp.o)
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcasestr.o)
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcat.o)
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcmp.o)
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcpy.o)
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strstr.o)
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok_r.o)
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strupr.o)
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(itoa.o)
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(ltoa.o)
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(mulsi10.o)
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(sprintf.o)
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(vfprintf_std.o)
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strnlen_P.o)
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(memcpy.o)
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strnlen.o)
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strrev.o)
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(fputc.o)
- .text          0x0000a45a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(ultoa_invert.o)
-                0x0000a45a                . = ALIGN (0x2)
+                0x00008780                Uploader_sendPort
+                0x00008546                SD_WriteTemperatureBuffer
+                0x00007fec                SD_WriteAirSampleSecond
+                0x000093f8                SD_StartLogFile
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_mulsi3.o)
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_udivmodhi4.o)
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_divmodhi4.o)
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_udivmodsi4.o)
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_exit.o)
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_clear_bss.o)
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(atol.o)
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(memmove.o)
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcasecmp.o)
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcasestr.o)
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcat.o)
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcmp.o)
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcpy.o)
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strstr.o)
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok_r.o)
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strupr.o)
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(itoa.o)
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(ltoa.o)
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(mulsi10.o)
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(sprintf.o)
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(vfprintf_std.o)
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strnlen_P.o)
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(memcpy.o)
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strnlen.o)
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strrev.o)
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(fputc.o)
+ .text          0x0000a4ce        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(ultoa_invert.o)
+                0x0000a4ce                . = ALIGN (0x2)
  *(.text.*)
- .text.libgcc   0x0000a45a       0x3e /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_mulsi3.o)
-                0x0000a45a                __mulsi3
- .text.libgcc   0x0000a498       0x28 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_udivmodhi4.o)
-                0x0000a498                __udivmodhi4
- .text.libgcc   0x0000a4c0       0x26 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_divmodhi4.o)
-                0x0000a4c0                __divmodhi4
-                0x0000a4c0                _div
- .text.libgcc   0x0000a4e6       0x44 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_udivmodsi4.o)
-                0x0000a4e6                __udivmodsi4
- .text.libgcc   0x0000a52a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_exit.o)
- .text.libgcc   0x0000a52a        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_clear_bss.o)
+ .text.libgcc   0x0000a4ce       0x3e /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_mulsi3.o)
+                0x0000a4ce                __mulsi3
+ .text.libgcc   0x0000a50c       0x28 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_udivmodhi4.o)
+                0x0000a50c                __udivmodhi4
+ .text.libgcc   0x0000a534       0x26 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_divmodhi4.o)
+                0x0000a534                __divmodhi4
+                0x0000a534                _div
+ .text.libgcc   0x0000a55a       0x44 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_udivmodsi4.o)
+                0x0000a55a                __udivmodsi4
+ .text.libgcc   0x0000a59e        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_exit.o)
+ .text.libgcc   0x0000a59e        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_clear_bss.o)
  .text.avr-libc
-                0x0000a52a       0x4e /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(atol.o)
-                0x0000a52a                atol
+                0x0000a59e       0x4e /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(atol.o)
+                0x0000a59e                atol
  .text.avr-libc
-                0x0000a578        0xa /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
-                0x0000a578                strtok
+                0x0000a5ec        0xa /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
+                0x0000a5ec                strtok
  .text.avr-libc
-                0x0000a582       0x24 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(memmove.o)
-                0x0000a582                memmove
+                0x0000a5f6       0x24 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(memmove.o)
+                0x0000a5f6                memmove
  .text.avr-libc
-                0x0000a5a6       0x26 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcasecmp.o)
-                0x0000a5a6                strcasecmp
+                0x0000a61a       0x26 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcasecmp.o)
+                0x0000a61a                strcasecmp
  .text.avr-libc
-                0x0000a5cc       0x4a /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcasestr.o)
-                0x0000a5cc                strcasestr
+                0x0000a640       0x4a /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcasestr.o)
+                0x0000a640                strcasestr
  .text.avr-libc
-                0x0000a616       0x16 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcat.o)
-                0x0000a616                strcat
+                0x0000a68a       0x16 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcat.o)
+                0x0000a68a                strcat
  .text.avr-libc
-                0x0000a62c       0x12 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcmp.o)
-                0x0000a62c                strcmp
+                0x0000a6a0       0x12 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcmp.o)
+                0x0000a6a0                strcmp
  .text.avr-libc
-                0x0000a63e        0xe /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcpy.o)
-                0x0000a63e                strcpy
+                0x0000a6b2        0xe /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strcpy.o)
+                0x0000a6b2                strcpy
  .text.avr-libc
-                0x0000a64c       0x34 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strstr.o)
-                0x0000a64c                strstr
+                0x0000a6c0       0x34 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strstr.o)
+                0x0000a6c0                strstr
  .text.avr-libc
-                0x0000a680       0x4e /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok_r.o)
-                0x0000a680                strtok_r
+                0x0000a6f4       0x4e /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok_r.o)
+                0x0000a6f4                strtok_r
  .text.avr-libc
-                0x0000a6ce       0x14 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strupr.o)
-                0x0000a6ce                strupr
+                0x0000a742       0x14 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strupr.o)
+                0x0000a742                strupr
  .text.avr-libc
-                0x0000a6e2       0x42 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(itoa.o)
-                0x0000a6e2                itoa
+                0x0000a756       0x42 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(itoa.o)
+                0x0000a756                itoa
  .text.avr-libc
-                0x0000a724       0x68 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(ltoa.o)
-                0x0000a724                ltoa
+                0x0000a798       0x68 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(ltoa.o)
+                0x0000a798                ltoa
  .text.avr-libc
-                0x0000a78c       0x2a /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(mulsi10.o)
-                0x0000a78c                __mulsi_const_10
+                0x0000a800       0x2a /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(mulsi10.o)
+                0x0000a800                __mulsi_const_10
  .text.avr-libc
-                0x0000a7b6       0x56 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(sprintf.o)
-                0x0000a7b6                sprintf
+                0x0000a82a       0x56 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(sprintf.o)
+                0x0000a82a                sprintf
  .text.avr-libc
-                0x0000a80c      0x400 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(vfprintf_std.o)
-                0x0000a80c                vfprintf
+                0x0000a880      0x400 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(vfprintf_std.o)
+                0x0000a880                vfprintf
  .text.avr-libc
-                0x0000ac0c       0x16 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strnlen_P.o)
-                0x0000ac0c                strnlen_P
+                0x0000ac80       0x16 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strnlen_P.o)
+                0x0000ac80                strnlen_P
  .text.avr-libc
-                0x0000ac22       0x12 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(memcpy.o)
-                0x0000ac22                memcpy
+                0x0000ac96       0x12 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(memcpy.o)
+                0x0000ac96                memcpy
  .text.avr-libc
-                0x0000ac34       0x16 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strnlen.o)
-                0x0000ac34                strnlen
+                0x0000aca8       0x16 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strnlen.o)
+                0x0000aca8                strnlen
  .text.avr-libc
-                0x0000ac4a       0x20 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strrev.o)
-                0x0000ac4a                strrev
+                0x0000acbe       0x20 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strrev.o)
+                0x0000acbe                strrev
  .text.avr-libc
-                0x0000ac6a       0x58 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(fputc.o)
-                0x0000ac6a                fputc
+                0x0000acde       0x58 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(fputc.o)
+                0x0000acde                fputc
  .text.avr-libc
-                0x0000acc2       0xbc /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(ultoa_invert.o)
-                0x0000acc2                __ultoa_invert
-                0x0000ad7e                . = ALIGN (0x2)
+                0x0000ad36       0xbc /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(ultoa_invert.o)
+                0x0000ad36                __ultoa_invert
+                0x0000adf2                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000ad7e        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_exit.o)
-                0x0000ad7e                exit
-                0x0000ad7e                _exit
+ .fini9         0x0000adf2        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_exit.o)
+                0x0000adf2                exit
+                0x0000adf2                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -683,11 +683,11 @@ LOAD /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000ad7e        0x4 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_exit.o)
+ .fini0         0x0000adf2        0x4 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a(_exit.o)
  *(.fini0)
-                0x0000ad82                _etext = .
+                0x0000adf6                _etext = .
 
-.data           0x00802000      0xce2 load address 0x0000ad82
+.data           0x00802000      0xce2 load address 0x0000adf6
                 0x00802000                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00802000        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/crtx256a3b.o
@@ -748,7 +748,7 @@ LOAD /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a
                 0x00802ce2                _edata = .
                 0x00802ce2                PROVIDE (__data_end, .)
 
-.bss            0x00802ce2     0x2a75
+.bss            0x00802ce2     0x2b15
                 0x00802ce2                PROVIDE (__bss_start, .)
  *(.bss)
  .bss           0x00802ce2        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/crtx256a3b.o
@@ -863,7 +863,7 @@ LOAD /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a
  .bss           0x008031c9        0x0 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(ultoa_invert.o)
  *(.bss*)
  *(COMMON)
- COMMON         0x008031c9     0x258e mainBaseStation.o
+ COMMON         0x008031c9     0x262e mainBaseStation.o
                 0x008031c9                ssid
                 0x008031fb                zeroOffsetB
                 0x008031fd                uploadFileBuffer
@@ -916,28 +916,28 @@ LOAD /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a
                 0x00805540                commandCode
                 0x00805541                pressureBuffer
                 0x00805569                lightBuffer
-                0x00805609                pressureSampleStartTime
-                0x00805611                okToSendTemperatureBuffer
-                0x00805613                CRC
-                0x00805617                Rs232Buffer
-                0x0080567b                tempDisplay
-                0x008056ad                availableFileName
-                0x008056bc                port
-                0x008056ee                nickname
-                0x00805720                okToSendMicrophoneBuffer
-                0x00805723                humidityBuffer
-                0x0080574b                fastString
-                0x00805755                tmp16
-                0x00805757                PROVIDE (__bss_end, .)
-                0x0000ad82                __data_load_start = LOADADDR (.data)
-                0x0000ba64                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x008056a9                pressureSampleStartTime
+                0x008056b1                okToSendTemperatureBuffer
+                0x008056b3                CRC
+                0x008056b7                Rs232Buffer
+                0x0080571b                tempDisplay
+                0x0080574d                availableFileName
+                0x0080575c                port
+                0x0080578e                nickname
+                0x008057c0                okToSendMicrophoneBuffer
+                0x008057c3                humidityBuffer
+                0x008057eb                fastString
+                0x008057f5                tmp16
+                0x008057f7                PROVIDE (__bss_end, .)
+                0x0000adf6                __data_load_start = LOADADDR (.data)
+                0x0000bad8                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00805757        0x0
-                0x00805757                PROVIDE (__noinit_start, .)
+.noinit         0x008057f7        0x0
+                0x008057f7                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00805757                PROVIDE (__noinit_end, .)
-                0x00805757                _end = .
-                0x00805757                PROVIDE (__heap_start, .)
+                0x008057f7                PROVIDE (__noinit_end, .)
+                0x008057f7                _end = .
+                0x008057f7                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -1053,13 +1053,13 @@ LOAD /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a
  .debug_pubnames
                 0x000016c4       0x1c /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(fputc.o)
 
-.debug_info     0x00000000     0x8b78
+.debug_info     0x00000000     0x8bad
  *(.debug_info)
- .debug_info    0x00000000     0x847f mainBaseStation.o
- .debug_info    0x0000847f       0x91 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
- .debug_info    0x00008510      0x1b4 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(sprintf.o)
- .debug_info    0x000086c4      0x34a /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(vfprintf_std.o)
- .debug_info    0x00008a0e      0x16a /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(fputc.o)
+ .debug_info    0x00000000     0x84b4 mainBaseStation.o
+ .debug_info    0x000084b4       0x91 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
+ .debug_info    0x00008545      0x1b4 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(sprintf.o)
+ .debug_info    0x000086f9      0x34a /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(vfprintf_std.o)
+ .debug_info    0x00008a43      0x16a /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(fputc.o)
  *(.gnu.linkonce.wi.*)
 
 .debug_abbrev   0x00000000      0xa30
@@ -1070,13 +1070,13 @@ LOAD /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a
  .debug_abbrev  0x000007d1      0x184 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(vfprintf_std.o)
  .debug_abbrev  0x00000955       0xdb /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(fputc.o)
 
-.debug_line     0x00000000     0x6fc3
+.debug_line     0x00000000     0x6fe3
  *(.debug_line)
- .debug_line    0x00000000     0x68ba mainBaseStation.o
- .debug_line    0x000068ba       0x81 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
- .debug_line    0x0000693b      0x12f /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(sprintf.o)
- .debug_line    0x00006a6a      0x482 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(vfprintf_std.o)
- .debug_line    0x00006eec       0xd7 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(fputc.o)
+ .debug_line    0x00000000     0x68da mainBaseStation.o
+ .debug_line    0x000068da       0x81 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
+ .debug_line    0x0000695b      0x12f /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(sprintf.o)
+ .debug_line    0x00006a8a      0x482 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(vfprintf_std.o)
+ .debug_line    0x00006f0c       0xd7 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(fputc.o)
 
 .debug_frame    0x00000000      0xa40
  *(.debug_frame)
@@ -1099,13 +1099,13 @@ LOAD /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/avrxmega6/libgcc.a
  .debug_str     0x0000461c       0x22 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(fputc.o)
                                 0x12e (size before relaxing)
 
-.debug_loc      0x00000000     0x67b8
+.debug_loc      0x00000000     0x67d6
  *(.debug_loc)
- .debug_loc     0x00000000     0x628b mainBaseStation.o
- .debug_loc     0x0000628b       0x30 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
- .debug_loc     0x000062bb       0x24 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(sprintf.o)
- .debug_loc     0x000062df      0x479 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(vfprintf_std.o)
- .debug_loc     0x00006758       0x60 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(fputc.o)
+ .debug_loc     0x00000000     0x62a9 mainBaseStation.o
+ .debug_loc     0x000062a9       0x30 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(strtok.o)
+ .debug_loc     0x000062d9       0x24 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(sprintf.o)
+ .debug_loc     0x000062fd      0x479 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(vfprintf_std.o)
+ .debug_loc     0x00006776       0x60 /usr/local/CrossPack-AVR-20100115/lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega6/libc.a(fputc.o)
 
 .debug_macinfo
  *(.debug_macinfo)

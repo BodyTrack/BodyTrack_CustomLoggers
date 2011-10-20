@@ -61,7 +61,7 @@ uint16_t			microphoneBufferCounter		= 0;
 volatile uint8_t	lastMicrophoneBufferSent	= 100;
 
 uint32_t			lightSampleStartTime		[lightNumberOfBuffers];
-uint16_t			lightBuffer					[lightNumberOfBuffers][lightNumberOfSamples * lightNumberOfChannels];
+uint32_t			lightBuffer					[lightNumberOfBuffers][lightNumberOfSamples * lightNumberOfChannels];
 volatile bool		okToSendLightBuffer			[lightNumberOfBuffers];
 uint8_t				lightBufferToWriteTo		= 0;
 uint16_t			lightBufferCounter			= 0;

@@ -92,6 +92,8 @@
 //                                - delay in record switch to avoid bouncing
 //                                - update to light sensor display code. shows 32-bit value.
 //              3.08 - 10/12/2011 - fix to speed mic buffer writing.
+//              3.09 - 10/20/2011 - fix for truncated light sensor values
+//                                - rejects invalid times
 //
 //___________________________________________
 
@@ -184,7 +186,8 @@ int main(void){
     SD_Init();
 	Interrupt_Init();
 	
-	if(Time_CheckVBatSystem() && (Time_Get() > 1000000)){				// grab time from rtc32 if enabled and valid
+	
+	if(Time_CheckVBatSystem() && (Time_Get() > 1260000000)){				// grab time from rtc32 if enabled and valid
 		timeIsValid = true;
 		RTC32.INTCTRL = ( RTC32.INTCTRL & ~RTC32_COMPINTLVL_gm ) | RTC32_COMPINTLVL_LO_gc;
 		UNIX_Time = Time_Get();

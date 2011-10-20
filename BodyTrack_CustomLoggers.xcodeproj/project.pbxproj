@@ -25,7 +25,6 @@
 		0320132213C5E00A006F6A2F /* display.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = display.h; sourceTree = "<group>"; };
 		0320132513C5E00A006F6A2F /* ff.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ff.c; sourceTree = "<group>"; };
 		0320132613C5E00A006F6A2F /* ff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ff.h; sourceTree = "<group>"; };
-		0320132713C5E00A006F6A2F /* ffconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffconf.h; sourceTree = "<group>"; };
 		0320132813C5E00A006F6A2F /* integer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = integer.h; sourceTree = "<group>"; };
 		0320132C13C5E00A006F6A2F /* light.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = light.c; sourceTree = "<group>"; };
 		0320132D13C5E00A006F6A2F /* light.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = light.h; sourceTree = "<group>"; };
@@ -52,10 +51,11 @@
 		03B360741439F8EA00CC5097 /* eeprom_driver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = eeprom_driver.h; sourceTree = "<group>"; };
 		03B360751439F90300CC5097 /* sp_driver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sp_driver.h; sourceTree = "<group>"; };
 		03B360761439F90300CC5097 /* sp_driver.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = sp_driver.S; sourceTree = "<group>"; };
-		03BEEBDF1444801200E215D3 /* pdiskio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pdiskio.c; sourceTree = "<group>"; };
-		03BEEBE01444801200E215D3 /* pff.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pff.c; sourceTree = "<group>"; };
-		03BEEBE11444801200E215D3 /* pff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pff.h; sourceTree = "<group>"; };
-		03BEEBE21444801E00E215D3 /* pdiskio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pdiskio.h; sourceTree = "<group>"; };
+		03BEEC9C1445C7D800E215D3 /* ffconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffconf.h; sourceTree = "<group>"; };
+		03BEED371445D52D00E215D3 /* pdiskio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pdiskio.c; sourceTree = "<group>"; };
+		03BEED381445D52D00E215D3 /* pdiskio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pdiskio.h; sourceTree = "<group>"; };
+		03BEED391445D52D00E215D3 /* pff.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pff.c; sourceTree = "<group>"; };
+		03BEED3A1445D52D00E215D3 /* pff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pff.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -78,7 +78,7 @@
 				0320132213C5E00A006F6A2F /* display.h */,
 				0320132513C5E00A006F6A2F /* ff.c */,
 				0320132613C5E00A006F6A2F /* ff.h */,
-				0320132713C5E00A006F6A2F /* ffconf.h */,
+				03BEEC9C1445C7D800E215D3 /* ffconf.h */,
 				0320132813C5E00A006F6A2F /* integer.h */,
 				0320132C13C5E00A006F6A2F /* light.c */,
 				0320132D13C5E00A006F6A2F /* light.h */,
@@ -95,8 +95,6 @@
 				0320133613C5E034006F6A2F /* sd.h */,
 				03B360731439F8EA00CC5097 /* eeprom_driver.c */,
 				03B360741439F8EA00CC5097 /* eeprom_driver.h */,
-				03B360751439F90300CC5097 /* sp_driver.h */,
-				03B360761439F90300CC5097 /* sp_driver.S */,
 				0320133713C5E034006F6A2F /* sensorsBS.c */,
 				0320133813C5E034006F6A2F /* sensorsBS.h */,
 				0301C9D613CB7CBE00B39AC5 /* sensorsCS.c */,
@@ -107,10 +105,12 @@
 				032016AE13C73CBE006F6A2F /* uploader.h */,
 				03B360251439EDE600CC5097 /* mainBaseStationBootloader.h */,
 				03B360261439EDE600CC5097 /* mainBaseStationBootloader.c */,
-				03BEEBE01444801200E215D3 /* pff.c */,
-				03BEEBE11444801200E215D3 /* pff.h */,
-				03BEEBDF1444801200E215D3 /* pdiskio.c */,
-				03BEEBE21444801E00E215D3 /* pdiskio.h */,
+				03BEED371445D52D00E215D3 /* pdiskio.c */,
+				03BEED381445D52D00E215D3 /* pdiskio.h */,
+				03BEED391445D52D00E215D3 /* pff.c */,
+				03BEED3A1445D52D00E215D3 /* pff.h */,
+				03B360751439F90300CC5097 /* sp_driver.h */,
+				03B360761439F90300CC5097 /* sp_driver.S */,
 			);
 			sourceTree = "<group>";
 		};
