@@ -25,6 +25,7 @@ FIL					Log_File, Upload_File;
 char				fileName [20];
 char				tmpString[10];
 
+char				configFileBuffer [50];
 uint8_t				tmp8[1];
 uint8_t				tmp16[2];
 uint8_t				tmp32[4];
@@ -188,35 +189,34 @@ void SD_MakeFileName(uint32_t var){
 }
 
 void SD_Read_config_file(void){
-	char temp [50];
 	
 	SD_Open("/config.txt");
     f_lseek(&Log_File, 0);
 	
 	while(true){
-        f_gets(temp,50,&Log_File);
-        if(temp[0] != 0){
-            if(strstr(temp,"ssid") != 0){
-                strtok(temp,"=");
+        f_gets(configFileBuffer,50,&Log_File);
+        if(configFileBuffer[0] != 0){
+            if(strstr(configFileBuffer,"ssid") != 0){
+                strtok(configFileBuffer,"=");
                 strcpy(ssid,strtok(NULL,"="));
                 ssidRead = true;
-            } else if(strstr(temp,"phrase") != 0){
-                strtok(temp,"=");
+            } else if(strstr(configFileBuffer,"phrase") != 0){
+                strtok(configFileBuffer,"=");
                 strcpy(phrase,strtok(NULL,"="));
                 phraseRead = true;
-            } else if(strstr(temp,"key") != 0){
-                strtok(temp,"=");
+            } else if(strstr(configFileBuffer,"key") != 0){
+                strtok(configFileBuffer,"=");
                 strcpy(key,strtok(NULL,"="));
                 keyRead = true;
-            } else if(strstr(temp,"port") != 0){
-                strtok(temp,"=");
+            } else if(strstr(configFileBuffer,"port") != 0){
+                strtok(configFileBuffer,"=");
 				strcpy(port,strtok(NULL,"="));
-            } else if(strstr(temp,"auth") != 0){
-				strtok(temp,"=");
+            } else if(strstr(configFileBuffer,"auth") != 0){
+				strtok(configFileBuffer,"=");
                 strcpy(auth,strtok(NULL,"="));
 				authRead = true;
-            } else if(strstr(temp,"user") != 0){
-                strtok(temp,"=");
+            } else if(strstr(configFileBuffer,"user") != 0){
+                strtok(configFileBuffer,"=");
                 strcpy(user,strtok(NULL,"="));
                 for(uint8_t i = 0; i < strlen(user); i++){
                     if(user[i] < ' '){
@@ -224,8 +224,8 @@ void SD_Read_config_file(void){
                         break;
                     }
                 }
-            } else if(strstr(temp,"nickname") != 0){
-                strtok(temp,"=");
+            } else if(strstr(configFileBuffer,"nickname") != 0){
+                strtok(configFileBuffer,"=");
 	            strcpy(nickname,strtok(NULL,"="));
                 for(uint8_t i = 0; i < strlen(nickname); i++){
                     if(nickname[i] < ' '){
@@ -234,20 +234,20 @@ void SD_Read_config_file(void){
                     }
                 }
 				
-            } else if(strstr(temp,"server") != 0){
-                strtok(temp,"=");
+            } else if(strstr(configFileBuffer,"server") != 0){
+                strtok(configFileBuffer,"=");
                 strcpy(server,strtok(NULL,"="));
-            } else if(strstr(temp,"daylightTime") != 0){
-                strtok(temp,"=");
+            } else if(strstr(configFileBuffer,"daylightTime") != 0){
+                strtok(configFileBuffer,"=");
                 strcpy(daylightTime,strtok(NULL,"="));
-            } else if(strstr(temp,"demoMode") != 0){
-                strtok(temp,"=");
+            } else if(strstr(configFileBuffer,"demoMode") != 0){
+                strtok(configFileBuffer,"=");
                 strcpy(demoModeString,strtok(NULL,"="));
-            } else if(strstr(temp,"recordFast") != 0){
-                strtok(temp,"=");
+            } else if(strstr(configFileBuffer,"recordFast") != 0){
+                strtok(configFileBuffer,"=");
                 strcpy(fastString,strtok(NULL,"="));
-            } else if(strstr(temp,"zone") != 0){
-				strtok(temp,"=");
+            } else if(strstr(configFileBuffer,"zone") != 0){
+				strtok(configFileBuffer,"=");
                 memmove(zone,strtok(NULL,"="),4);
                 for(uint8_t i = 0;  i < strlen(zone); i++){
                     if(zone[i] < ' '){

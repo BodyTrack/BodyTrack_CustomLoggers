@@ -94,8 +94,20 @@
 //              3.08 - 10/12/2011 - fix to speed mic buffer writing.
 //              3.09 - 10/20/2011 - fix for truncated light sensor values
 //                                - rejects invalid times
+//              3.10 - 10/31/2011 - fix corrupted config data when dylos is connected
+//                                - fix mislabeled dylos data
+//                                - changed 6-channel dylos display on lcd
+//
 //
 //___________________________________________
+
+
+
+#define DeviceClass			"BaseStation"
+#define FirmwareVersion		"3.10"
+#define HardwareVersion		"3"
+
+
 
 #include "avr_compiler.h"
 #include <stdio.h>
@@ -148,6 +160,7 @@ char				tempDisplay [50];        // use in display interrupt
 
 volatile uint8_t	currentMode      = 0;
 
+volatile bool		okToReadConfigFile		= false;
 volatile bool		okToOpenLogFile			= false;
 volatile bool		okToWriteToLogFile		= false;
 volatile bool		okToCloseLogFile		= false;
@@ -204,13 +217,14 @@ int main(void){
 	_delay_ms(1000);
 	
 	while(!SD_Inserted()){
-		SD_Init();
+		SD_Init();		
 		display_showSplashScreen(true,false,false);			// waiting for SD card
 		_delay_ms(250);
 	}
 	
 	_delay_ms(500);
-	SD_Read_config_file();
+	okToReadConfigFile = true;
+	while(okToReadConfigFile);
 	
     if(demoMode){
 		display_showSplashScreen(false,false,true);
@@ -574,27 +588,29 @@ ISR(SD_Writer_Timer_vect)
 		if(strstr(airQualityString,"Dylos") == NULL){
 			airSampleTime = Time_Get32BitTimer();
 			airCount[0] = atol(strtok(airQualityString,","));
-			for(uint8_t i = 0; i < numberOfBins; i++){
-				airCount[i+1] = atol(strtok(NULL,","));
-			}
 			if(numberOfBins == 2){
-				
+				airCount[1] = atol(strtok(NULL,","));
 				quickSmall = airCount[0];
 				quickLarge = airCount[1];
 				if(recording){
 					SD_WriteAirSampleMinute();
 				}
-				okToSendAirQuality = false;
-			} else {
-				quickSmall = airCount[0] + airCount[1];
-				quickLarge = airCount[2] + airCount[3] + airCount[4] + airCount[5];
-				
+			} else if(numberOfBins == 6){
+				airCount[1] = atol(strtok(NULL,","));
+				airCount[2] = atol(strtok(NULL,","));
+				airCount[3] = atol(strtok(NULL,","));
+				airCount[4] = atol(strtok(NULL,","));
+				airCount[5] = atol(strtok(NULL,","));
+			
+				quickSmall = airCount[0];
+				quickLarge = airCount[3];
 				if(recording){
 					SD_WriteAirSampleSecond();
 				}
-				okToSendAirQuality = false;
 			}
 		} 
+		
+		okToSendAirQuality = false;
 	}
 
 	if(okToOpenLogFile){
@@ -683,6 +699,11 @@ ISR(SD_Writer_Timer_vect)
 		}
         strcpy(fileToUpload,"");
         okToEraseFile = false;
+	}
+	
+	if(okToReadConfigFile){
+		SD_Read_config_file();
+		okToReadConfigFile = false;
 	}
 }
 
