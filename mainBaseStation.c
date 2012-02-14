@@ -97,6 +97,8 @@
 //              3.10 - 10/31/2011 - fix corrupted config data when dylos is connected
 //                                - fix mislabeled dylos data
 //                                - changed 6-channel dylos display on lcd
+//              3.11 - 02/14/2012 - fixed display bug where "uploading" would appear on sensor parge
+//                                - changed dylos parsing, 6 channel no longer randomly appears as 2 channel
 //
 //
 //___________________________________________
@@ -104,7 +106,7 @@
 
 
 #define DeviceClass			"BaseStation"
-#define FirmwareVersion		"3.10"
+#define FirmwareVersion		"3.11"
 #define HardwareVersion		"3"
 
 
@@ -178,6 +180,9 @@ volatile uint8_t	spaceRemainingCounter = 0;
 volatile uint8_t	backlight_Timer = 0;
 volatile uint16_t	syncCounter = 0;
 
+volatile uint8_t	numberOfBins = 1;
+
+
 
 // ********************************** Main Program *********************************
 
@@ -199,7 +204,6 @@ int main(void){
     SD_Init();
 	Interrupt_Init();
 	
-	
 	if(Time_CheckVBatSystem() && (Time_Get() > 1260000000)){				// grab time from rtc32 if enabled and valid
 		timeIsValid = true;
 		RTC32.INTCTRL = ( RTC32.INTCTRL & ~RTC32_COMPINTLVL_gm ) | RTC32_COMPINTLVL_LO_gc;
@@ -212,7 +216,7 @@ int main(void){
 		RTC32.INTCTRL = 0;
 	
 	}
-
+    
 	display_showSplashScreen(false,false,false);
 	_delay_ms(1000);
 	
@@ -233,8 +237,7 @@ int main(void){
 		while(true);
 	}
 	
-Reset:
-	uploadPercentBS = 0;
+
 	_delay_ms(500);
 	okToDisplayGUI = true;
 	_delay_ms(100);	
@@ -247,7 +250,8 @@ Reset:
 			_delay_ms(250);
 		}
 	}
-	
+ Reset: 
+	uploadPercentBS = 0;
 	connected = false;
 	while(!Uploader_connectToComputer());
 	connected = true;
@@ -257,7 +261,6 @@ Reset:
 		}
     }
 }
-
 
 
 
@@ -366,6 +369,7 @@ ISR(Display_Writer_Timer_vect){
 				while(!recording);
 			}
 			restartingFile = false;
+			
 		}
 	}
 	
@@ -475,6 +479,7 @@ ISR(Display_Writer_Timer_vect){
 
 		} else if(currentMode == sensorMode){
 			display_putString("     Sensors     ",0,0,System5x7);
+			display_putString("                 ",1,0,System5x7);
 			sprintf(tempDisplay,"Temperature: %3uC", quickTemperature);
 			display_putString(tempDisplay,2,0,System5x7);
 			sprintf(tempDisplay,"Humidity:  %3u", quickHumidity);
@@ -576,15 +581,29 @@ ISR(SD_Writer_Timer_vect)
 	}
 	
 	if(okToSendAirQuality && !restartingFile){
-		uint8_t numberOfBins = 1;
-		uint8_t counter = 0;
-		while(Rs232_CharReadyToRead()){
+		//uint8_t counter = 0;
+		
+		
+		numberOfBins = 1;
+		/*while(Rs232_CharReadyToRead()){
 			airQualityString[counter] = Rs232_GetByte(false);
 			if(airQualityString[counter] == ','){
 				numberOfBins++;
 			}
 			counter++;
+		}*/
+		for (uint8_t i = 0; i < 255; i++) {
+			if(!Rs232_CharReadyToRead()){
+				break;
+			}
+			airQualityString[i] = Rs232_GetByte(false);
+			if(airQualityString[i] == ','){
+				numberOfBins++;
+			}
 		}
+		
+		
+		
 		if(strstr(airQualityString,"Dylos") == NULL){
 			airSampleTime = Time_Get32BitTimer();
 			airCount[0] = atol(strtok(airQualityString,","));
@@ -595,6 +614,7 @@ ISR(SD_Writer_Timer_vect)
 				if(recording){
 					SD_WriteAirSampleMinute();
 				}
+				Debug_SendString(airQualityString, true);
 			} else if(numberOfBins == 6){
 				airCount[1] = atol(strtok(NULL,","));
 				airCount[2] = atol(strtok(NULL,","));
@@ -607,7 +627,7 @@ ISR(SD_Writer_Timer_vect)
 				if(recording){
 					SD_WriteAirSampleSecond();
 				}
-			}
+			} 
 		} 
 		
 		okToSendAirQuality = false;
@@ -621,7 +641,6 @@ ISR(SD_Writer_Timer_vect)
 		    timeRecordingStarted = UNIX_Time;
 		    SD_WriteRTCBlock(Time_Get32BitTimer(),UNIX_Time);
 
-		    Rs232_ClearBuffer();
 		    recording = true;
 		} else {
 		    sdValid = false;

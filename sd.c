@@ -20,7 +20,7 @@ FILINFO				fno,fno2;
 
 DIR					dir;
 
-FIL					Log_File, Upload_File;
+FIL					Log_File, Upload_File, Config_File;
 
 char				fileName [20];
 char				tmpString[10];
@@ -114,6 +114,7 @@ uint8_t SD_Init(void){
 	} else {
 		sdValid = false;
 	}
+	
 	Button_Port.PIN4CTRL =  PORT_OPC_WIREDORPULL_gc;
 	return tmp;
 }
@@ -190,11 +191,12 @@ void SD_MakeFileName(uint32_t var){
 
 void SD_Read_config_file(void){
 	
-	SD_Open("/config.txt");
-    f_lseek(&Log_File, 0);
+    
+	f_open(&Config_File, "/config.txt", FA_READ | FA_OPEN_ALWAYS);
+	f_lseek(&Config_File, 0);
 	
 	while(true){
-        f_gets(configFileBuffer,50,&Log_File);
+        f_gets(configFileBuffer,50,&Config_File);
         if(configFileBuffer[0] != 0){
             if(strstr(configFileBuffer,"ssid") != 0){
                 strtok(configFileBuffer,"=");
@@ -288,6 +290,7 @@ void SD_Read_config_file(void){
     if((strstr(fastString,"true") != 0)){
         wantToRecordFast = true;
     }
+	f_close(&Config_File);
 }
 
 
@@ -319,10 +322,10 @@ void SD_Timer_Init(void)			// Initialize 100 Hz timer needed for SD access
 	SD_Timer.PER = 576;
 
 	// Select clock source
-	SD_Timer.CTRLA = (SD_Timer.CTRLA & ~TC0_CLKSEL_gm) | TC_CLKSEL_DIV256_gc;
+	SD_Timer.CTRLA = TC_CLKSEL_DIV256_gc;
 	
 	// Enable CCA interrupt
-	SD_Timer.INTCTRLA = (SD_Timer.INTCTRLA & ~TC0_OVFINTLVL_gm) | TC_CCAINTLVL_MED_gc;
+	SD_Timer.INTCTRLA = TC_CCAINTLVL_MED_gc;
 	
 }
 

@@ -18,7 +18,8 @@ bool wantToRecordAirQuality		= true;
 bool wantToRecordFast			= false;
 
 
-#define maxFileLength					9000
+#define maxFileLength					9000		// 15 minutes
+//#define maxFileLength					600		    // 1 minute
 
 #define temperatureNumberOfSamples   	10
 #define humidityNumberOfSamples   		10
