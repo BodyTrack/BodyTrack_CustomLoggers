@@ -98,7 +98,8 @@
 //                                - fix mislabeled dylos data
 //                                - changed 6-channel dylos display on lcd
 //              3.11 - 02/14/2012 - fixed display bug where "uploading" would appear on sensor parge
-//                                - changed dylos parsing, 6 channel no longer randomly appears as 2 channel
+//                                - fixed 'garbage in config file' bug
+//              3.12 - 02/15/2012 - changed dylos parsing, 6 channel appears as 2 channel less often
 //
 //
 //___________________________________________
@@ -106,7 +107,7 @@
 
 
 #define DeviceClass			"BaseStation"
-#define FirmwareVersion		"3.11"
+#define FirmwareVersion		"3.12"
 #define HardwareVersion		"3"
 
 
@@ -539,7 +540,60 @@ ISR(SD_Writer_Timer_vect)
 				okToSendMicrophoneBuffer[i] = false;
 			}
 		}
+	}
+	
+	if(okToSendAirQuality && !restartingFile){
 		
+		numberOfBins = 1;
+		for (uint8_t i = 0; i < 255; i++) {
+			if(!Rs232_CharReadyToRead()){
+				airQualityString[i] = 0;
+				break;
+			}
+			airQualityString[i] = Rs232_GetByte(false);
+			
+			if(airQualityString[i] == 0x0A){
+				airQualityString[i+1] = 0;
+				break;	
+			}
+			
+			if(airQualityString[i] == ','){
+				numberOfBins++;
+			}
+		}
+		
+		
+		
+		if(strstr(airQualityString,"Dylos") == NULL){
+			airSampleTime = Time_Get32BitTimer();
+			airCount[0] = atol(strtok(airQualityString,","));
+			if(numberOfBins == 2){
+				airCount[1] = atol(strtok(NULL,","));
+				quickSmall = airCount[0];
+				quickLarge = airCount[1];
+				if(recording){
+					SD_WriteAirSampleMinute();
+				}
+				Debug_SendString(airQualityString, true);
+			} else if(numberOfBins == 6){
+				airCount[1] = atol(strtok(NULL,","));
+				airCount[2] = atol(strtok(NULL,","));
+				airCount[3] = atol(strtok(NULL,","));
+				airCount[4] = atol(strtok(NULL,","));
+				airCount[5] = atol(strtok(NULL,","));
+				
+				quickSmall = airCount[0];
+				quickLarge = airCount[3];
+				if(recording){
+					SD_WriteAirSampleSecond();
+				}
+			} 
+		} 
+		
+		okToSendAirQuality = false;
+	}
+	
+	if(recording){
 		for(uint8_t i = 0; i < temperatureNumberOfBuffers; i++){
 			if(okToSendTemperatureBuffer[i] && (lastTemperatureBufferSent != i)){
 				SD_WriteTemperatureBuffer(i);
@@ -578,59 +632,6 @@ ISR(SD_Writer_Timer_vect)
 			SD_WriteRTCBlock(Time_Get32BitTimer(),UNIX_Time);
 			okToSendRTCBlock = false;
 		}
-	}
-	
-	if(okToSendAirQuality && !restartingFile){
-		//uint8_t counter = 0;
-		
-		
-		numberOfBins = 1;
-		/*while(Rs232_CharReadyToRead()){
-			airQualityString[counter] = Rs232_GetByte(false);
-			if(airQualityString[counter] == ','){
-				numberOfBins++;
-			}
-			counter++;
-		}*/
-		for (uint8_t i = 0; i < 255; i++) {
-			if(!Rs232_CharReadyToRead()){
-				break;
-			}
-			airQualityString[i] = Rs232_GetByte(false);
-			if(airQualityString[i] == ','){
-				numberOfBins++;
-			}
-		}
-		
-		
-		
-		if(strstr(airQualityString,"Dylos") == NULL){
-			airSampleTime = Time_Get32BitTimer();
-			airCount[0] = atol(strtok(airQualityString,","));
-			if(numberOfBins == 2){
-				airCount[1] = atol(strtok(NULL,","));
-				quickSmall = airCount[0];
-				quickLarge = airCount[1];
-				if(recording){
-					SD_WriteAirSampleMinute();
-				}
-				Debug_SendString(airQualityString, true);
-			} else if(numberOfBins == 6){
-				airCount[1] = atol(strtok(NULL,","));
-				airCount[2] = atol(strtok(NULL,","));
-				airCount[3] = atol(strtok(NULL,","));
-				airCount[4] = atol(strtok(NULL,","));
-				airCount[5] = atol(strtok(NULL,","));
-			
-				quickSmall = airCount[0];
-				quickLarge = airCount[3];
-				if(recording){
-					SD_WriteAirSampleSecond();
-				}
-			} 
-		} 
-		
-		okToSendAirQuality = false;
 	}
 
 	if(okToOpenLogFile){

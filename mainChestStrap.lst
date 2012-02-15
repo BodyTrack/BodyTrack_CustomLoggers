@@ -25280,295 +25280,295 @@
  26788               	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 mainChestStrap.c
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:2      *ABS*:0000003f __SREG__
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:3      *ABS*:0000003e __SP_H__
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:4      *ABS*:0000003d __SP_L__
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:5      *ABS*:00000034 __CCP__
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:6      *ABS*:00000000 __tmp_reg__
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:7      *ABS*:00000001 __zero_reg__
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:18     .text:00000000 CCPWrite
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:67     .text:0000002a Debug_CharReadyToRead
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24164  .bss:0000001b Debug_writeLocation
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:2      *ABS*:0000003f __SREG__
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:3      *ABS*:0000003e __SP_H__
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:4      *ABS*:0000003d __SP_L__
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:5      *ABS*:00000034 __CCP__
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:6      *ABS*:00000000 __tmp_reg__
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:7      *ABS*:00000001 __zero_reg__
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:18     .text:00000000 CCPWrite
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:67     .text:0000002a Debug_CharReadyToRead
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24164  .bss:0000001b Debug_writeLocation
                             *COM*:00000064 DebugBuffer
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24158  .bss:00000019 Debug_readLocation
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:112    .text:00000084 Debug_ClearBuffer
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:153    .text:000000da Debug_Init
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:305    .text:000001b0 Debug_GetByte
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:354    .text:000001f6 Debug_SendByte
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24170  .bss:0000001d Debug_timeOutCounter
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:437    .text:00000272 Leds_Init
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24158  .bss:00000019 Debug_readLocation
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:112    .text:00000084 Debug_ClearBuffer
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:153    .text:000000da Debug_Init
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:305    .text:000001b0 Debug_GetByte
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:354    .text:000001f6 Debug_SendByte
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24170  .bss:0000001d Debug_timeOutCounter
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:437    .text:00000272 Leds_Init
                             *COM*:00000002 ledState
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:474    .text:00000296 Leds_State
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:493    .text:000002a2 Leds_Set
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:517    .text:000002b8 Leds_Clear
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:541    .text:000002ce Leds_Toggle
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:565    .text:000002e4 Time_Init
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:595    .text:00000306 Time_Set
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:740    .text:000003b2 Time_CheckVBatSystem
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:775    .text:000003e2 Time_Get
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:805    .text:0000040c Time_Get32BitTimer
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:869    .text:0000045c Time_UTCSecsToTime
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25568  .data:00000758 monthDays
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:1187   .text:00000662 wait_ready
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25581  .bss:00000064 Timer2
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:1243   .text:000006a0 select
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:1296   .text:000006da rcvr_datablock
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:474    .text:00000296 Leds_State
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:493    .text:000002a2 Leds_Set
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:517    .text:000002b8 Leds_Clear
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:541    .text:000002ce Leds_Toggle
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:565    .text:000002e4 Time_Init
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:595    .text:00000306 Time_Set
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:740    .text:000003b2 Time_CheckVBatSystem
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:775    .text:000003e2 Time_Get
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:805    .text:0000040c Time_Get32BitTimer
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:869    .text:0000045c Time_UTCSecsToTime
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25568  .data:00000758 monthDays
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:1187   .text:00000662 wait_ready
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25581  .bss:00000064 Timer2
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:1243   .text:000006a0 select
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:1296   .text:000006da rcvr_datablock
                              .bss:00000063 Timer1
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:1440   .text:0000079e xmit_datablock
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:1557   .text:0000083c send_cmd
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:1774   .text:00000954 disk_initialize
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25564  .data:00000757 Stat
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25582  .bss:00000065 CardType
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:2107   .text:00000b20 disk_status
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:2130   .text:00000b2e disk_read
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:2276   .text:00000bee disk_write
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:2453   .text:00000cde disk_ioctl
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:3093   .text:00001084 disk_timerproc
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:3130   .text:000010ac get_fattime
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24176  .bss:00000021 UNIX_Time
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:3261   .text:0000119c move_window
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:3422   .text:0000128e sync
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:3607   .text:000013ac get_fat
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:3894   .text:00001580 put_fat
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:4211   .text:00001758 remove_chain
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:4380   .text:0000184e create_chain
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:4701   .text:00001a34 clust2sect
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:4781   .text:00001aae dir_seek
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:5100   .text:00001ca6 dir_next
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:5581   .text:00001fa0 dir_read
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:5677   .text:00002008 dir_register
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:5828   .text:000020b6 dir_remove
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:5887   .text:000020f8 get_fileinfo
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:6086   .text:00002210 follow_path
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:6623   .text:000024bc check_fs
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:6777   .text:000025c2 chk_mounted
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25583  .bss:00000066 FatFs
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24182  .data:000002c9 Drives
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25584  .bss:0000006a Fsid
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:7670   .text:00002bae validate
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:7720   .text:00002be2 f_mount
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:7782   .text:00002c24 f_open
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:8263   .text:00002f0e f_read
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:8932   .text:000032fa f_write
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:9695   .text:00003782 f_sync
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:9877   .text:00003890 f_close
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:9907   .text:000038a8 f_lseek
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:10603  .text:00003d04 f_opendir
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:10743  .text:00003dca f_readdir
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:10852  .text:00003e60 f_stat
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:10943  .text:00003ede f_getfree
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:11324  .text:0000412a f_truncate
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:11515  .text:00004244 f_unlink
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:11736  .text:00004378 f_mkdir
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:12274  .text:00004692 f_chmod
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:12379  .text:0000471c f_utime
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:12489  .text:000047b6 f_rename
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:12906  .text:00004a04 f_mkfs
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25517  .data:0000072b sstbl.6367
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25503  .data:00000715 cstbl.6368
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:14662  .text:00005508 f_gets
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:14777  .text:000055a4 f_putc
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:14838  .text:000055f0 f_puts
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:14898  .text:00005638 SD_Close
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:1440   .text:0000079e xmit_datablock
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:1557   .text:0000083c send_cmd
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:1774   .text:00000954 disk_initialize
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25564  .data:00000757 Stat
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25582  .bss:00000065 CardType
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:2107   .text:00000b20 disk_status
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:2130   .text:00000b2e disk_read
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:2276   .text:00000bee disk_write
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:2453   .text:00000cde disk_ioctl
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:3093   .text:00001084 disk_timerproc
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:3130   .text:000010ac get_fattime
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24176  .bss:00000021 UNIX_Time
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:3261   .text:0000119c move_window
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:3422   .text:0000128e sync
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:3607   .text:000013ac get_fat
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:3894   .text:00001580 put_fat
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:4211   .text:00001758 remove_chain
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:4380   .text:0000184e create_chain
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:4701   .text:00001a34 clust2sect
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:4781   .text:00001aae dir_seek
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:5100   .text:00001ca6 dir_next
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:5581   .text:00001fa0 dir_read
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:5677   .text:00002008 dir_register
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:5828   .text:000020b6 dir_remove
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:5887   .text:000020f8 get_fileinfo
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:6086   .text:00002210 follow_path
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:6623   .text:000024bc check_fs
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:6777   .text:000025c2 chk_mounted
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25583  .bss:00000066 FatFs
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24182  .data:000002c9 Drives
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25584  .bss:0000006a Fsid
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:7670   .text:00002bae validate
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:7720   .text:00002be2 f_mount
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:7782   .text:00002c24 f_open
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:8263   .text:00002f0e f_read
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:8932   .text:000032fa f_write
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:9695   .text:00003782 f_sync
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:9877   .text:00003890 f_close
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:9907   .text:000038a8 f_lseek
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:10603  .text:00003d04 f_opendir
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:10743  .text:00003dca f_readdir
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:10852  .text:00003e60 f_stat
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:10943  .text:00003ede f_getfree
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:11324  .text:0000412a f_truncate
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:11515  .text:00004244 f_unlink
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:11736  .text:00004378 f_mkdir
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:12274  .text:00004692 f_chmod
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:12379  .text:0000471c f_utime
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:12489  .text:000047b6 f_rename
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:12906  .text:00004a04 f_mkfs
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25517  .data:0000072b sstbl.6367
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25503  .data:00000715 cstbl.6368
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:14662  .text:00005508 f_gets
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:14777  .text:000055a4 f_putc
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:14838  .text:000055f0 f_puts
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:14898  .text:00005638 SD_Close
                             *COM*:00000220 Log_File
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:14914  .text:00005642 SD_Inserted
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24252  .bss:0000002b sdValid
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:14928  .text:00005648 SD_WriteBuffer
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:14914  .text:00005642 SD_Inserted
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24252  .bss:0000002b sdValid
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:14928  .text:00005648 SD_WriteBuffer
                             *COM*:00000004 CRC
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24264  .data:00000313 crc_table
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:15042  .text:00005716 SD_Write32
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24264  .data:00000313 crc_table
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:15042  .text:00005716 SD_Write32
                             *COM*:00000004 tmp32
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:15081  .text:0000574a SD_Write16
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:15081  .text:0000574a SD_Write16
                             *COM*:00000002 tmp16
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:15107  .text:00005760 SD_Write8
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:15107  .text:00005760 SD_Write8
                             *COM*:00000001 tmp8
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:15129  .text:00005772 SD_ClearCRC
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:15150  .text:0000578c SD_WriteCRC
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:15176  .text:000057aa SD_GetSpaceRemaining
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:15129  .text:00005772 SD_ClearCRC
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:15150  .text:0000578c SD_WriteCRC
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:15176  .text:000057aa SD_GetSpaceRemaining
                             *COM*:00000002 fs
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24258  .bss:0000002c percentDiskUsed
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:15255  .text:00005830 SD_Init
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25585  .bss:0000006c fso0
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25586  .bss:0000029a fso1
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:15326  .text:0000588e SD_Timer_Init
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:15351  .text:000058a4 __vector_47
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:15413  .text:00005908 Button_Init
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:15486  .text:0000595e Button_Pressed
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:15519  .text:00005984 Accel_Write_Byte
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:15542  .text:00005994 Accel_Read_Byte
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:15569  .text:000059a8 Accel_WriteToAddress
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:15621  .text:000059d8 Accel_ReadFromAddress
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:15681  .text:00005a0c Accel_ReadResults
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:15900  .text:00005b0c Sensors_ResetAccelBuffers
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24115  .bss:0000000f accelBufferCounter
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24109  .bss:0000000e accelBufferToWriteTo
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24258  .bss:0000002c percentDiskUsed
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:15255  .text:00005830 SD_Init
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25585  .bss:0000006c fso0
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25586  .bss:0000029a fso1
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:15326  .text:0000588e SD_Timer_Init
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:15351  .text:000058a4 __vector_47
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:15413  .text:00005908 Button_Init
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:15486  .text:0000595e Button_Pressed
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:15519  .text:00005984 Accel_Write_Byte
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:15542  .text:00005994 Accel_Read_Byte
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:15569  .text:000059a8 Accel_WriteToAddress
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:15621  .text:000059d8 Accel_ReadFromAddress
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:15681  .text:00005a0c Accel_ReadResults
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:15900  .text:00005b0c Sensors_ResetAccelBuffers
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24115  .bss:0000000f accelBufferCounter
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24109  .bss:0000000e accelBufferToWriteTo
                             *COM*:00000002 okToSendAccelBuffer
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:15922  .text:00005b22 Accel_Init
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:15986  .text:00005b7c __vector_108
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24027  .bss:00000001 recording
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24021  .bss:00000000 wantToRecordFast
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:15922  .text:00005b22 Accel_Init
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:15986  .text:00005b7c __vector_108
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24027  .bss:00000001 recording
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24021  .bss:00000000 wantToRecordFast
                             *COM*:000004b0 accelSampleStartTime
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:16104  .text:00005c58 Sensors_ReadTemperature
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:16122  .text:00005c64 Sensors_ReadRespiration
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:16140  .text:00005c70 Sensors_ReadEKG
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:16158  .text:00005c7c Sensors_ReadHumidity
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:16104  .text:00005c58 Sensors_ReadTemperature
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:16122  .text:00005c64 Sensors_ReadRespiration
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:16140  .text:00005c70 Sensors_ReadEKG
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:16158  .text:00005c7c Sensors_ReadHumidity
                             *COM*:00000002 zeroOffsetA
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:16232  .text:00005cf6 Sensors_ResetTemperatureBuffers
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24039  .bss:00000003 temperatureBufferCounter
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24033  .bss:00000002 temperatureBufferToWriteTo
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:16232  .text:00005cf6 Sensors_ResetTemperatureBuffers
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24039  .bss:00000003 temperatureBufferCounter
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24033  .bss:00000002 temperatureBufferToWriteTo
                             *COM*:00000002 okToSendTemperatureBuffer
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:16254  .text:00005d0c Sensors_ResetRespirationBuffers
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24058  .bss:00000006 respirationBufferCounter
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24052  .bss:00000005 respirationBufferToWriteTo
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:16254  .text:00005d0c Sensors_ResetRespirationBuffers
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24058  .bss:00000006 respirationBufferCounter
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24052  .bss:00000005 respirationBufferToWriteTo
                             *COM*:00000003 okToSendRespirationBuffer
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:16277  .text:00005d26 Sensors_ResetEKGBuffers
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24077  .bss:00000009 EKGBufferCounter
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24071  .bss:00000008 EKGBufferToWriteTo
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:16277  .text:00005d26 Sensors_ResetEKGBuffers
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24077  .bss:00000009 EKGBufferCounter
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24071  .bss:00000008 EKGBufferToWriteTo
                             *COM*:00000003 okToSendEKGBuffer
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:16300  .text:00005d40 Sensors_ResetHumidityBuffers
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24096  .bss:0000000c humidityBufferCounter
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24090  .bss:0000000b humidityBufferToWriteTo
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:16300  .text:00005d40 Sensors_ResetHumidityBuffers
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24096  .bss:0000000c humidityBufferCounter
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24090  .bss:0000000b humidityBufferToWriteTo
                             *COM*:00000002 okToSendHumidityBuffer
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:16322  .text:00005d56 Sensors_Init
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:16322  .text:00005d56 Sensors_Init
                             *COM*:00000002 zeroOffsetB
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:16659  .text:00005ee6 __vector_83
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24009  .data:000002c2 wantToRecordEKG
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:16659  .text:00005ee6 __vector_83
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24009  .data:000002c2 wantToRecordEKG
                             *COM*:000004b0 EKGSampleStartTime
                             *COM*:00000708 EKGBuffer
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25300  .bss:00000032 HZ_RefeshCounter2
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24014  .data:000002c3 wantToRecordRespiration
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25300  .bss:00000032 HZ_RefeshCounter2
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24014  .data:000002c3 wantToRecordRespiration
                             *COM*:000000c8 respirationSampleStartTime
                             *COM*:0000012c respirationBuffer
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25294  .bss:00000030 HZ_RefeshCounter
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24134  .bss:00000012 rtcBlockCounter
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24128  .bss:00000011 okToSendRTCBlock
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:23999  .data:000002c0 wantToRecordTemperature
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25294  .bss:00000030 HZ_RefeshCounter
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24134  .bss:00000012 rtcBlockCounter
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24128  .bss:00000011 okToSendRTCBlock
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:23999  .data:000002c0 wantToRecordTemperature
                             *COM*:00000028 temperatureSampleStartTime
                             *COM*:00000028 temperatureBuffer
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24004  .data:000002c1 wantToRecordHumidity
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24004  .data:000002c1 wantToRecordHumidity
                             *COM*:00000028 humiditySampleStartTime
                             *COM*:00000028 humidityBuffer
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:17144  .text:000062b2 SP_ReadCalibrationByte
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:17179  .text:000062c6 Uploader_getTime
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:17144  .text:000062b2 SP_ReadCalibrationByte
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:17179  .text:000062c6 Uploader_getTime
                             *COM*:00000032 command
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:17456  .text:0000644e Uploader_eraseFile
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:17456  .text:0000644e Uploader_eraseFile
                             *COM*:00000014 fileToErase
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25421  .bss:00000054 okToEraseFile
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25421  .bss:00000054 okToEraseFile
                             *COM*:00000001 eraseFileReturn
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:17619  .text:00006504 Uploader_ClearCRC
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:17619  .text:00006504 Uploader_ClearCRC
                             *COM*:00000004 uploadCRC
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:17640  .text:0000651e Uploader_WriteCRC
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:17704  .text:00006586 Uploader_uploadFile
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25361  .bss:0000004a uploading
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:17640  .text:0000651e Uploader_WriteCRC
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:17704  .text:00006586 Uploader_uploadFile
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25361  .bss:0000004a uploading
                             *COM*:0000000f fileToUpload
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25391  .bss:0000004f okToOpenFileToUpload
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25397  .bss:00000050 uploadFileOpened
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25427  .bss:00000055 fileExists
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25415  .bss:00000053 okToCloseUploadFile
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25379  .bss:0000004d okToUpload
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25331  .bss:0000003c uploadFileSize
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25343  .bss:00000041 numberOfPacketsToUpload
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25349  .bss:00000045 leftOverBytesToUpload
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25409  .bss:00000052 uploadFileBufferFull
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25403  .bss:00000051 okToFillUploadFileBuffer
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25337  .bss:00000040 uploadPercentBS
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25391  .bss:0000004f okToOpenFileToUpload
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25397  .bss:00000050 uploadFileOpened
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25427  .bss:00000055 fileExists
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25415  .bss:00000053 okToCloseUploadFile
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25379  .bss:0000004d okToUpload
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25331  .bss:0000003c uploadFileSize
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25343  .bss:00000041 numberOfPacketsToUpload
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25349  .bss:00000045 leftOverBytesToUpload
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25409  .bss:00000052 uploadFileBufferFull
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25403  .bss:00000051 okToFillUploadFileBuffer
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25337  .bss:00000040 uploadPercentBS
                             *COM*:000003e8 uploadFileBuffer
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:18309  .text:00006982 Uploader_UpdateCRC
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:18376  .text:000069fe Clock_Init
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:18451  .text:00006a58 Disable_JTAG
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:18505  .text:00006a88 Interrupt_Init
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:18529  .text:00006a96 __vector_104
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25439  .bss:00000057 okToOpenLogFile
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25433  .bss:00000056 timeIsValid
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25487  .bss:00000061 debounceEnabled
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25451  .bss:00000059 okToCloseLogFile
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:18642  .text:00006b62 Charger_Init
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:18662  .text:00006b70 Charged
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:18685  .text:00006b86 GUI_Init
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:18714  .text:00006ba4 __vector_77
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25469  .bss:0000005c lengthOfCurrentFile
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25463  .bss:0000005b restartingFile
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25475  .bss:0000005e syncCounter
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25493  .bss:00000062 spaceRemainingCounter
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25457  .bss:0000005a okToGetRemainingSpace
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25481  .bss:00000060 debounceTimer
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25499  .data:00000714 batteryVoltageOk
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25355  .bss:00000049 connected
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:18309  .text:00006982 Uploader_UpdateCRC
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:18376  .text:000069fe Clock_Init
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:18451  .text:00006a58 Disable_JTAG
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:18505  .text:00006a88 Interrupt_Init
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:18529  .text:00006a96 __vector_104
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25439  .bss:00000057 okToOpenLogFile
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25433  .bss:00000056 timeIsValid
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25487  .bss:00000061 debounceEnabled
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25451  .bss:00000059 okToCloseLogFile
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:18642  .text:00006b62 Charger_Init
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:18662  .text:00006b70 Charged
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:18685  .text:00006b86 GUI_Init
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:18714  .text:00006ba4 __vector_77
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25469  .bss:0000005c lengthOfCurrentFile
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25463  .bss:0000005b restartingFile
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25475  .bss:0000005e syncCounter
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25493  .bss:00000062 spaceRemainingCounter
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25457  .bss:0000005a okToGetRemainingSpace
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25481  .bss:00000060 debounceTimer
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25499  .data:00000714 batteryVoltageOk
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25355  .bss:00000049 connected
                             *COM*:00000002 ledCounter
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:19105  .text:00006df0 SD_BackroundWriter_Init
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:19134  .text:00006e0e SD_WriteRTCBlock
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:19228  .text:00006ea6 getDeviceID
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:19105  .text:00006df0 SD_BackroundWriter_Init
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:19134  .text:00006e0e SD_WriteRTCBlock
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:19228  .text:00006ea6 getDeviceID
                             *COM*:00000032 deviceID
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:19640  .text:0000707e SD_WriteString
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:19750  .text:00007134 SD_WriteAccelBuffer
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:19640  .text:0000707e SD_WriteString
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:19750  .text:00007134 SD_WriteAccelBuffer
                             *COM*:00000e10 accelBuffer
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:19925  .text:0000725e SD_WriteEKGBuffer
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:20072  .text:00007350 SD_WriteRespirationBuffer
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:20218  .text:00007440 SD_WriteHumidityBuffer
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:20354  .text:0000751c SD_WriteTemperatureBuffer
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:20486  .text:000075f8 Debug_SendString
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:20576  .text:00007660 Uploader_connectToComputer
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25325  .bss:0000003a timeOutCounter
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:20729  .text:00007702 Uploader_sendPort
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:19925  .text:0000725e SD_WriteEKGBuffer
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:20072  .text:00007350 SD_WriteRespirationBuffer
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:20218  .text:00007440 SD_WriteHumidityBuffer
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:20354  .text:0000751c SD_WriteTemperatureBuffer
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:20486  .text:000075f8 Debug_SendString
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:20576  .text:00007660 Uploader_connectToComputer
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25325  .bss:0000003a timeOutCounter
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:20729  .text:00007702 Uploader_sendPort
                             *COM*:00000032 port
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:20789  .text:0000775a Uploader_sendServer
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:20789  .text:0000775a Uploader_sendServer
                             *COM*:00000032 server
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:20849  .text:000077b2 Uploader_sendNickname
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:20849  .text:000077b2 Uploader_sendNickname
                             *COM*:00000032 nickname
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:20909  .text:0000780a Uploader_sendUser
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:20909  .text:0000780a Uploader_sendUser
                             *COM*:0000000a user
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:20973  .text:00007862 Uploader_sendKey
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24228  .bss:00000027 phraseRead
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:20973  .text:00007862 Uploader_sendKey
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24228  .bss:00000027 phraseRead
                             *COM*:00000032 phrase
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24234  .bss:00000028 keyRead
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24234  .bss:00000028 keyRead
                             *COM*:00000032 key
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:21081  .text:00007908 Uploader_sendAuthType
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24222  .bss:00000026 authRead
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:21081  .text:00007908 Uploader_sendAuthType
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24222  .bss:00000026 authRead
                             *COM*:00000032 auth
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:21161  .text:00007982 Uploader_sendSSID
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24240  .bss:00000029 ssidRead
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:21161  .text:00007982 Uploader_sendSSID
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24240  .bss:00000029 ssidRead
                             *COM*:00000032 ssid
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:21245  .text:000079fc Uploader_sendFilename
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25367  .bss:0000004b okToOpenDirectory
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25373  .bss:0000004c okToGrabNextFileName
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:21245  .text:000079fc Uploader_sendFilename
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25367  .bss:0000004b okToOpenDirectory
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25373  .bss:0000004c okToGrabNextFileName
                             *COM*:0000000f availableFileName
                             *COM*:0000000f currentLogFile
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:21340  .text:00007a94 Uploader_Update
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:21585  .text:00007bae SD_Read_config_file
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:21340  .text:00007a94 Uploader_Update
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:21585  .text:00007bae SD_Read_config_file
                             *COM*:00000220 Config_File
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24196  .data:000002ff zone
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24196  .data:000002ff zone
                             *COM*:00000032 configFileBuffer
                             *COM*:0000000a daylightTime
                             *COM*:0000000a demoModeString
                             *COM*:0000000a fastString
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24216  .bss:00000025 timeZoneShift
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24246  .bss:0000002a zoneChanged
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24190  .data:000002cd serverOpenCommand
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24146  .bss:00000017 demoMode
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:22209  .text:00007ff2 main
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:22590  .text:0000819c SD_MakeFileName
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24216  .bss:00000025 timeZoneShift
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24246  .bss:0000002a zoneChanged
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24190  .data:000002cd serverOpenCommand
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24146  .bss:00000017 demoMode
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:22209  .text:00007ff2 main
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:22590  .text:0000819c SD_MakeFileName
                             *COM*:00000014 fileName
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:22625  .text:000081c8 SD_Open
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:22732  .text:00008226 SD_StartLogFile
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:22946  .text:0000839c __vector_53
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24121  .data:000002c8 lastAccelerometerBufferSent
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24083  .data:000002c6 lastEKGBufferSent
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24064  .data:000002c5 lastRespirationBufferSent
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24045  .data:000002c4 lastTemperatureBufferSent
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24102  .data:000002c7 lastHumidityBufferSent
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24140  .bss:00000013 timeRecordingStarted
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:22625  .text:000081c8 SD_Open
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:22732  .text:00008226 SD_StartLogFile
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:22946  .text:0000839c __vector_53
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24121  .data:000002c8 lastAccelerometerBufferSent
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24083  .data:000002c6 lastEKGBufferSent
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24064  .data:000002c5 lastRespirationBufferSent
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24045  .data:000002c4 lastTemperatureBufferSent
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24102  .data:000002c7 lastHumidityBufferSent
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24140  .bss:00000013 timeRecordingStarted
                             *COM*:00000016 dir
                             *COM*:00000016 fno
                             *COM*:00000220 Upload_File
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:23516  .text:000087a6 f_printf
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24152  .bss:00000018 useWifiForUploading
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24202  .data:00000309 am
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:24208  .data:0000030e pm
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25306  .bss:00000034 ekgCounter
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25312  .bss:00000036 tempTime
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25318  .data:00000713 commandCounter
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25385  .bss:0000004e doneUploading
-/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccl4Gcs7.s:25445  .bss:00000058 okToWriteToLogFile
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:23516  .text:000087a6 f_printf
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24152  .bss:00000018 useWifiForUploading
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24202  .data:00000309 am
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:24208  .data:0000030e pm
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25306  .bss:00000034 ekgCounter
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25312  .bss:00000036 tempTime
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25318  .data:00000713 commandCounter
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25385  .bss:0000004e doneUploading
+/var/folders/yg/v065xz8d7t9blhsyp93dmr5w0000gn/T//ccBfPKKl.s:25445  .bss:00000058 okToWriteToLogFile
                             *COM*:00000008 time
                             *COM*:00000016 fno2
                             *COM*:0000000a tmpString
